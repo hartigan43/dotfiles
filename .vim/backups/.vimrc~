@@ -18,6 +18,7 @@ call vundle#rc()
 
 filetype plugin indent on "req
 
+"colorscheme base16-default
 "colorscheme base16-eighties
 python import sys; sys.path.append("/usr/local/lib/python2.7/site-packages/")
 python from powerline.bindings.vim import source_plugin; source_plugin()
@@ -65,7 +66,7 @@ if has('gui_running')
   set guioptions-=L                               " odd fix for to get scrollbars 
   set guioptions-=r                               " properly hidden on left and right
   set background=dark
-  colorscheme base16-tomorrow
+  colorscheme base16-default
 endif
 
 " javascript folding http://amix.dk/blog/post/19132

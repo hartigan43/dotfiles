@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+		<link rel="stylesheet" type="text/css" href="./style/style.css" /> 
+		<link rel="stylesheet" type="text/css" href="./style/scrollpath.css" /> 
+		<link href="http://fonts.googleapis.com/css?family=Terminal+Dosis&subset=latin" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="script/lib/prefixfree.min.js"></script>
+		<!--[if lt IE 9]>
+			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]--> 
+		<title>Scrollpath.js Test</title>
+			</head>
+	<body>
+		<nav>
+			<ul>
+				<li><a href="#start">1</a></li><!--necessary for wrap around?-->
+				<li><a href="#design">2</a></li>
+				<li><a href="#implement">3</a></li>
+				<li><a href="#enjoy">4</a></li>
+			</ul>
+		</nav>
+
+		<div class="settings">
+			<a href="" class="show-path">Show Path</a>
+		</div>
+
+<!--SCROLLPATH WRAPPER -->
+		<div class="wrapper">
+			<div class="eval">
+				<h1>Evaluate</h1>
+				<span class="big">Shit about eval</h1></span>
+			</div>
+			<div class="design">
+				<h1>Design</h1>
+				<span class="big">Shit about design</h1></span>
+			</div>
+			<div class="implement">
+				<h1>Implement</h1>
+				<span class="big">Shit about implement</h1></span>
+			</div>
+			<div class="enjoy">
+				<h1>Enjoy</h1>
+				<span class="big">Shit about enjoy</h1></span>
+			</div>
+		</div><!-- END WRAPPER -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>
+	<script type="text/javascript" src="./script/lib/jquery.easing.js"></script>
+	<script type="text/javascript" src="./script/jquery.scrollpath.js"></script>
+	<script type="text/javascript" src="./script/path.js"></script>
+	</body>
+</html>
