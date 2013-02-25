@@ -1,4 +1,4 @@
-Vim and zsh configurations and plugins.
+###My dotfiles.
+Make sure you have `git` and `curl` installed and if using Linux. On OSX this should work out of the box.
+Then run `chmod +x install.sh && ./install.sh`
 
-Last updated 12 Dec 2012.
-- Switched my sytax off and used the theme by Kyle Isom after reading his blog post on the subject.
