@@ -33,7 +33,7 @@ source $HOME/.gvm/scripts/gvm
 # RBENV
 eval "$(rbenv init -)"
 
-#HOMEBREW and DRUSH
-#DEF PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+#HOMEBREW AMP, and DRUSH
+#DEFAULT PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
 export PATH=/usr/local/bin:$PATH:/usr/local/sbin
-export PATH=$PATH:/Applications/MAMP/bin/php/php5.4.10/bin
+export PATH="$(brew --prefix josegonzalez/php/php54)/bin:$PATH"
