@@ -94,3 +94,8 @@ if [[ $os -ne 0 ]]; then
     packer -S python2-powerline-git
   fi
 fi
+
+#ip tables to prevent a good bit of bullshit ISP throttling
+echo -e "Adding ISP throttling IP to iptables...\n"
+sudo iptables -A INPUT -s 173.194.55.0/24 -j DROP
+sudo iptables -A INPUT -s 206.111.0.0/16 -j DROP
