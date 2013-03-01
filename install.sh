@@ -1,37 +1,66 @@
 #! /bin/bash
 #Detect uname for proper os configuration
 unamestr=$( uname -s )
+linux=''
 
-#Install ZSH
-echo -e "Installing ZSH and oh-my-zsh...\n"
+#TODO ADD UBUNTU CONFIG AS WELL AS ARCH WHEN WORKING
+#TODO .vimrcs folder for diff configs
+#uname case function
+getOS() {
+  case $unamestr in
+    Darwin) os=0;;
+     Linux) os=1; if [[ -n $linux ]]; then linuxVersion(); fi;;
+         *) echo -e "Uname was nor properly detected, this script will not complete properly.\n";;
+  esac
+}
+
+#choose between my two main linux instalations Arch for desktop and ubuntu server
+linuxVersion() {
+  while true; do
+    read -p "Enter a 1 if using Arch, enter 2 if using Ubuntu" lin
+    case $lin in
+      1) linux=1; break;;
+      2) linux=2; break;;
+      *) echo -e "Please enter a 1 or 2.\n";;
+    esac
+  done
+}
+
+#Install zsh and git
+echo -e "Installing zsh and git...\n"
+if [[ $os -eq 0 ]]; then
+  echo -e "Installing homebrew first...\n"; ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+  brew update; brew install zsh git
+elif [[ $linux -eq 1 ]]; then
+  sudo pacman -Syu; sudo pacman -S zsh git
+else
+  sudo apt-get update; sudo apt-get install zsh git
+fi
+
+#Install oh-my-zsh
+echo -e "Installing oh-my-zsh...\n"
 curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
 
 #Install vimrc zshrc and functions
 echo -e "Copying vimrc, zshrc, tmux.conf and such to HOME...\n"
-cp .vimrc $HOME
-case $unamestr in
-   Linux) cp .zsh/.zshrc_linux "$HOME/.zshrc";;
-  Darwin) cp .zsh/.zshrc_osx "$HOME/.zshrc"; echo -e "Also installing Homebrew for OSX...\n"; ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)";;
-       *) echo -e "Uname was not properly detected, manually copy over zshrc.\n";;
-esac
 cp .tmux.conf $HOME
 cp -R .vim $HOME
 cp -R .zsh $HOME
+mkdir $HOME/.vim/tmp $HOME/.vim/backups
 
-while true; do
-  read -p "Do you have git currently installed? (y/n): " yn
-  case $yn in
-    [Yy]* ) break;;
-    [Nn]* ) if [[ $unamestr == 'Darwin' ]]; then
-              brew install git;
-            else
-              echo -e "Install git before proceeding.\n";
-            fi ;;
-        * ) echo -e "Please enter yes or no\n";;
-  esac
-done
+#slightly different configs for paths and plugins
+if [[ $os -eq 0 ]]; then
+  cp .vimrcs/.vimrc_osx "$HOME/.vimrc"
+  cp .zsh/.zshrc_osx "$HOME/.zshrc"
+elif [[ $linux -eq 1 ]]; then
+  cp .vimrcs/.vimrc_arch "$HOME/.vimrc"
+  cp .zsh/.zshrc_arch "$HOME/.zshrc"
+else
+  cp .vimrcs/.vimrc_linux "$HOME/.vimrc"
+  cp .zsh/.zshrc_linux "$HOME/.zshrc"
+fi
 
-read -p "Enter your git username (full name): " name
+read -p "Enter your name (full name): " name
 read -p "Enter your git email address: " email
 git config --global user.name "$name"
 git config --global user.email "$email"

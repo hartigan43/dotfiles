@@ -2,7 +2,6 @@ set nocompatible               " be iMproved
 filetype off                   " required!
 
 set rtp+=~/.vim/bundle/vundle/
-set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 call vundle#rc()
 
