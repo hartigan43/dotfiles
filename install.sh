@@ -99,3 +99,15 @@ fi
 echo -e "Adding ISP throttling IP to iptables...\n"
 sudo iptables -A INPUT -s 173.194.55.0/24 -j DROP
 sudo iptables -A INPUT -s 206.111.0.0/16 -j DROP
+
+#rbenv installation
+if [[ $ os -eq 0 ]]; then
+  brew install rbenv
+  brew install ruby-build
+  echo 'eval "$(rbenv init -)"' >> ~/.zshrc
+else
+  git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
+  echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.zshrc
+  echo 'eval "$(rbenv init -)"' >> ~/.zshrc
+  git clone git://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+fi
