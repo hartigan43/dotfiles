@@ -21,7 +21,7 @@ Bundle 'Valloric/YouCompleteMe'
 
 filetype plugin indent on "req
 
-"colorscheme base16-tomorrow
+"colorscheme base16-railscasts
 let g:nerdtree_tabs_open_on_console_startup=1
 
 syntax enable

@@ -26,4 +26,4 @@ plugins=(git vundle rbenv ruby rails rails3 encode64)
 source $HOME/.zsh/.zsh_aliases
 
 # RBENV
-eval "$(rbenv init -)"
+#eval "$(rbenv init -)"
