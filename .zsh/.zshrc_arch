@@ -6,7 +6,7 @@ ZSH_THEME="clean"
 source $ZSH/oh-my-zsh.sh
 
 #Aliases
-alias deploy="~/Code/Web/Scripts/main_deploy.sh"
+alias cms-install="~/Code/Web/Scripts/main_deploy.sh"
 alias gob="go build"
 
 # Suffix Aliases - open filetypes with program of choice
