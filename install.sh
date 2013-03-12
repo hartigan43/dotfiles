@@ -2,6 +2,7 @@
 #Detect uname for proper os configuration
 unamestr=$( uname -s )
 
+####FUNCTIONS####
 #uname case function
 getOS() {
   case $unamestr in
@@ -27,14 +28,13 @@ getLinux() {
 rbenvInstall() {
   if [[ $os -eq 1 ]]; then
     brew install rbenv
-    brew install rub-build
-    echo 'eval "$(rbenv init -)"' >> $HOME/.zshrc
+    brew install ruby-build
   else
     git clone git://github.com/sstephenson/rbenv.git $HOME/.rbenv
     echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> $HOME/.zshrc
-    echo 'eval "$(rbenv init -)"' >> $HOME/.zshrc
     git clone git://github.com/sstephenson/ruby-build.git $HOME/.rbenv/plugins/ruby-build
   fi
+  echo -e "If you're not using the zshrc in this repo add 'eval "$(rbenv init -)"' to your bashrc or zshrc.\n"
 }
 
 #ubuntu YCM plugin plugin installation
@@ -61,11 +61,12 @@ ubuPowerline() {
     wget https://github.com/Lokaltog/powerline/raw/develop/font/PowerlineSymbols.otf
     cd $fontConfDir && wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
   else # no fontconfig detected
-    echo -e "Downloading two patched fonts that you can set for use in your terminal of choice since fontconfig failed...\n"
+    echo -e "Downloading two patched fonts (Inconsolata/DroidSansMono) that you can set for use in your terminal of choice since fontconfig failed...\n"
     wget https://github.com/Lokaltog/powerline-fonts/tree/master/Inconsolata/Inconsolata\ for\ Powerline.otf
     wget https://github.com/Lokaltog/powerline-fonts/tree/master/DroidSansMono/Inconsolata\ for\ Powerline.otf
   fi
   fc-cache -vf $HOME/.fonts
+  echo -e "Powerline should have installed successfully.  Locate it and add rtp+=path/to/powerline/bindings/vim to your vimrc.\n":
 }
 
 #arch YCM plugin plugin installation
@@ -84,9 +85,8 @@ ohmyzsh() {
   #in case prompt fails for zsh
   chsh -s /bin/zsh
 }
-# END FUNCTIONS
+####END FUNCTIONS####
 
-#MAIN 
 echo -e "$unamestr detected!\n"
 getOS
 
@@ -113,13 +113,10 @@ mkdir $HOME/.vim/tmp $HOME/.vim/backups
 
 #slightly different configs for paths and plugins
 if [[ $os -eq 0 ]]; then
-  cp .vimrcs/.vimrc_osx "$HOME/.vimrc"
+  cp .vimrc "$HOME/.vimrc"
   cp .zsh/.zshrc_osx "$HOME/.zshrc"
-elif [[ $linux -eq 1 ]]; then
-  cp .vimrcs/.vimrc_arch "$HOME/.vimrc"
-  cp .zsh/.zshrc_arch "$HOME/.zshrc"
 else
-  cp .vimrcs/.vimrc_linux "$HOME/.vimrc"
+  cp .vimrc "$HOME/.vimrc"
   cp .zsh/.zshrc_linux "$HOME/.zshrc"
 fi
 
