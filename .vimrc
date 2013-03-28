@@ -2,11 +2,12 @@ set nocompatible               " be iMproved
 filetype off                   " required!
 
 set rtp+=~/.vim/bundle/vundle/
+set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 call vundle#rc()
 
 "let Vundle manage Vundle
 "required! 
-Bundle 'airblade/vim-gitgutter'
 Bundle 'gmarik/vundle'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'kien/ctrlp.vim'
@@ -21,7 +22,7 @@ Bundle 'Valloric/YouCompleteMe'
 
 filetype plugin indent on "req
 
-"colorscheme base16-railscasts
+"colorscheme base16-tomorrow
 let g:nerdtree_tabs_open_on_console_startup=1
 
 syntax enable
@@ -51,14 +52,6 @@ set foldmethod=indent
 set foldnestmax=2
 set foldenable
 
-function ForceFoldmethodIndent()
-  if &foldenable
-    se foldmethod=indent
-  endif
-endfunction
-"nnoremap <F5> :normal zi^M|call ForceFoldmethodIndent()
-"inoremap <F5> ^O:normal zi^M|call ForceFoldmethodIndent()
-
 "disable arrow keys / ctrl + hjkl window swap
 map <up> <nop>
 map <down> <nop>
@@ -74,12 +67,10 @@ nmap <F3> :TagbarToggle<CR>
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! %!sudo tee > /dev/null %
 
-if has("gui_running")
-  set guifont=Inconsolata\ 11     "set fonts for gui vim
-  set guioptions-=egmT                           "hide the gui elements
-  set guioptions-=m
-  set guioptions-=T
-  set guioptions-=L                               "fix for to get scrollbars 
+if has('gui_running')
+  set guifont=Inconsolata\ for\ Powerline:h13     "set fonts for gui vim
+  set guioptions-=egmt                            "hide the gui elements
+  set guioptions-=L                               "odd fix for to get scrollbars 
   set guioptions-=r                               "properly hidden on left and right
   set background=dark
   colorscheme base16-railscasts

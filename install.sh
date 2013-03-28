@@ -26,7 +26,7 @@ getLinux() {
 
 #install rbenv on osx or any linux
 rbenvInstall() {
-  if [[ $os -eq 1 ]]; then
+  if [[ $os -eq 0 ]]; then
     brew install rbenv
     brew install ruby-build
   else
@@ -105,20 +105,12 @@ fi
 ohmyzsh
 
 #Install vimrc zshrc and functions
-echo -e "Copying vimrc, zshrc, tmux.conf and such to HOME...\n"
-cp .tmux.conf $HOME
+echo -e "Symlinking vimrc, zshrc, tmux.conf and such to HOME...\n"
+ln -s $HOME/.dotfiles/.zsh $HOME/.zsh
+ln -s $HOME/.dotfiles/.vimrc $HOME/.vimrc
+ln -s $HOME/.dotfiles/.tmux.conf $HOME/.tmux.conf
 cp -R .vim $HOME
-cp -R .zsh $HOME
 mkdir $HOME/.vim/tmp $HOME/.vim/backups
-
-#slightly different configs for paths and plugins
-if [[ $os -eq 0 ]]; then
-  cp .vimrc "$HOME/.vimrc"
-  cp .zsh/.zshrc_osx "$HOME/.zshrc"
-else
-  cp .vimrc "$HOME/.vimrc"
-  cp .zsh/.zshrc_linux "$HOME/.zshrc"
-fi
 
 echo -e "Running basic git configuration...\n"
 read -p "Enter your name (full name): " name
@@ -132,10 +124,10 @@ vim +BundleInstall +qall
 
 #YCM BUILD AND POWERLINE INSTALLATION - CURRENTLY NOT AUTOMATED IN OSX DUE TO GOOFY PYTHON ISSUS WITH HOMEBREW / SYSTEM
 if [[ $os -ne 0 ]]; then
-  if [[ $linux -eq 2 ]]; then  #UBUNTU 
-    ubuYCM
-    echo -e "YCM complete, now installing poerline and its fonts...\n"
-    ubuPowerline
+  if [[ $linux -eq 2 ]]; then  #UBUNTU - currently disabled as ubuntus vim is behind and requires manual build
+    #ubuYCM
+    #echo -e "YCM complete, now installing poerline and its fonts...\n"
+    #ubuPowerline
   else   #ARCH
     echo -e "Installing YCM plugin plugin... \n"
     archYCM

@@ -8,9 +8,10 @@ source $ZSH/oh-my-zsh.sh
 #Aliases
 alias caffeine="echo 'No Sleep For an HOUR!'; caffeinate -u -t 3600"
 alias andsdk="~/Code/SDKs\ -\ Libraries/android-sdk/tools/android sdk"
-alias cms-install="~/Code/Web/Scripts/main_deploy.sh"
+alias deploy="~/Code/Web/Scripts/main_deploy.sh"
 alias gob="go build"
 alias bupdate='brew update && brew upgrade && brew cleanup'
+alias git="hub"
 
 # Suffix Aliases - open filetypes with program of choice
 alias -s html=mvim
