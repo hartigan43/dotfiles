@@ -12,6 +12,7 @@ alias deploy="~/Code/Web/Scripts/main_deploy.sh"
 alias gob="go build"
 alias bupdate='brew update && brew upgrade && brew cleanup'
 alias git="hub"
+alias sudo="nocorrect sudo"
 
 # Suffix Aliases - open filetypes with program of choice
 alias -s html=mvim
