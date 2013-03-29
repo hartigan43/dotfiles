@@ -90,7 +90,6 @@ ohmyzsh() {
 echo -e "$unamestr detected!\n"
 getOS
 
-#Install zsh and git
 echo -e "Installing zsh and git...\n"
 if [[ $os -eq 0 ]]; then
   echo -e "Installing homebrew first...\n"; ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
@@ -106,7 +105,8 @@ ohmyzsh
 
 #Install vimrc zshrc and functions
 echo -e "Symlinking vimrc, zshrc, tmux.conf and such to HOME...\n"
-ln -s $HOME/.dotfiles/.zsh $HOME/.zsh
+ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc
+ln -s $HOME/.dotfiles/.zsh_aliases $HOME/.zsh_aliases
 ln -s $HOME/.dotfiles/.vimrc $HOME/.vimrc
 ln -s $HOME/.dotfiles/.tmux.conf $HOME/.tmux.conf
 cp -R .vim $HOME
@@ -127,8 +127,9 @@ if [[ $os -ne 0 ]]; then
   if [[ $linux -eq 2 ]]; then  #UBUNTU - currently disabled as ubuntus vim is behind and requires manual build
     #ubuYCM
     #echo -e "YCM complete, now installing poerline and its fonts...\n"
-    #ubuPowerline
-  else   #ARCH
+    ubuPowerline
+  else
+    #ARCH
     echo -e "Installing YCM plugin plugin... \n"
     archYCM
     ehco -e "YCM complete, installing powerline...\n"
