@@ -105,7 +105,12 @@ ohmyzsh
 
 #Install vimrc zshrc and functions
 echo -e "Symlinking vimrc, zshrc, tmux.conf and such to HOME...\n"
-ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc
+if [[ $os -eq 0 ]]; then
+  ln -s $HOME/.dotfiles/.zshrc_osx $HOME/.zshrc
+else
+  ln -s $HOME/.dotfiles/.zshrc_linux $HOME/.zshrc
+fi
+
 ln -s $HOME/.dotfiles/.zsh_aliases $HOME/.zsh_aliases
 ln -s $HOME/.dotfiles/.vimrc $HOME/.vimrc
 ln -s $HOME/.dotfiles/.tmux.conf $HOME/.tmux.conf
