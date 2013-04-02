@@ -31,7 +31,7 @@ alias -s go=mvim
 plugins=(git vundle rbenv ruby rails rails3 brew encode64 osx)
 
 # Miscellaneous functions
-source $HOME/.zsh/.zsh_aliases
+source $HOME/.zsh_aliases
 
 # if GVM installed
 source $HOME/.gvm/scripts/gvm
