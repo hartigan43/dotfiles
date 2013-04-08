@@ -11,7 +11,7 @@ if [ "$TMUX" = "" ]; then tmux; fi
 #Aliases
 alias caffeine="echo 'No Sleep For an HOUR!'; caffeinate -u -t 3600"
 alias andsdk="~/Code/SDKs\ -\ Libraries/android-sdk/tools/android sdk"
-alias deploy="~/Code/Web/Scripts/main_deploy.sh"
+alias site-install="~/Code/Web/Scripts/install/main_install.sh"
 alias gob="go build"
 alias bupdate='brew update && brew upgrade && brew cleanup'
 alias git="hub"

@@ -68,12 +68,12 @@ nmap <F3> :TagbarToggle<CR>
 cmap w!! %!sudo tee > /dev/null %
 
 if has('gui_running')
-  set guifont=Inconsolata\ for\ Powerline:h13     "set fonts for gui vim
+  set guifont=Inconsolata\ for\ Powerline:h11     "set fonts for gui vim
   set guioptions-=egmt                            "hide the gui elements
   set guioptions-=L                               "odd fix for to get scrollbars 
   set guioptions-=r                               "properly hidden on left and right
   set background=dark
-  colorscheme base16-railscasts
+  colorscheme base16-solarized
 endif
 
 " addons for the tagbar vim plugin
