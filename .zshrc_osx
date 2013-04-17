@@ -27,8 +27,8 @@ alias -s c=mvim
 alias -s cpp=mvim
 alias -s go=mvim
 
-# Plugins to load, loc in  ~/.oh-my-zsh/custom/plugins/ Ex: plugins=(rails git textmate ruby lighthouse)
-plugins=(git vundle rbenv ruby rails rails3 brew encode64 osx)
+#oh-my-zsh-plugins
+plugins=(git github vundle rbenv ruby rails rails3 brew encode64 osx tmux golang)
 
 # Miscellaneous functions
 source $HOME/.zsh_aliases

@@ -1,6 +1,6 @@
 # pane0:top |  pane1:bottom-left | pane2:bottom-mid | pane3: bottom-right
 # select first pane -- only one if empty
-rename-window arch
+rename-window local
 select-pane -t 0
 # split horizontally by 85%
 split-window -v -p 15

@@ -6,7 +6,7 @@ ZSH_THEME="clean"
 source $ZSH/oh-my-zsh.sh
 
 # tmux on start with zsh
-#`if [ "$TMUX" = "" ]; then tmux; fi
+if [ "$TMUX" = "" ]; then tmux; fi
 
 #Aliases
 alias gob="go build"
@@ -23,8 +23,8 @@ alias -s c=gvim
 alias -s cpp=gvim
 alias -s go=gvim
 
-# Plugins to load, loc in  ~/.oh-my-zsh/custom/plugins/ Ex: plugins=(rails git textmate ruby lighthouse)
-plugins=(git vundle rbenv ruby rails rails3 encode64)
+#oh-my-zsh plugins
+plugins=(git github vundle rbenv ruby rails rails3 encode64 tmux golang archlinux systemd)
 
 # Miscellaneous functions
 source $HOME/.zsh_aliases
