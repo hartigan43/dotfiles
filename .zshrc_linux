@@ -6,7 +6,7 @@ ZSH_THEME="clean"
 source $ZSH/oh-my-zsh.sh
 
 # tmux on start with zsh
-#if [ "$TMUX" = "" ]; then tmux; fi
+#`if [ "$TMUX" = "" ]; then tmux; fi
 
 #Aliases
 alias gob="go build"
