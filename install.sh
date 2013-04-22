@@ -93,11 +93,11 @@ getOS
 echo -e "Installing zsh and git...\n"
 if [[ $os -eq 0 ]]; then
   echo -e "Installing homebrew first...\n"; ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
-  brew update; brew install zsh git
+  brew update; brew install zsh git curl wget
 elif [[ $linux -eq 1 ]]; then
-  sudo pacman -Syu; sudo pacman -S zsh git
+  sudo pacman -Syu; sudo pacman -S zsh git curl wget
 else
-  sudo apt-get update; sudo apt-get install zsh git
+  sudo apt-get update; sudo apt-get install zsh git curl wget
 fi
 
 #install oh-my-zsh
@@ -114,14 +114,22 @@ fi
 ln -s $HOME/.dotfiles/.zsh_aliases $HOME/.zsh_aliases
 ln -s $HOME/.dotfiles/.vimrc $HOME/.vimrc
 ln -s $HOME/.dotfiles/.tmux.conf $HOME/.tmux.conf
-cp -R .vim $HOME
-mkdir $HOME/.vim/tmp $HOME/.vim/backups
+ln -s $HOME/.dotfiles/.tmux $HOME/.tmux
+
+mkdir -p $HOME/.vim/tmp $HOME/.vim/backups
 
 echo -e "Running basic git configuration...\n"
 read -p "Enter your name (full name): " name
 read -p "Enter your git email address: " email
 git config --global user.name "$name"
 git config --global user.email "$email"
+
+echo -e "Creating pianobar config...\n"
+read -p "Enter your pandora email address: " pandMail
+read -p "Enter your pandora password: " pandPass
+mkdir -p $HOME/.config/pianobar/ && touch $HOME/.config/pianobar/config
+echo "user = $pandMail" >> $HOME/.config/pianobar/config
+echo "password = $pandPass" >> $HOME/.config/pianobar/config
 
 echo -e "Installing Vundle and running BundleInstall for vim plugins...\n"
 git clone https://github.com/gmarik/vundle.git $HOME/.vim/bundle/vundle
@@ -131,7 +139,7 @@ vim +BundleInstall +qall
 if [[ $os -ne 0 ]]; then
   if [[ $linux -eq 2 ]]; then  #UBUNTU - currently disabled as ubuntus vim is behind and requires manual build
     #ubuYCM
-    #echo -e "YCM complete, now installing poerline and its fonts...\n"
+    #echo -e "YCM complete, now installing powerline and its fonts...\n"
     ubuPowerline
   else
     #ARCH
