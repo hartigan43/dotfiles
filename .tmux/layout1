@@ -4,16 +4,22 @@ rename-window local
 select-pane -t 0
 # split horizontally by 75%
 split-window -v -p 25
-# select bottom pane and split vertically by 33%
+# select bottom pane and split vertically by 15% for pianobar
 select-pane -t 1
-split-window -h -p 20
-# select larger bottom pane and split in half - yielding 3 1/3 chunks
+split-window -h -p 15
+# select larger bottom pane and split in half - yielding 3 panes
 select-pane -t 1
 split-window -h -p 50
+#split the irssi window for the nicklist
+select-pane -t 2
+split-window -h -p 15
+resize-pane -t 3 -L 4
 
-#launch irssi and pianobar in their respective panes
-send -t 3 pianobar ENTER
+#launch irssi, nicklist and pianobar in their respective panes
+send -t 4 pianobar ENTER
 send -t 2 irssi ENTER
+send -t 3 'cat ~/.irssi/nicklistfifo' ENTER
+send -t 2 '/nicklist fifo' ENTER
 
 #open new window at my dev server
-new-window -n 'Omni-Utility' 'ssh oms1'
+#new-window -n 'Omni-Utility' 'ssh oms1'
