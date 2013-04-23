@@ -78,6 +78,7 @@ archYCM() {
   make ycm_core
   cp /usr/lib/llvm/libclang.so $HOME/.vim/bundle/YouCompleteMe/python
 }
+
 #Install oh-my-zsh
 ohmyzsh() {
   echo -e "Installing oh-my-zsh...\n"
@@ -107,13 +108,14 @@ ohmyzsh
 echo -e "Symlinking vimrc, zshrc, tmux.conf and such to HOME...\n"
 if [[ $os -eq 0 ]]; then
   ln -s $HOME/.dotfiles/.zshrc_osx $HOME/.zshrc
+  ln -s $HOME/.dotifles/.tmux_osx.conf $HOME/.tmux.conf
 else
   ln -s $HOME/.dotfiles/.zshrc_linux $HOME/.zshrc
+  ln -s $HOME/.dotfiles/.tmux_linux $HOME/.tmux.conf
 fi
 
 ln -s $HOME/.dotfiles/.zsh_aliases $HOME/.zsh_aliases
 ln -s $HOME/.dotfiles/.vimrc $HOME/.vimrc
-ln -s $HOME/.dotfiles/.tmux.conf $HOME/.tmux.conf
 ln -s $HOME/.dotfiles/.tmux $HOME/.tmux
 
 mkdir -p $HOME/.vim/tmp $HOME/.vim/backups

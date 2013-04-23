@@ -1,15 +1,20 @@
-# pane0:top |  pane1:bottom-left | pane2:bottom-mid | pane3: bottom-right
+# pane0:top |  pane1:bottom-left | pane2:bottom-mid | pane3: between mid and right (nicklist) | pane4:bottom-right
+
 # select first pane -- only one if empty
 rename-window local
 select-pane -t 0
-# split horizontally by 75%
-split-window -v -p 25
+
+# split horizontally by 78% - weird I know
+split-window -v -p 22
+
 # select bottom pane and split vertically by 15% for pianobar
 select-pane -t 1
 split-window -h -p 15
+
 # select larger bottom pane and split in half - yielding 3 panes
 select-pane -t 1
 split-window -h -p 50
+
 #split the irssi window for the nicklist
 select-pane -t 2
 split-window -h -p 15
