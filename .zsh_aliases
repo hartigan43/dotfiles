@@ -2,6 +2,11 @@
 
 alias ll="ls -l"
 alias la="ls -a"
+alias lla="ls -la"
+alias l.="ls -d .*"
+
+#From alias.sh
+alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
 extract () {
     if [ -f $1 ] ; then
@@ -22,13 +27,4 @@ extract () {
      else
          echo "'$1' is not a valid file"
      fi
-}
-
-# Currently broken... 
-s(){
-    if [[ $# == 0 ]]; then
-        sudo $(history -p '!!')
-    else
-        sudo "$@"
-    fi
 }
