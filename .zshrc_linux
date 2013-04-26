@@ -4,7 +4,7 @@ DEFAULT_USER="jake"
 ZSH_THEME="clean"
 # (random) clean miloshadzic takashiyoshida sporty_256 sorin robbyrussell nicoulaj
 source $ZSH/oh-my-zsh.sh
-export TERM=xterm-256color
+export TERM=xterm-256color #fix so tmux colors, and vim colors all play nice
 # tmux on start with zsh
 if [ "$TMUX" = "" ]; then tmux; fi
 
@@ -12,6 +12,7 @@ if [ "$TMUX" = "" ]; then tmux; fi
 alias gob="go build"
 alias git="hub"
 alias sudo="nocorrect sudo"
+alias irssi="TERM=screen-256color irssi" #fix for the xterm fix above with xfce4term and irssi buffer
 
 # Suffix Aliases - open filetypes with program of choice
 alias -s html=gvim

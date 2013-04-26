@@ -3,7 +3,23 @@
 unamestr=$( uname -s )
 
 ####FUNCTIONS####
-#uname case function
+
+#build vim from source for ubuntu - per instructions in YCM repo
+ubuVim(){
+  #first remove vim/gvim and install dependencies
+  sudo apt-get install libncurses5-dev libgnome2-dev libgnomeui-dev libgtk2.0-dev libatk1.0-dev libbonoboui2-dev libcairo2-dev libx11-dev libxpm-dev libxt-dev python-dev ruby-dev mercurial
+  sudo apt-get remove vim vim-runtime gvim
+  cd ~
+  #download install and build
+  hg clone https://code.google.com/p/vim/
+  cd vim
+  ./configure --with-features=huge --enable-rubyinterp --enable-pythoninterp --enable-perlinterp --enable-gui=gtk2 --enable-cscope --prefix=/usr
+  make VIMRUNTIMEDIR=/usr/share/vim/vim73
+  sudo make install
+}
+
+
+#detect the os being used -- better way to do this?
 getOS() {
   case $unamestr in
     Darwin) os=0;;
@@ -37,6 +53,24 @@ rbenvInstall() {
   echo -e "If you're not using the zshrc in this repo add 'eval "$(rbenv init -)"' to your bashrc or zshrc.\n"
 }
 
+archPianobar() {
+  sudo packer -S pianobar-git
+  sudo mv /etc/libao.conf /etc/liba.conf.bak
+  sudo echo "default_drive=pulese" >> /etc/libao.conf
+}
+
+osxPianobar() {
+ brew install pianobar
+}
+
+ubuPianobar() {
+  sudo apt-get install libao-dev libmad0-dev libfaac-dev libfaad-dev libgnutls-dev libjson0-dev
+  git clone git://github.com/PromyLOPh/pianobar.git
+  cd pianobar && make clean
+  make
+  sudo make install
+}
+
 #ubuntu YCM plugin plugin installation
 ubuYCM() {
   echo -e "Installing YCM plugin plugin... \n"
@@ -63,7 +97,7 @@ ubuPowerline() {
   else # no fontconfig detected
     echo -e "Downloading two patched fonts (Inconsolata/DroidSansMono) that you can set for use in your terminal of choice since fontconfig failed...\n"
     wget https://github.com/Lokaltog/powerline-fonts/tree/master/Inconsolata/Inconsolata\ for\ Powerline.otf
-    wget https://github.com/Lokaltog/powerline-fonts/tree/master/DroidSansMono/Inconsolata\ for\ Powerline.otf
+    wget https://github.com/Lokaltog/powerline-fonts/tree/master/DroidSansMono/Droid\ Sans\ Mono\ for\ Powerline.otf
   fi
   fc-cache -vf $HOME/.fonts
   echo -e "Powerline should have installed successfully.  Locate it and add rtp+=path/to/powerline/bindings/vim to your vimrc.\n":
@@ -106,12 +140,14 @@ ohmyzsh
 
 #Install vimrc zshrc and functions
 echo -e "Symlinking vimrc, zshrc, tmux.conf and such to HOME...\n"
+mv $HOME/.zshrc $HOME/.zshrc.bak #remove original zshrc
+
 if [[ $os -eq 0 ]]; then
   ln -s $HOME/.dotfiles/.zshrc_osx $HOME/.zshrc
   ln -s $HOME/.dotifles/.tmux_osx.conf $HOME/.tmux.conf
 else
   ln -s $HOME/.dotfiles/.zshrc_linux $HOME/.zshrc
-  ln -s $HOME/.dotfiles/.tmux_linux $HOME/.tmux.conf
+  ln -s $HOME/.dotfiles/.tmux_linux.conf $HOME/.tmux.conf
 fi
 
 ln -s $HOME/.dotfiles/.zsh_aliases $HOME/.zsh_aliases
@@ -126,6 +162,16 @@ read -p "Enter your git email address: " email
 git config --global user.name "$name"
 git config --global user.email "$email"
 
+#install pianobar and save configurationG
+echo -e "Installing pianobar...\n"
+if [[ $os -eq 0 ]]; then
+  osxPianobar
+else if [[ $linux -eq 2 ]]; then  #UBUNTU
+  ubuPianobar
+else
+  archPianobar
+fi
+
 echo -e "Creating pianobar config...\n"
 read -p "Enter your pandora email address: " pandMail
 read -p "Enter your pandora password: " pandPass
@@ -133,6 +179,7 @@ mkdir -p $HOME/.config/pianobar/ && touch $HOME/.config/pianobar/config
 echo "user = $pandMail" >> $HOME/.config/pianobar/config
 echo "password = $pandPass" >> $HOME/.config/pianobar/config
 
+#Vundle installation and plugin install from vimrc
 echo -e "Installing Vundle and running BundleInstall for vim plugins...\n"
 git clone https://github.com/gmarik/vundle.git $HOME/.vim/bundle/vundle
 vim +BundleInstall +qall
@@ -140,8 +187,9 @@ vim +BundleInstall +qall
 #YCM BUILD AND POWERLINE INSTALLATION - CURRENTLY NOT AUTOMATED IN OSX DUE TO GOOFY PYTHON ISSUS WITH HOMEBREW / SYSTEM
 if [[ $os -ne 0 ]]; then
   if [[ $linux -eq 2 ]]; then  #UBUNTU - currently disabled as ubuntus vim is behind and requires manual build
-    #ubuYCM
-    #echo -e "YCM complete, now installing powerline and its fonts...\n"
+    ubuVim
+    ubuYCM
+    echo -e "YCM complete, now installing powerline and its fonts...\n"
     ubuPowerline
   else
     #ARCH
