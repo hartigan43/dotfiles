@@ -79,6 +79,20 @@ ubuYCM() {
   ./install.sh --clang-completer
 }
 
+#arch YCM plugin plugin installation
+archYCM() {
+  echo -e "Installing YCM plugin plugin... \n"
+  sudo pacman -S clang cmake
+  mkdir $HOME/ycm_build && cd $HOME/ycm_build
+  cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBCLANG=ON . $HOME/.vim/bundle/YouCompleteMe/cpp
+  make ycm_core
+  cp /usr/lib/llvm/libclang.so $HOME/.vim/bundle/YouCompleteMe/python
+}
+
+brewYCM() {
+
+}
+
 ubuPowerline() {
   sudo apt-get install python-pip
   pip install --user git+git://github.com/Lokaltog/powerline
@@ -101,16 +115,6 @@ ubuPowerline() {
   fi
   fc-cache -vf $HOME/.fonts
   echo -e "Powerline should have installed successfully.  Locate it and add rtp+=path/to/powerline/bindings/vim to your vimrc.\n":
-}
-
-#arch YCM plugin plugin installation
-archYCM() {
-  echo -e "Installing YCM plugin plugin... \n"
-  sudo pacman -S clang cmake
-  mkdir $HOME/ycm_build && cd $HOME/ycm_build
-  cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBCLANG=ON . $HOME/.vim/bundle/YouCompleteMe/cpp
-  make ycm_core
-  cp /usr/lib/llvm/libclang.so $HOME/.vim/bundle/YouCompleteMe/python
 }
 
 #Install oh-my-zsh

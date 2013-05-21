@@ -1,7 +1,6 @@
 # pane0:top |  pane1:bottom-left | pane2:bottom-mid | pane3: between mid and right (nicklist) | pane4:bottom-right
 
 # select first pane -- only one if empty
-rename-window local
 select-pane -t 0
 
 # split horizontally by 78% - weird I know
@@ -28,6 +27,9 @@ send -t 2 '/nicklist fifo' ENTER
 
 #select top pane
 select-pane -t 0
+
+# set the window name
+rename-window local
 
 #open new window at my dev server
 #new-window -n 'Omni-Utility' 'ssh oms1'

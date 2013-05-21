@@ -11,6 +11,7 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 "chosen vim extensions
 Bundle 'airblade/vim-gitgutter'
+Bundle 'FredKSchott/CoVim'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'kien/ctrlp.vim'
 Bundle 'majutsushi/tagbar'
