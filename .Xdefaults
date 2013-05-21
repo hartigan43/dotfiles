@@ -3,13 +3,13 @@ URxvt.foreground: #dcdccc
 !URxvt.depth: 32
 URxvt*background: #3f3f3f
  
-URxvt.saveLines:32767
+URxvt.saveLines:40000
 URxvt.scrollBar: false
  
 URxvt*font: xft:Inconsolata\ for\ Powerline:pixelsize=13
  
 URxvt.perl-ext-common: default,matcher
-URxvt.urlLauncher: uzbl-browser
+URxvt.urlLauncher: google-chrome
 URxvt.matcher.button: 2
 URxvt.matcher.pattern.1: \\bwww\\.[\\w-]\\.[\\w./?&@#-]*[\\w/-]
  
