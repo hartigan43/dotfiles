@@ -1,0 +1,34 @@
+# Rails development layout
+# 0: top (vim) | 1: bottom-left (shell) | 2: bottom-mid (guard/server) | 3: bottom-right (guard/server) 
+# 4: right-top (pianobar) | 5: right-bottom (irssi)
+
+# select first pane -- only one if empty
+select-pane -t 0
+
+# split the window horizontally by 78%
+split-window -v -p 22
+
+# select the bottom pane and split it into thirds
+select-pane -t 1
+split-window -h -p 16
+select-pane -t 1
+split-window -h -p 65
+
+# make small column in top pane for irssi and pianobar
+select-pane -t 0
+split-window -h -p 15
+select-pane -t 1
+split-window -v -p 50
+
+#get into my rails directory and launch applications
+send -t 1 pianobar ENTER
+send -t 2 irssi ENTER
+send -t 3 'cd ~/Code/Rails' ENTER
+send -t 4 'cd ~/Code/Rails' ENTER
+send -t 5 'cd ~/Code/Rails' ENTER
+send -t 0 'cd ~/Code/Rails' ENTER
+
+select-pane -t 0
+
+# set the window name for my forgetful self
+rename-window rails
