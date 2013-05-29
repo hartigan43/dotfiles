@@ -7,6 +7,11 @@ alias l.="ls -d .*"
 
 #From alias.sh
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias memhog="ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6 | tail -15"
+
+randocommit() {
+    git commit -m"`curl -s http://whatthecommit.com/index.txt`"
+}
 
 extract () {
     if [ -f $1 ] ; then
