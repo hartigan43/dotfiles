@@ -1,6 +1,8 @@
 URxvt.foreground: #dcdccc
-URxvt*background: #3d3d3d
- 
+URxvt*background: #222222
+
+Urxvt.iconFile: /usr/share/icons/misc/terminalas.png
+
 URxvt.saveLines:40000
 URxvt.scrollBar: false
  
