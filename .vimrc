@@ -73,7 +73,7 @@ cmap w!! %!sudo tee > /dev/null %
 
 if has('gui_running')
   if has('macunix')
-    set guifont=Inconsolata\ for\ Powerline 10     "set fonts for gui vim
+    set guifont=Inconsolata\ for\ Powerline:h11     "set fonts for gui vim
   elseif has("gui_gtk2")                           "per vim wiki set gui font for most WMs
     set guifont=Inconsolata\ 10
   elseif has("gui_photon")
