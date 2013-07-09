@@ -72,8 +72,9 @@ nmap <F3> :TagbarToggle<CR>
 cmap w!! %!sudo tee > /dev/null %
 
 if has('gui_running')
-"  set guifont=Inconsolata/10                     "set fonts for gui vim
-  if has("gui_gtk2")                              "per vim wiki set gui font for most WMs
+  if has('macunix')
+    set guifont=Inconsolata\ for\ Powerline 10     "set fonts for gui vim
+  elseif has("gui_gtk2")                           "per vim wiki set gui font for most WMs
     set guifont=Inconsolata\ 10
   elseif has("gui_photon")
     set guifont=Inconsolata:s10
