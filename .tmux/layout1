@@ -14,16 +14,18 @@ split-window -h -p 15
 select-pane -t 1
 split-window -h -p 50
 
+#only for IRSSI 
 #split the irssi window for the nicklist
-select-pane -t 2
-split-window -h -p 15
-resize-pane -t 3 -L 4
+#select-pane -t 2
+#split-window -h -p 15
+#resize-pane -t 3 -L 4
 
-#launch irssi, nicklist and pianobar in their respective panes
-send -t 4 pianobar ENTER
-send -t 2 irssi ENTER
-send -t 3 'cat ~/.irssi/nicklistfifo' ENTER
-send -t 2 '/nicklist fifo' ENTER
+#launch irc, nicklist and pianobar in their respective panes
+send -t 3 pianobar ENTER
+send -t 2 weechat-curses ENTER
+#Only for IRSSI
+#send -t 3 'cat ~/.irssi/nicklistfifo' ENTER
+#send -t 2 '/nicklist fifo' ENTER
 
 #select top pane
 select-pane -t 0
