@@ -13,6 +13,7 @@ alias gob="go build"
 alias git="hub"
 alias sudo="nocorrect sudo"
 alias irssi="TERM=screen-256color irssi" #fix for the xterm fix above with xfce4term and irssi buffer
+alias weechat-curses="TERM=screen-256color weechat-curses" #attempting same irssi fix with weechat
 
 # Suffix Aliases - open filetypes with program of choice
 alias -s html=gvim
