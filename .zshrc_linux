@@ -32,7 +32,7 @@ plugins=(git github vundle rbenv ruby rails rails3 encode64 tmux golang archlinu
 source $HOME/.zsh_aliases
 
 #Set tmux title based on hostname
-settmuxtitle()
+printf "\033k`hostname -s`\033\\"
 
 # GO
 export GOPATH="$HOME/Code/go"

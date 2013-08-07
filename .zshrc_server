@@ -23,7 +23,7 @@ alias -s go=gvim
 plugins=(git github vundle rbenv ruby rails rails3 encode64 tmux golang archlinux systemd)
 
 #Set tmux title based on hostname
-settmuxtitle()
+printf "\033k`hostname -s`\033\\"
 
 # Miscellaneous functions
 source $HOME/.zsh_aliases

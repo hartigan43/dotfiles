@@ -33,6 +33,9 @@ plugins=(git github vundle rbenv ruby rails rails3 brew encode64 osx tmux golang
 # Miscellaneous functions
 source $HOME/.zsh_aliases
 
+#set tmux window title to hostname
+printf "\033k`hostname -s`\033\\"
+
 # if GVM installed
 source $HOME/.gvm/scripts/gvm
 # RBENV
