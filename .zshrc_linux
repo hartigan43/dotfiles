@@ -31,10 +31,12 @@ plugins=(git github vundle rbenv ruby rails rails3 encode64 tmux golang archlinu
 # Miscellaneous functions
 source $HOME/.zsh_aliases
 
-export PATH="$HOME/.rbenv/bin:$PATH:/opt/andoid-sdk-tools"
+#Set tmux title based on hostname
+settmuxtitle()
 
 # GO
 export GOPATH="$HOME/Code/go"
+export PATH="$HOME/.rbenv/bin:$PATH:/opt/andoid-sdk-tools"
 
 # RBENV
 eval "$(rbenv init -)"

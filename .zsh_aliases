@@ -9,11 +9,21 @@ alias l.="ls -d .*"
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias memhog="ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6 | tail -15"
 
-randocommit() {
+function randocommissian() {
     git commit -m"`curl -s http://whatthecommit.com/index.txt`"
 }
 
-extract () {
+function mcd() {
+  mkdir -p "$1" && cd "$1";
+}
+
+#set the tmux window title to the hostname
+function settmuxtitle() {
+  printf "\033k`hostname -s`\033\\"
+}
+
+#aliash.sh
+function extract () {
     if [ -f $1 ] ; then
       case $1 in
         *.tar.bz2)   tar xjf $1     ;;
