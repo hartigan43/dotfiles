@@ -16,8 +16,10 @@ Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'kien/ctrlp.vim'
 Bundle 'majutsushi/tagbar'
 Bundle 'pangloss/vim-javascript'
+Bundle 'prendradjaja/vim-vertigo'
 Bundle 'scrooloose/nerdtree'
 Bundle 'scrooloose/syntastic'
+Bundle 'takac/vim-commandcaps'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-haml'
@@ -93,6 +95,14 @@ if has('gui_running')
   set background=dark
   colorscheme zenburn
 endif
+
+" vertigo navigation bindings
+nnoremap <silent> <Space>j :<C-U>VertigoDown n<CR>
+vnoremap <silent> <Space>j :<C-U>VertigoDown v<CR>
+onoremap <silent> <Space>j :<C-U>VertigoDown o<CR>
+nnoremap <silent> <Space>k :<C-U>VertigoUp n<CR>
+vnoremap <silent> <Space>k :<C-U>VertigoUp v<CR>
+onoremap <silent> <Space>k :<C-U>VertigoUp o<CR>
 
 " addons for the tagbar vim plugin
 let g:tagbar_phpctags_bin='~/.vim/plugin/tagbar-phpctags.vim'
