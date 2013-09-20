@@ -1,0 +1,1 @@
+hardstatus alwayslastline "%w+ --  Host: %H Date: %D-%M-%Y: Load: %l "

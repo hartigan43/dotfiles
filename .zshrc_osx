@@ -34,6 +34,7 @@ plugins=(git github vundle rbenv ruby rails rails3 brew encode64 osx tmux golang
 source $HOME/.zsh_aliases
 
 #set tmux window title to hostname
+DISABLE_AUTO_TITLE=true
 printf "\033k`hostname -s`\033\\"
 
 # if GVM installed

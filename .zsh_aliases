@@ -4,6 +4,7 @@ alias ll="ls -l"
 alias la="ls -a"
 alias lla="ls -la"
 alias l.="ls -d .*"
+alias mxlookup="nslookup -q=mx"
 
 #From alias.sh
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"

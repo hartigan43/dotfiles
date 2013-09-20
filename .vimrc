@@ -10,10 +10,12 @@ call vundle#rc()
 "required! 
 Bundle 'gmarik/vundle'
 "chosen vim extensions
+Bundle 'altercation/vim-colors-solarized'
 Bundle 'airblade/vim-gitgutter'
 "Bundle 'FredKSchott/CoVim'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'kien/ctrlp.vim'
+Bundle 'Lokaltog/vim-easymotion'
 Bundle 'majutsushi/tagbar'
 Bundle 'pangloss/vim-javascript'
 Bundle 'prendradjaja/vim-vertigo'
@@ -28,13 +30,17 @@ Bundle 'tpope/vim-surround'
 
 filetype plugin indent on "req
 
-"colorscheme base16-tomorrow
+"nerdtree shown on file open
 let g:nerdtree_tabs_open_on_console_startup=1
+"easy motion leader key setting
+"let g:EasyMotion_leader_key = '''
 
 syntax enable
-set term=screen-256color
+"set term=screen-256color
+set t_Co=256 
+"colorscheme solarized
 set number                    "show line numbers
-set background=dark
+set background=light
 set ts=2                      "tabs width as two spaces
 set shiftwidth=2              
 set autoindent                "keep indentation of current line
@@ -95,6 +101,9 @@ if has('gui_running')
   set background=dark
   colorscheme zenburn
 endif
+
+"syntastic settings
+let g:syntastic_javascript_checkers = ['jslint']
 
 " vertigo navigation bindings
 nnoremap <silent> <Space>j :<C-U>VertigoDown n<CR>
