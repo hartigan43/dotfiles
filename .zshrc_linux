@@ -35,8 +35,9 @@ source $HOME/.zsh_aliases
 printf "\033k`hostname -s`\033\\"
 
 # GO
-export GOPATH="$HOME/Code/go"
+#export GOPATH="$HOME/Code/go"
 export PATH="$HOME/.rbenv/bin:$PATH:/opt/andoid-sdk-tools"
+#export PATH="$PATH:$HOME/.bspwm"
 
 # RBENV
 eval "$(rbenv init -)"

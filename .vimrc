@@ -11,7 +11,7 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 "chosen vim extensions
 Bundle 'airblade/vim-gitgutter'
-Bundle 'FredKSchott/CoVim'
+"Bundle 'FredKSchott/CoVim'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'kien/ctrlp.vim'
 Bundle 'majutsushi/tagbar'
@@ -24,7 +24,7 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-haml'
 Bundle 'tpope/vim-surround'
-Bundle 'Valloric/YouCompleteMe'
+"Bundle 'Valloric/YouCompleteMe'
 
 filetype plugin indent on "req
 
