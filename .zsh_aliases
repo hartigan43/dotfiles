@@ -9,6 +9,9 @@ alias mxlookup="nslookup -q=mx"
 #From alias.sh
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias memhog="ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6 | tail -15"
+alias aperr="sudo tail -f /var/log/apache2/error.log"
+alias apacc="sudo tail -f /var/log/apache2/access.log"
+alias upgrade="apt-get update && apt-get upgrade && apt-get clean"
 
 function randocommissian() {
     git commit -m"`curl -s http://whatthecommit.com/index.txt`"
@@ -43,4 +46,8 @@ function extract () {
      else
          echo "'$1' is not a valid file"
      fi
+}
+
+function undozip(){
+  unzip -l "$1" |  awk 'BEGIN { OFS="" ; ORS="" } ; { for ( i=4; i<NF; i++ ) print $i " "; print $NF "\n" }' | xargs -I{} rm -r {}
 }
