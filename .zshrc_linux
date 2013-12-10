@@ -1,7 +1,7 @@
 #user and default editor
 DEFAULT_USER="jake"
 export EDITOR="/usr/bin/vim"
-export VISUAL="/usr/bin/gvim"
+#export VISUAL="/usr/bin/gvim"
 
 #oh-my-zsh
 ZSH=$HOME/.oh-my-zsh
