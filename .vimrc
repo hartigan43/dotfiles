@@ -2,9 +2,15 @@ set nocompatible               " be iMproved
 filetype off                   " required!
 
 set rtp+=~/.vim/bundle/vundle/
-set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
+"Desktop
+"set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 call vundle#rc()
+
+"LAPTOP - powerline - pip2.7
+python from powerline.vim import setup as powerline_setup
+python powerline_setup()
+python del powerline_setup
 
 "let Vundle manage Vundle
 "required! 
