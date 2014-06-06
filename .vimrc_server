@@ -152,12 +152,10 @@ endfunction
 au FileType javascript call JavaScriptFold()
 au FileType javascript setl fen
 
-" fix so powerline updates faster 
-if ! has('gui_running')
-    set ttimeoutlen=10
-    augroup FastEscape
-        autocmd!
-        au InsertEnter * set timeoutlen=0
-        au InsertLeave * set timeoutlen=1000
-    augroup END
-endif
+""airline settings
+" remove separators
+let g:airline_left_sep=''
+let g:airline_right_sep=''
+" remove unused modes
+let g:airline_enable_fugitive=0
+let g:airline_enable_syntastic=0
