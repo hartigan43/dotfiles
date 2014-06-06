@@ -15,7 +15,6 @@ Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'kien/ctrlp.vim'
 Bundle 'majutsushi/tagbar'
 Bundle 'pangloss/vim-javascript'
-Bundle 'prendradjaja/vim-vertigo'
 Bundle 'scrooloose/nerdtree'
 Bundle 'scrooloose/syntastic'
 Bundle 'takac/vim-commandcaps'
@@ -74,39 +73,8 @@ nmap <F3> :TagbarToggle<CR>
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! %!sudo tee > /dev/null %
 
-if has('gui_running')
-  if has('macunix')
-    set guifont=Inconsolata\ for\ Powerline:h11     "set fonts for gui vim
-  elseif has("gui_gtk2")                           "per vim wiki set gui font for most WMs
-    set guifont=Inconsolata\ 10
-  elseif has("gui_photon")
-    set guifont=Inconsolata:s10
-  elseif has("gui_kde")
-    set guifont=Inconsolata/10/-1/5/50/0/0/0/1/0
-  elseif has("x11")
-    set guifont=-*-inconsolata-medium-r-normal-*-*-180-*-*-m-*-*
-  else
-    set guifont=Inconsolata:h10:cDEFAULT
-  endif
-  set guioptions-=egmt                            "hide the gui elements
-  set guioptions-=T
-  set guioptions-=m
-  set guioptions-=L                               "odd fix for to get scrollbars 
-  set guioptions-=r                               "properly hidden on left and right
-  set background=dark
-  colorscheme zenburn
-endif
-
 "syntastic settings
 let g:syntastic_javascript_checkers = ['jslint']
-
-" vertigo navigation bindings
-nnoremap <silent> <Space>j :<C-U>VertigoDown n<CR>
-vnoremap <silent> <Space>j :<C-U>VertigoDown v<CR>
-onoremap <silent> <Space>j :<C-U>VertigoDown o<CR>
-nnoremap <silent> <Space>k :<C-U>VertigoUp n<CR>
-vnoremap <silent> <Space>k :<C-U>VertigoUp v<CR>
-onoremap <silent> <Space>k :<C-U>VertigoUp o<CR>
 
 " addons for the tagbar vim plugin
 let g:tagbar_phpctags_bin='~/.vim/plugin/tagbar-phpctags.vim'
