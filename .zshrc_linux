@@ -13,6 +13,7 @@ ZSH_THEME="clean"
 # (random) clean miloshadzic takashiyoshida sporty_256 sorin robbyrussell nicoulaj
 source $ZSH/oh-my-zsh.sh
 
+#TMUX
 export TERM=xterm-256color #fix so tmux colors, and vim colors all play nice
 # tmux on start with zsh
 if [ "$TMUX" = "" ]; then tmux; fi
@@ -25,7 +26,7 @@ alias irssi="TERM=screen-256color irssi" #fix for the xterm fix above with xfce4
 alias weechat-curses="TERM=screen-256color weechat-curses" #attempting same irssi fix with weechat
 
 #oh-my-zsh plugins
-plugins=(git github vundle rbenv ruby rails rails3 encode64 tmux golang archlinux systemd pass)
+plugins=(git github vundle rbenv ruby rails encode64 tmux golang archlinux systemd pass)
 
 # Miscellaneous functions
 source $HOME/.zsh_aliases

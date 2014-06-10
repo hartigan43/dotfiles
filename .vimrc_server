@@ -1,0 +1,129 @@
+set nocompatible               " be iMproved
+filetype off                   " required!
+
+set rtp+=~/.vim/bundle/vundle/
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+call vundle#rc()
+
+"let Vundle manage Vundle
+"required! 
+Bundle 'gmarik/vundle'
+"chosen vim extensions
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'airblade/vim-gitgutter'
+Bundle 'jistr/vim-nerdtree-tabs'
+Bundle 'kien/ctrlp.vim'
+Bundle 'majutsushi/tagbar'
+Bundle 'pangloss/vim-javascript'
+Bundle 'scrooloose/nerdtree'
+Bundle 'scrooloose/syntastic'
+Bundle 'takac/vim-commandcaps'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-rails'
+Bundle 'tpope/vim-haml'
+Bundle 'tpope/vim-surround'
+Bundle 'bling/vim-airline'
+
+filetype plugin indent on "req
+
+"nerdtree shown on file open
+let g:nerdtree_tabs_open_on_console_startup=1
+
+syntax enable
+"set term=screen-256color
+set t_Co=256 
+"colorscheme solarized
+set number                    "show line numbers
+set background=light
+set ts=2                      "tabs width as two spaces
+set shiftwidth=2                  
+set autoindent                "keep indentation of current line
+set smarttab
+set expandtab                 "converts tabs to spaces
+set showmatch
+set encoding=utf-8
+set laststatus=2              "always shows statusline / powerline
+set noshowmode                "hides the mode for default statusline
+set nowrap                    "no word wrapping
+set backup                    "file backups enabled
+set backupdir=~/.vim/backups  "backup dir
+set directory=~/.vim/tmp      "temporary dir
+set noerrorbells              "kill the noise
+set timeoutlen=350            "delay for accepting key combination
+set mousehide                 "hide mouse while editing
+set pastetoggle=<F2>          "when in insert mode, allow easy external clipboard pasting
+
+"enable fold based on indent with max level of 10
+set foldmethod=indent
+set foldnestmax=2
+set foldenable
+
+"disable arrow keys / ctrl + hjkl window swap
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+map <C-n> <plug>NERDTreeTabsToggle<CR>
+nmap <F3> :TagbarToggle<CR>
+
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! %!sudo tee > /dev/null %
+
+"syntastic settings
+let g:syntastic_javascript_checkers = ['jslint']
+
+" addons for the tagbar vim plugin
+let g:tagbar_phpctags_bin='~/.vim/plugin/tagbar-phpctags.vim'
+let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+\ }
+
+" javascript folding http://amix.dk/blog/post/19132
+function! JavaScriptFold()
+  setl foldmethod=syntax
+  setl foldlevelstart=1
+  syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
+
+  function! FoldText()
+    return substitute(getline(v:foldstart), '{.*', '{...}', '')
+  endfunction
+  setl foldtext=FoldText()
+endfunction
+au FileType javascript call JavaScriptFold()
+au FileType javascript setl fen
+
+""airline settings
+" remove separators
+let g:airline_left_sep=''
+let g:airline_right_sep=''
+" remove unused modes
+let g:airline_enable_fugitive=0
+let g:airline_enable_syntastic=0
