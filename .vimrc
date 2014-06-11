@@ -8,9 +8,9 @@ set runtimepath^=~/.vim/bundle/ctrlp.vim
 call vundle#rc()
 
 "LAPTOP - powerline - pip2.7
-python from powerline.vim import setup as powerline_setup
-python powerline_setup()
-python del powerline_setup
+"python from powerline.vim import setup as powerline_setup
+"python powerline_setup()
+"python del powerline_setup
 
 "let Vundle manage Vundle
 "required! 
