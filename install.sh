@@ -90,7 +90,9 @@ serverInstall() {
 }
 
 workstationInstall() {
+  ln -s $HOME/.dotfiles/antigen/antigen.zsh $HOME/.antigen.zsh
   ln -s $HOME/.dotfiles/.zshrc_linux $HOME/.zshrc
+  ln -s $HOME/.dotfiles/.zshrc_linux $HOME/.zshenv
   ln -s $HOME/.dotfiles/.tmux_linux.conf $HOME/.tmux.conf
   ln -s $HOME/.dotfiles/.zsh_aliases $HOME/.zsh_aliases
   ln -s $HOME/.dotfiles/.vimrc $HOME/.vimrc
