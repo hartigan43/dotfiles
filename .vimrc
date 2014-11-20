@@ -32,6 +32,7 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-haml'
 Bundle 'tpope/vim-surround'
+Bundle 'itchyny/calendar.vim'
 Bundle 'Valloric/YouCompleteMe'
 
 filetype plugin indent on "req
@@ -40,6 +41,8 @@ filetype plugin indent on "req
 let g:nerdtree_tabs_open_on_console_startup=1
 "easy motion leader key setting
 "let g:EasyMotion_leader_key = '''
+"let calendar.vim use google calendar
+let g:calendar_google_calendar = 1
 
 syntax enable
 "set term=screen-256color

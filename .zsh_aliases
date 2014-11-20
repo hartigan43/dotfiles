@@ -5,6 +5,11 @@ alias la="ls -a"
 alias lla="ls -la"
 alias l.="ls -d .*"
 alias mxlookup="nslookup -q=mx"
+alias gob="go build"
+#alias git="hub"
+alias sudo="nocorrect sudo"
+alias irssi="TERM=screen-256color irssi" #fix for the xterm fix above with xfce4term and irssi buffer
+alias weechat-curses="TERM=screen-256color weechat-curses" #attempting same irssi fix with weechat
 
 #From alias.sh
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
@@ -26,7 +31,7 @@ function settmuxtitle() {
   printf "\033k`hostname -s`\033\\"
 }
 
-#aliash.sh
+#alias.sh
 function extract () {
     if [ -f $1 ] ; then
       case $1 in

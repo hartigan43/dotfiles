@@ -6,11 +6,11 @@ new-window
 # select first pane -- only one if empty
 select-pane -t 0
 
-# split horizontally by 78% - weird I know
-split-window -v -p 22
+# split horizontally by 83%
+split-window -v -p 17
 
 # select bottom pane and split vertically by 15% for pianobar
-select-pane -t 1
+select-pane -t 2
 split-window -h -p 50
 
 # launch weechat in the first window
