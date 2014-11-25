@@ -18,6 +18,7 @@ Bundle 'gmarik/vundle'
 "chosen vim extensions
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'airblade/vim-gitgutter'
+Bundle 'christoomey/vim-tmux-navigator'
 "Bundle 'FredKSchott/CoVim'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'kien/ctrlp.vim'
