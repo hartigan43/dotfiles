@@ -1,54 +1,39 @@
 set nocompatible               " be iMproved
 filetype off                   " required!
 
-set rtp+=~/.vim/bundle/vundle/
-"Desktop
-"set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
+call plug#begin('~/.vim/plugged') "load vim-plug
+
+" Vim-plug plugins
+Plug 'airblade/vim-gitgutter'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'fatih/vim-go'
+"Plug  'FredKSchott/CoVim'
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'kien/ctrlp.vim'
+"Plug 'Lokaltog/vim-easymotion'
+Plug 'majutsushi/tagbar'
+Plug 'pangloss/vim-javascript'
+Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/syntastic'
+Plug 'takac/vim-commandcaps'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-haml'
+Plug 'tpope/vim-surround'
+Plug 'Valloric/YouCompleteMe'
+
+call plug#end()
+
 set runtimepath^=~/.vim/bundle/ctrlp.vim
-call vundle#rc()
-
-"LAPTOP - powerline - pip2.7
-"python from powerline.vim import setup as powerline_setup
-"python powerline_setup()
-"python del powerline_setup
-
-"let Vundle manage Vundle
-"required! 
-Bundle 'gmarik/vundle'
-"chosen vim extensions
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'airblade/vim-gitgutter'
-Bundle 'christoomey/vim-tmux-navigator'
-"Bundle 'FredKSchott/CoVim'
-Bundle 'jistr/vim-nerdtree-tabs'
-Bundle 'kien/ctrlp.vim'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'majutsushi/tagbar'
-Bundle 'pangloss/vim-javascript'
-Bundle 'prendradjaja/vim-vertigo'
-Bundle 'scrooloose/nerdtree'
-Bundle 'scrooloose/syntastic'
-Bundle 'takac/vim-commandcaps'
-Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-rails'
-Bundle 'tpope/vim-haml'
-Bundle 'tpope/vim-surround'
-Bundle 'itchyny/calendar.vim'
-Bundle 'Valloric/YouCompleteMe'
 
 filetype plugin indent on "req
 
 "nerdtree shown on file open
 let g:nerdtree_tabs_open_on_console_startup=1
-"easy motion leader key setting
-"let g:EasyMotion_leader_key = '''
-"let calendar.vim use google calendar
-let g:calendar_google_calendar = 1
 
 syntax enable
 "set term=screen-256color
 set t_Co=256 
-"colorscheme solarized
 set number                    "show line numbers
 set background=light
 set ts=2                      "tabs width as two spaces
