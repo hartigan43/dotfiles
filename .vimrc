@@ -26,7 +26,7 @@ call plug#end()
 
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
-filetype plugin indent on "req
+"filetype plugin indent on "req
 
 "nerdtree shown on file open
 let g:nerdtree_tabs_open_on_console_startup=1
@@ -70,6 +70,7 @@ map <C-k> <C-w>k
 map <C-l> <C-w>l
 map <C-n> <plug>NERDTreeTabsToggle<CR>
 nmap <F3> :TagbarToggle<CR>
+nmap <F4> :lwindow<CR>
 
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! %!sudo tee > /dev/null %
@@ -98,45 +99,18 @@ if has('gui_running')
 endif
 
 "syntastic settings
-let g:syntastic_javascript_checkers = ['jslint']
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
-" vertigo navigation bindings
-nnoremap <silent> <Space>j :<C-U>VertigoDown n<CR>
-vnoremap <silent> <Space>j :<C-U>VertigoDown v<CR>
-onoremap <silent> <Space>j :<C-U>VertigoDown o<CR>
-nnoremap <silent> <Space>k :<C-U>VertigoUp n<CR>
-vnoremap <silent> <Space>k :<C-U>VertigoUp v<CR>
-onoremap <silent> <Space>k :<C-U>VertigoUp o<CR>
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+  "end recommended syntastic
+let g:syntastic_loc_list_height = 6
 
-" addons for the tagbar vim plugin
-let g:tagbar_phpctags_bin='~/.vim/plugin/tagbar-phpctags.vim'
-let g:tagbar_type_go = {
-    \ 'ctagstype' : 'go',
-    \ 'kinds'     : [
-        \ 'p:package',
-        \ 'i:imports:1',
-        \ 'c:constants',
-        \ 'v:variables',
-        \ 't:types',
-        \ 'n:interfaces',
-        \ 'w:fields',
-        \ 'e:embedded',
-        \ 'm:methods',
-        \ 'r:constructor',
-        \ 'f:functions'
-    \ ],
-    \ 'sro' : '.',
-    \ 'kind2scope' : {
-        \ 't' : 'ctype',
-        \ 'n' : 'ntype'
-    \ },
-    \ 'scope2kind' : {
-        \ 'ctype' : 't',
-        \ 'ntype' : 'n'
-    \ },
-    \ 'ctagsbin'  : 'gotags',
-    \ 'ctagsargs' : '-sort -silent'
-\ }
+let g:syntastic_javascript_checkers = ['jshint']
 
 " javascript folding http://amix.dk/blog/post/19132
 function! JavaScriptFold()
