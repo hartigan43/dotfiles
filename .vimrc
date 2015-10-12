@@ -13,8 +13,10 @@ Plug 'kien/ctrlp.vim'
 "Plug 'Lokaltog/vim-easymotion'
 Plug 'majutsushi/tagbar'
 Plug 'pangloss/vim-javascript'
+Plug 'rking/ag.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
+Plug 'sjl/gundo.vim'
 Plug 'takac/vim-commandcaps'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
@@ -27,6 +29,7 @@ call plug#end()
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 "filetype plugin indent on "req
+filetype indent on
 
 "nerdtree shown on file open
 let g:nerdtree_tabs_open_on_console_startup=1
@@ -49,14 +52,17 @@ set nowrap                    "no word wrapping
 set backup                    "file backups enabled
 set backupdir=~/.vim/backups  "backup dir
 set directory=~/.vim/tmp      "temporary dir
+set writebackup               "enabling backups
 set noerrorbells              "kill the noise
 set timeoutlen=350            "delay for accepting key combination
 set mousehide                 "hide mouse while editing
 set pastetoggle=<F2>          "when in insert mode, allow easy external clipboard pasting
+set incsearch                 "search as characters are entered
+set hlsearch                  "highlight matches
 
-"enable fold based on indent with max level of 10
 set foldmethod=indent
-set foldnestmax=2
+set foldlevelstart=10
+set foldnestmax=10
 set foldenable
 
 "disable arrow keys / ctrl + hjkl window swap
@@ -68,9 +74,23 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+
+"custom key commands and plugin settings
 map <C-n> <plug>NERDTreeTabsToggle<CR>
+"show/hide tagbar
 nmap <F3> :TagbarToggle<CR>
+"syntastic window
 nmap <F4> :lwindow<CR>
+"hide search highlighting
+nnoremap <leader><space> :nohlsearch<CR> 
+"display vim undo tree
+nnoremap <leader>u :GundoToggle<CR>
+
+"ctrlp settings
+let g:ctrlp_match_window = 'bottom,order:ttb'                     "order matches top to bottom
+let g:ctrlp_switch_buffer = 0                                     "always open new file in new buffer
+let g:ctrlp_working_path_mode = 0                                 "ctrlp respect dir change in vim session
+let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'    "allow ctrl p to use ag and be fast
 
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! %!sudo tee > /dev/null %
