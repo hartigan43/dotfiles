@@ -22,12 +22,13 @@ ohmyzsh() {
   chsh -s /bin/zsh
 }
 
+#TODO Replace with vim-plug
 #Install Vundle
-installVundle() {
-  echo -e "Installing Vundle and running BundleInstall for vim plugins...\n"
-  git clone https://github.com/gmarik/vundle.git $HOME/.vim/bundle/vundle
-  vim +BundleInstall +qall
-}
+#installVundle() {
+#  echo -e "Installing Vundle and running BundleInstall for vim plugins...\n"
+#  git clone https://github.com/gmarik/vundle.git $HOME/.vim/bundle/vundle
+#  vim +BundleInstall +qall
+#}
 
 #Git Config
 gitConf() {
@@ -65,10 +66,10 @@ commonInstall() {
 echo -e "Configuration files symlinked to HOME...\n"
 mv $HOME/.zshrc $HOME/.zshrc.bak #remove original zshrc
 
-mkdir -p $HOME/.vim/tmp $HOME/.vim/backups
+mkdir -p $HOME/.vim/tmp/backups $HOME/.vim/tmp/undo $HOME/.vim/tmp/swap
 
 #Vundle installation and plugin install from vimrc
-installVundle
+#installVundle
 
 #zsh and ohmyzsh
 ohmyzsh
@@ -102,7 +103,7 @@ workstationInstall() {
   #rbenv installation
   rbenvInstall
   
-  #ip tables to prevent a good bit of bullshit ISP throttling
+  #ip tables to prevent a good bit of ISP video throttling
   echo -e "Adding ISP throttling IP to iptables...\n"
   sudo iptables -A INPUT -s 173.194.55.0/24 -j DROP
   sudo iptables -A INPUT -s 206.111.0.0/16 -j DROP

@@ -1,5 +1,5 @@
-set nocompatible               " be iMproved
 filetype off                   " required!
+set nocompatible               " be iMproved
 
 call plug#begin('~/.vim/plugged') "load vim-plug
 
@@ -28,8 +28,8 @@ call plug#end()
 
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
-"filetype plugin indent on "req
-filetype indent on
+filetype plugin indent on
+"filetype indent on
 
 "nerdtree shown on file open
 let g:nerdtree_tabs_open_on_console_startup=1
@@ -37,32 +37,44 @@ let g:nerdtree_tabs_open_on_console_startup=1
 syntax enable
 "set term=screen-256color
 set t_Co=256 
-set number                    "show line numbers
+set number                                        "show line numbers
 set background=light
-set ts=2                      "tabs width as two spaces
-set shiftwidth=2              
-set autoindent                "keep indentation of current line
+set ts=2                                          "tabs width as two spaces
+set shiftwidth=2                                  
+set autoindent                                    "keep indentation of current line
 set smarttab
-set expandtab                 "converts tabs to spaces
+set expandtab                                     "converts tabs to spaces
 set showmatch
+set history=1000
+set lazyredraw                                    "only redraw when necessary
 set encoding=utf-8
-set laststatus=2              "always shows statusline / powerline
-set noshowmode                "hides the mode for default statusline
-set nowrap                    "no word wrapping
-set backup                    "file backups enabled
-set backupdir=~/.vim/backups  "backup dir
-set directory=~/.vim/tmp      "temporary dir
-set writebackup               "enabling backups
-set noerrorbells              "kill the noise
-set timeoutlen=350            "delay for accepting key combination
-set mousehide                 "hide mouse while editing
-set pastetoggle=<F2>          "when in insert mode, allow easy external clipboard pasting
-set incsearch                 "search as characters are entered
-set hlsearch                  "highlight matches
+set laststatus=2                                  "always shows statusline / powerline
+set noshowmode                                    "hides the mode for default statusline
+set nowrap                                        "no word wrapping
+set undofile                                      "allow per file undo persistance
+set undoreload=10000
+set undodir=~/.vim/tmp/undo//                     "undo dir
+set backupdir=~/.vim/tmp/backups//                "backup dir -- // saves full filepath with % as folder delimeter
+set directory=~/.vim/tmp/swap//                   "temporary dir for swap files
+set backup                                        "file backups enabled
+set writebackup                                   "enabling backups
+set noswapfile                                    "disable swaps - were using backups in 2015
+set noerrorbells                                  "kill the noise
+set timeoutlen=350                                "delay for accepting key combination
+set mousehide                                     "hide mouse while editing
+set pastetoggle=<F2>                              "when in insert mode, allow easy external clipboard pasting
+set incsearch                                     "search as characters are entered
+set hlsearch                                      "highlight matches
+set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode characters for tab,eol,and with wrap on
 
+"set leader key -- originally \ -- now localleader
+let mapleader = ","
+let maplocalleader = "\\"
+
+"fold methods
 set foldmethod=indent
 set foldlevelstart=10
-set foldnestmax=10
+set foldnestmax=12
 set foldenable
 
 "disable arrow keys / ctrl + hjkl window swap
@@ -76,6 +88,9 @@ map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 "custom key commands and plugin settings
+"Clean trailing whitespace
+nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
+"toggle nerdtree display
 map <C-n> <plug>NERDTreeTabsToggle<CR>
 "show/hide tagbar
 nmap <F3> :TagbarToggle<CR>
@@ -85,6 +100,8 @@ nmap <F4> :lwindow<CR>
 nnoremap <leader><space> :nohlsearch<CR> 
 "display vim undo tree
 nnoremap <leader>u :GundoToggle<CR>
+"split line similar to using J to join a line
+nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w
 
 "ctrlp settings
 let g:ctrlp_match_window = 'bottom,order:ttb'                     "order matches top to bottom
