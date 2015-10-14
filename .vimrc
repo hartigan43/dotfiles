@@ -1,9 +1,13 @@
+" .vimrc
+" many things from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
+
 filetype off                   " required!
 set nocompatible               " be iMproved
 
+" Vim-plug --------------------------------------------------------------- {{{
+
 call plug#begin('~/.vim/plugged') "load vim-plug
 
-" Vim-plug plugins
 Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'fatih/vim-go'
@@ -26,19 +30,15 @@ Plug 'Valloric/YouCompleteMe'
 
 call plug#end()
 
-set runtimepath^=~/.vim/bundle/ctrlp.vim
+" }}}
 
 filetype plugin indent on
 "filetype indent on
 
-"nerdtree shown on file open
-let g:nerdtree_tabs_open_on_console_startup=1
+" Basic options ------------------------------------------------------------ {{{
 
 syntax enable
-"set term=screen-256color
-set t_Co=256 
 set number                                        "show line numbers
-set background=light
 set ts=2                                          "tabs width as two spaces
 set shiftwidth=2                                  
 set autoindent                                    "keep indentation of current line
@@ -59,25 +59,23 @@ set directory=~/.vim/tmp/swap//                   "temporary dir for swap files
 set backup                                        "file backups enabled
 set writebackup                                   "enabling backups
 set noswapfile                                    "disable swaps - were using backups in 2015
-set noerrorbells                                  "kill the noise
+"set noerrorbells                                 "kill the noise
+set visualbell                                    "kill the noise
 set timeoutlen=350                                "delay for accepting key combination
 set mousehide                                     "hide mouse while editing
 set pastetoggle=<F2>                              "when in insert mode, allow easy external clipboard pasting
 set incsearch                                     "search as characters are entered
 set hlsearch                                      "highlight matches
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode characters for tab,eol,and with wrap on
+set showbreak=↪
 
-"set leader key -- originally \ -- now localleader
+" set leader key -- originally \ -- now localleader
 let mapleader = ","
 let maplocalleader = "\\"
 
-"fold methods
-set foldmethod=indent
-set foldlevelstart=10
-set foldnestmax=12
-set foldenable
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 
-"disable arrow keys / ctrl + hjkl window swap
+" disable arrow keys / ctrl + hjkl window swap
 map <up> <nop>
 map <down> <nop>
 map <left> <nop>
@@ -87,31 +85,114 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-"custom key commands and plugin settings
-"Clean trailing whitespace
-nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
-"toggle nerdtree display
-map <C-n> <plug>NERDTreeTabsToggle<CR>
-"show/hide tagbar
-nmap <F3> :TagbarToggle<CR>
-"syntastic window
-nmap <F4> :lwindow<CR>
-"hide search highlighting
-nnoremap <leader><space> :nohlsearch<CR> 
-"display vim undo tree
-nnoremap <leader>u :GundoToggle<CR>
-"split line similar to using J to join a line
-nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w
+" if undo and backup directories do not exist, make them
+if !isdirectory(expand(&undodir))
+    call mkdir(expand(&undodir), "p")
+endif
+if !isdirectory(expand(&backupdir))
+    call mkdir(expand(&backupdir), "p")
+endif
+if !isdirectory(expand(&directory))
+    call mkdir(expand(&directory), "p")
+endif
 
-"ctrlp settings
+" }}}
+" Folding ------------------------------------------------------------------ {{{
+
+set foldlevelstart=0
+
+" Make zO recursively open whatever fold we're in, even if it's partially open.
+nnoremap zO zczO
+
+" "Focus" the current line.  Basically:
+"
+" 1. Close all folds.
+" 2. Open just the folds containing the current line.
+" 3. Move the line to a little bit (15 lines) above the center of the screen.
+" 4. Pulse the cursor line.  My eyes are bad.
+"
+" This mapping wipes out the z mark, which I never use.
+"
+" I use :sus for the rare times I want to actually background Vim.
+nnoremap <c-z> mzzMzvzz15<c-e>`z:Pulse<cr>
+
+function! MyFoldText() " {{{
+    let line = getline(v:foldstart)
+
+    let nucolwidth = &fdc + &number * &numberwidth
+    let windowwidth = winwidth(0) - nucolwidth - 3
+    let foldedlinecount = v:foldend - v:foldstart
+
+    " expand tabs into spaces
+    let onetab = strpart('          ', 0, &tabstop)
+    let line = substitute(line, '\t', onetab, 'g')
+
+    let line = strpart(line, 0, windowwidth - 2 -len(foldedlinecount))
+    let fillcharcount = windowwidth - len(line) - len(foldedlinecount)
+    return line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
+endfunction " }}}
+
+set foldtext=MyFoldText()
+set foldmethod=marker
+
+" }}}
+" Plugin-settings ---------------------------------------------------------- {{{
+" ctrlp settings  ---------------------------------------------------------- {{{
 let g:ctrlp_match_window = 'bottom,order:ttb'                     "order matches top to bottom
 let g:ctrlp_switch_buffer = 0                                     "always open new file in new buffer
 let g:ctrlp_working_path_mode = 0                                 "ctrlp respect dir change in vim session
 let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'    "allow ctrl p to use ag and be fast
+" }}}
+
+" syntastic settings ------------------------------------------------------- {{{
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+  "end recommended syntastic
+let g:syntastic_loc_list_height = 6
+
+let g:syntastic_javascript_checkers = ['jshint']
+" }}}
+
+"nerdtree shown on file open
+let g:nerdtree_tabs_open_on_console_startup=1
+" }}}
+" Custom keys -------------------------------------------------------------- {{{
+" Clean trailing whitespace
+nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
+
+" toggle nerdtree display
+map <C-n> <plug>NERDTreeTabsToggle<CR>
+
+" show/hide tagbar
+nmap <F3> :TagbarToggle<CR>
+
+" syntastic window
+nmap <F4> :lwindow<CR>
+
+" hide search highlighting
+nnoremap <leader><space> :nohlsearch<CR> 
+
+" display vim undo tree
+nnoremap <leader>u :GundoToggle<CR>
+
+" split line similar to using J to join a line
+nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w
 
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! %!sudo tee > /dev/null %
 
+" disable help key
+noremap  <F1> :checktime<cr>
+inoremap <F1> <esc>:checktime<cr>
+
+" }}}
+" GUI-settings ------------------------------------------------------------- {{{
 if has('gui_running')
   if has('macunix')
     set guifont=Inconsolata\ for\ Powerline:h11     "set fonts for gui vim
@@ -134,34 +215,21 @@ if has('gui_running')
   set background=dark
   colorscheme zenburn
 endif
-
-"syntastic settings
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-  "end recommended syntastic
-let g:syntastic_loc_list_height = 6
-
-let g:syntastic_javascript_checkers = ['jshint']
-
+" }}}
+" Misc settings ------------------------------------------------------------ {{{
 " javascript folding http://amix.dk/blog/post/19132
-function! JavaScriptFold()
-  setl foldmethod=syntax
-  setl foldlevelstart=1
-  syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
-
-  function! FoldText()
-    return substitute(getline(v:foldstart), '{.*', '{...}', '')
-  endfunction
-  setl foldtext=FoldText()
-endfunction
-au FileType javascript call JavaScriptFold()
-au FileType javascript setl fen
+" function! JavaScriptFold()
+"   setl foldmethod=syntax
+"   setl foldlevelstart=1
+"   syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
+" 
+"   function! FoldText()
+"     return substitute(getline(v:foldstart), '{.*', '{...}', '')
+"   endfunction
+"   setl foldtext=FoldText()
+" endfunction
+" au FileType javascript call JavaScriptFold()
+" au FileType javascript setl fen
 
 " fix so powerline updates faster 
 if ! has('gui_running')
@@ -172,3 +240,4 @@ if ! has('gui_running')
         au InsertLeave * set timeoutlen=1000
     augroup END
 endif
+" }}}
