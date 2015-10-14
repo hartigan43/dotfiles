@@ -1,4 +1,5 @@
 #! /bin/sh
+# TODO maybe ignore creating vim directories with new vimrc
 
 #Check for git and curl
 prereqCheck() {
@@ -50,7 +51,7 @@ rbenvInstall() {
 setRealName() {
   read -p "Please enter you real name. ex: John Doe:\n" realName
   currentUser=whoami
-  sudo usermod -c "'$realName'" $currentUser 
+  sudo usermod -c "'$realName'" $currentUser
 }
 
 #TODO
@@ -102,7 +103,7 @@ workstationInstall() {
 
   #rbenv installation
   rbenvInstall
-  
+
   #ip tables to prevent a good bit of ISP video throttling
   echo -e "Adding ISP throttling IP to iptables...\n"
   sudo iptables -A INPUT -s 173.194.55.0/24 -j DROP

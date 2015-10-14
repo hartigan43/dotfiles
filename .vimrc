@@ -9,6 +9,7 @@ set nocompatible               " be iMproved
 call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
+Plug 'bling/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'fatih/vim-go'
 "Plug  'FredKSchott/CoVim'
@@ -161,6 +162,9 @@ let g:syntastic_javascript_checkers = ['jshint']
 
 "nerdtree shown on file open
 let g:nerdtree_tabs_open_on_console_startup=1
+
+"enable powerline symbols with airline
+let g:airline_powerline_fonts = 1
 " }}}
 " Custom keys -------------------------------------------------------------- {{{
 " Clean trailing whitespace
