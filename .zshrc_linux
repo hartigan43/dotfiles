@@ -1,7 +1,7 @@
 #user and default editor
 DEFAULT_USER="jake"
 export EDITOR="/usr/bin/vim"
-#export VISUAL="/usr/bin/gvim"
+export VISUAL="/usr/bin/gvim"
 
 #vi mode with backspace
 set -o vi
@@ -20,31 +20,70 @@ printf "\033k`hostname -s`\033\\"
 
 #Go
 export GOPATH="$HOME/Code/Go"
-export PATH="$HOME/.rbenv/bin:$PATH:/opt/andoid-sdk-tools"
 export PATH="$GOPATH/bin:$PATH"
-#export PATH="$PATH:$HOME/.bspwm"
 
 #rbenv
+export PATH="$HOME/.rbenv/bin:$PATH:/opt/andoid-sdk-tools"
 eval "$(rbenv init -)"
 
-#Antigen
-source ~/.antigen.zsh
-#load oh-my-zsh library
-antigen use oh-my-zsh  #antigen bundle robbyrussell/oh-my-zsh lib/
-#Antigen Bundles
-#antigen bundle robbyrussell/oh-my-zsh plugins/ruby
-antigen bundle command-not-found
-antigen bundle git
-antigen bundle pass
-antigen bundle rails
-antigen bundle ruby
-antigen bundle rbenv
-antigen bundle rupa/z
-antigen bundle systemd
-antigen bundle tmux
-antigen bundle vundle
-antigen bundle zsh-users/zsh-syntax-highlighting
-#Antigen Theme
-antigen-theme robbyrussell/oh-my-zsh themes/clean
-## (random) clean miloshadzic takashiyoshida sporty_256 sorin robbyrussell nicoulaj
-antigen apply
+##Antigen
+#source ~/.antigen.zsh
+##load oh-my-zsh library
+#antigen use oh-my-zsh  #antigen bundle robbyrussell/oh-my-zsh lib/
+##Antigen Bundles
+##antigen bundle robbyrussell/oh-my-zsh plugins/ruby
+#antigen bundle command-not-found
+#antigen bundle git
+#antigen bundle pass
+#antigen bundle rails
+#antigen bundle ruby
+#antigen bundle rbenv
+#antigen bundle rupa/z
+#antigen bundle systemd
+#antigen bundle tmux
+#antigen bundle vundle
+#antigen bundle zsh-users/zsh-syntax-highlighting
+##Antigen Theme
+#antigen-theme robbyrussell/oh-my-zsh themes/clean
+### (random) clean miloshadzic takashiyoshida sporty_256 sorin robbyrussell nicoulaj
+#antigen apply
+
+# zgen
+#
+# load zgen
+source "${HOME}/.dotfiles/zgen/zgen.zsh"
+
+# check if there's no init script
+if ! zgen saved; then
+    echo "Creating a zgen save"
+
+    zgen oh-my-zsh
+
+    # plugins
+    zgen oh-my-zsh plugins/command-not-found
+    zgen oh-my-zsh plugins/git
+    zgen oh-my-zsh plugins/pass
+    zgen oh-my-zsh plugins/ruby
+    zgen oh-my-zsh plugins/rails
+    zgen oh-my-zsh plugins/rupa/z
+    zgen oh-my-zsh plugins/rbenv
+    zgen oh-my-zsh plugins/sudo
+    zgen oh-my-zsh plugins/systemd
+    zgen oh-my-zsh plugins/tmux
+    zgen load zsh-users/zsh-syntax-highlighting
+
+    # bulk load
+    zgen loadall <<EOPLUGINS
+        zsh-users/zsh-history-substring-search
+EOPLUGINS
+    # ^ can't indent this EOPLUGINS
+
+    # completions
+    zgen load zsh-users/zsh-completions src
+
+    # theme
+    zgen oh-my-zsh themes/clean
+
+    # save all to init script
+    zgen save
+fi
