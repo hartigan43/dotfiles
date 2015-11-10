@@ -4,7 +4,7 @@
 filetype off                   " required!
 set nocompatible               " be iMproved
 
-" Vim-plug --------------------------------------------------------------- {{{
+" Vim-plug ----------------------------------------------------------------- {{{
 
 call plug#begin('~/.vim/plugged') "load vim-plug
 
