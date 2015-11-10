@@ -11,10 +11,10 @@ call plug#begin('~/.vim/plugged') "load vim-plug
 Plug 'airblade/vim-gitgutter'
 Plug 'bling/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'fatih/vim-go'
 "Plug  'FredKSchott/CoVim'
 Plug 'jistr/vim-nerdtree-tabs'
-Plug 'kien/ctrlp.vim'
 "Plug 'Lokaltog/vim-easymotion'
 Plug 'majutsushi/tagbar'
 Plug 'pangloss/vim-javascript'
@@ -66,6 +66,8 @@ set timeoutlen=350                                "delay for accepting key combi
 set mousehide                                     "hide mouse while editing
 set pastetoggle=<F2>                              "when in insert mode, allow easy external clipboard pasting
 set incsearch                                     "search as characters are entered
+set ignorecase                                    "ignore case while searching
+set smartcase                                     "ignores lower case if search pattern is uppercase
 set hlsearch                                      "highlight matches
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode characters for tab,eol,and with wrap on
 set showbreak=↪
@@ -145,6 +147,11 @@ let g:ctrlp_working_path_mode = 0                                 "ctrlp respect
 let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'    "allow ctrl p to use ag and be fast
 " }}}
 
+" gundo.vim settings ------------------------------------------------------- {{{
+let g:gundo_width = 60
+let g:gundo_preview_height = 40
+" }}}
+
 " syntastic settings ------------------------------------------------------- {{{
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -159,6 +166,7 @@ let g:syntastic_loc_list_height = 6
 
 let g:syntastic_javascript_checkers = ['jshint']
 " }}}
+"
 
 "nerdtree shown on file open
 let g:nerdtree_tabs_open_on_console_startup=1
