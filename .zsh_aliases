@@ -10,6 +10,8 @@ alias gob="go build"
 alias sudo="nocorrect sudo"
 alias irssi="TERM=screen-256color irssi" #fix for the xterm fix above with xfce4term and irssi buffer
 alias weechat-curses="TERM=screen-256color weechat-curses" #attempting same irssi fix with weechat
+alias psmem="ps auxf | sort -nr -k 4 | head -10" #top 10 process eating memory
+alias pscpu="ps auxf | sort -nr -k 3 | head -10" #top 10 processes eating cpu
 
 #From alias.sh
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
@@ -17,6 +19,10 @@ alias memhog="ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6 | t
 alias aperr="sudo tail -f /var/log/apache2/error.log"
 alias apacc="sudo tail -f /var/log/apache2/access.log"
 alias upgrade="apt-get update && apt-get upgrade && apt-get clean"
+
+# SO 5828324 - git submodule recursive updates
+alias gitsup="git submodule foreach git pull origin master"
+
 
 function randocommissian() {
     git commit -m"`curl -s http://whatthecommit.com/index.txt`"

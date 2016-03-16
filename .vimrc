@@ -34,7 +34,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-haml'
 Plug 'tpope/vim-surround'
-Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
 
 call plug#end()
 
@@ -179,7 +179,7 @@ let g:syntastic_javascript_checkers = ['jshint']
 let g:nerdtree_tabs_open_on_console_startup=1
 
 "enable powerline symbols with airline
-let g:airline_powerline_fonts = 1
+"let g:airline_powerline_fonts = 1
 " }}}
 " Custom keys -------------------------------------------------------------- {{{
 " Clean trailing whitespace

@@ -1,5 +1,4 @@
 ###Dotfiles.
-Installation for linux, workstation and server.  
-Clone into `$HOME/.dotfiles` and then run `chmod +x install.sh && ./install.sh` but read the script first!!! 
+Clone and then run `chmod +x install.sh && ./install.sh` but read the script first!
 
 All config files are symlinked from the repo into your home directory.

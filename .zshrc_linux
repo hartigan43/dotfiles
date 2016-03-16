@@ -2,13 +2,14 @@
 DEFAULT_USER="jake"
 export EDITOR="/usr/bin/vim"
 export VISUAL="/usr/bin/gvim"
+#export XDG_CONFIG_HOME:="$HOME/.config"
 
 #vi mode with backspace
 set -o vi
 bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
 
 #tmux
-export TERM=xterm-256color #fix so tmux colors, and vim colors all play nice
+export TERM="xterm-256color" #fix so tmux colors, and vim colors all play nice
 # tmux on start with zsh
 if [ "$TMUX" = "" ]; then tmux; fi
 

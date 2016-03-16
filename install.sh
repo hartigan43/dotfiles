@@ -73,7 +73,7 @@ mkdir -p $HOME/.vim/tmp/backups $HOME/.vim/tmp/undo $HOME/.vim/tmp/swap
 #installVundle
 
 #zsh and ohmyzsh
-ohmyzsh
+#ohmyzsh
 
 #Setup git
 gitConf
@@ -94,7 +94,7 @@ serverInstall() {
 workstationInstall() {
   ln -s $HOME/.dotfiles/antigen/antigen.zsh $HOME/.antigen.zsh
   ln -s $HOME/.dotfiles/.zshrc_linux $HOME/.zshrc
-  ln -s $HOME/.dotfiles/.zshrc_linux $HOME/.zshenv
+  #ln -s $HOME/.dotfiles/.zshrc_linux $HOME/.zshenv
   ln -s $HOME/.dotfiles/.tmux_linux.conf $HOME/.tmux.conf
   ln -s $HOME/.dotfiles/.zsh_aliases $HOME/.zsh_aliases
   ln -s $HOME/.dotfiles/.vimrc $HOME/.vimrc
@@ -102,7 +102,7 @@ workstationInstall() {
   commonInstall
 
   #rbenv installation
-  rbenvInstall
+  #rbenvInstall
 
   #ip tables to prevent a good bit of ISP video throttling
   echo -e "Adding ISP throttling IP to iptables...\n"
@@ -114,10 +114,11 @@ workstationInstall() {
 
 #Run it all
 prereqCheck
+workstationInstall
 #Check if this will be a server installation
-read -p "Is this a server installation?" Yn
-case $Yn in
-  Yy) serverInstall ;;
-  Nn) workstationInstall ;;
-   *) echo "Enter Y/N please. \n";;
-esac
+#read -p "Is this a server installation?" Yn
+#case $Yn in
+#  Yy) serverInstall ;;
+#  Nn) workstationInstall ;;
+#   *) echo "Enter Y/N please. \n";;
+#esac
