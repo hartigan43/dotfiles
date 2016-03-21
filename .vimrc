@@ -2,7 +2,14 @@
 " many things from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 
 filetype off                   " required!
-set nocompatible               " be iMproved
+
+if !has('nvim')                " vim specific vs neovim below
+  set nocompatible             " be iMproved
+endif
+
+if has('nvim')
+  set mouse-=a                 " not ready for mouse use yet
+endif
 
 " Vim-plug ----------------------------------------------------------------- {{{
 
