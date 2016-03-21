@@ -9,7 +9,7 @@ set nocompatible               " be iMproved
 call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
-Plug 'bling/vim-airline'
+"Plug 'bling/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'fatih/vim-go'
@@ -36,6 +36,10 @@ call plug#end()
 filetype plugin indent on
 "filetype indent on
 
+" Powerline ---------------------------------------------------------------- {{{
+let g:powerline_pycmd = 'py3' " enables powerline with python 3
+
+" }}}
 " Basic options ------------------------------------------------------------ {{{
 
 syntax enable
@@ -172,7 +176,7 @@ let g:syntastic_javascript_checkers = ['jshint']
 let g:nerdtree_tabs_open_on_console_startup=1
 
 "enable powerline symbols with airline
-"let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 1
 " }}}
 " Custom keys -------------------------------------------------------------- {{{
 " Clean trailing whitespace

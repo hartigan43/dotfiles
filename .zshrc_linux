@@ -8,6 +8,9 @@ export VISUAL="/usr/bin/gvim"
 set -o vi
 bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
 
+#Arch - export pacmatic pacman program
+export pacman_program="pacaur"
+
 #tmux
 export TERM="xterm-256color" #fix so tmux colors, and vim colors all play nice
 # tmux on start with zsh
@@ -20,8 +23,8 @@ source $HOME/.zsh_aliases
 printf "\033k`hostname -s`\033\\"
 
 #Go
-export GOPATH="$HOME/Code/Go"
-export PATH="$GOPATH/bin:$PATH"
+#export GOPATH="$HOME/Code/Go"
+#export PATH="$GOPATH/bin:$PATH"
 
 #rbenv
 export PATH="$HOME/.rbenv/bin:$PATH:/opt/andoid-sdk-tools"
