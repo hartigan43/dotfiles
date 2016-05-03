@@ -30,28 +30,6 @@ printf "\033k`hostname -s`\033\\"
 export PATH="$HOME/.rbenv/bin:$PATH:/opt/andoid-sdk-tools"
 eval "$(rbenv init -)"
 
-##Antigen
-#source ~/.antigen.zsh
-##load oh-my-zsh library
-#antigen use oh-my-zsh  #antigen bundle robbyrussell/oh-my-zsh lib/
-##Antigen Bundles
-##antigen bundle robbyrussell/oh-my-zsh plugins/ruby
-#antigen bundle command-not-found
-#antigen bundle git
-#antigen bundle pass
-#antigen bundle rails
-#antigen bundle ruby
-#antigen bundle rbenv
-#antigen bundle rupa/z
-#antigen bundle systemd
-#antigen bundle tmux
-#antigen bundle vundle
-#antigen bundle zsh-users/zsh-syntax-highlighting
-##Antigen Theme
-#antigen-theme robbyrussell/oh-my-zsh themes/clean
-### (random) clean miloshadzic takashiyoshida sporty_256 sorin robbyrussell nicoulaj
-#antigen apply
-
 # zgen
 #
 # load zgen
@@ -69,7 +47,7 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/pass
     zgen oh-my-zsh plugins/ruby
     zgen oh-my-zsh plugins/rails
-    zgen oh-my-zsh plugins/rupa/z
+    zgen oh-my-zsh plugins/z
     zgen oh-my-zsh plugins/rbenv
     zgen oh-my-zsh plugins/sudo
     zgen oh-my-zsh plugins/systemd
