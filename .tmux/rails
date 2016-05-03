@@ -6,19 +6,19 @@
 select-pane -t 0
 
 # split the window vertically by 80%
-split-window -v -p 20
+split-window -v -c "#{pane_current_path}" -p 15 
 
 # select the bottom pane and split it into thirds
 select-pane -t 2 
-split-window -h -p 33
+split-window -h -c "#{pane_current_path}" -p 33
 select-pane -t 2 
-split-window -h -p 50 
+split-window -h -c "#{pane_current_path}" -p 50 
 
 #get into my rails directory and launch applications
-send -t 1 'cd ~/Workspace/rails' ENTER
-send -t 2 'cd ~/Workspace/rails' ENTER
-send -t 3 'cd ~/Workspace/rails' ENTER
-send -t 4 'cd ~/Workspace/rails' ENTER
+#send -t 1 'cd ~/Workspace/rails' ENTER
+#send -t 2 'cd ~/Workspace/rails' ENTER
+#send -t 3 'cd ~/Workspace/rails' ENTER
+#send -t 4 'cd ~/Workspace/rails' ENTER
 
 select-pane -t 0
 

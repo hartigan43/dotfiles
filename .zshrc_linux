@@ -20,7 +20,7 @@ if [ "$TMUX" = "" ]; then tmux; fi
 source $HOME/.zsh_aliases
 
 #Set tmux title based on hostname
-printf "\033k`hostname -s`\033\\"
+#printf "\033k`hostname -s`\033\\"
 
 #Go
 #export GOPATH="$HOME/Code/Go"
