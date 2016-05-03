@@ -82,7 +82,7 @@ set smartcase                                     "ignores lower case if search 
 set hlsearch                                      "highlight matches
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode characters for tab,eol,and with wrap on
 set showbreak=↪
-
+      
 " set leader key -- originally \ -- now localleader
 let mapleader = ","
 let maplocalleader = "\\"
