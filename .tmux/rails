@@ -5,28 +5,20 @@
 # select first pane -- only one if empty
 select-pane -t 0
 
-# split the window horizontally by 78%
-split-window -v -p 22
+# split the window vertically by 80%
+split-window -v -c "#{pane_current_path}" -p 15 
 
 # select the bottom pane and split it into thirds
-select-pane -t 1
-split-window -h -p 16
-select-pane -t 1
-split-window -h -p 65
-
-# make small column in top pane for irssi and pianobar
-select-pane -t 0
-split-window -h -p 15
-select-pane -t 1
-split-window -v -p 50
+select-pane -t 2 
+split-window -h -c "#{pane_current_path}" -p 33
+select-pane -t 2 
+split-window -h -c "#{pane_current_path}" -p 50 
 
 #get into my rails directory and launch applications
-send -t 1 pianobar ENTER
-send -t 2 irssi ENTER
-send -t 3 'cd ~/Code/Rails' ENTER
-send -t 4 'cd ~/Code/Rails' ENTER
-send -t 5 'cd ~/Code/Rails' ENTER
-send -t 0 'cd ~/Code/Rails' ENTER
+#send -t 1 'cd ~/Workspace/rails' ENTER
+#send -t 2 'cd ~/Workspace/rails' ENTER
+#send -t 3 'cd ~/Workspace/rails' ENTER
+#send -t 4 'cd ~/Workspace/rails' ENTER
 
 select-pane -t 0
 
