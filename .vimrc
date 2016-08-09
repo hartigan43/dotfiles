@@ -70,7 +70,7 @@ set ignorecase                                    "ignore case while searching
 set smartcase                                     "ignores lower case if search pattern is uppercase
 set hlsearch                                      "highlight matches
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode characters for tab,eol,and with wrap on
-set showbreak=↪
+"set showbreak=↪
 
 " set leader key -- originally \ -- now localleader
 let mapleader = ","

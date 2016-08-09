@@ -2,6 +2,7 @@
 DEFAULT_USER="jake"
 export EDITOR="/usr/bin/vim"
 export VISUAL="/usr/bin/gvim"
+export XDG_CONFIG_HOME="$HOME/.config"
 
 #vi mode with backspace
 set -o vi
