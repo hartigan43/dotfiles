@@ -20,12 +20,11 @@ Plug 'bling/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'fatih/vim-go'
-"Plug  'FredKSchott/CoVim'
 Plug 'jistr/vim-nerdtree-tabs'
-"Plug 'Lokaltog/vim-easymotion'
+Plug 'easymotion/vim-easymotion'
 Plug 'majutsushi/tagbar'
 Plug 'pangloss/vim-javascript'
-Plug 'rking/ag.vim'
+"Plug 'rking/ag.vim' "deprecated, consider ack.vim
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim'
@@ -34,7 +33,12 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-haml'
 Plug 'tpope/vim-surround'
-"Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe'
+
+" nvim specific plugins
+if has('nvim')
+  Plug 'bling/vim-airline'
+endif
 
 call plug#end()
 
