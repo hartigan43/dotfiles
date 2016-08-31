@@ -40,6 +40,11 @@ if has('nvim')
   Plug 'bling/vim-airline'
 endif
 
+" gvim specific plugins
+if has('gui_running')
+  Plug 'junegunn/seoul256.vim'
+endif
+
 call plug#end()
 
 " }}}
@@ -181,7 +186,10 @@ let g:syntastic_loc_list_height = 6
 
 let g:syntastic_javascript_checkers = ['jshint']
 " }}}
-"
+
+" YouCompleteMe settings ------------------------------------------------------- {{{
+let g:ycm_min_num_of_chars_for_completion = 6 "default is 2, less results on smaller words/vars
+" }}}
 
 "nerdtree shown on file open
 let g:nerdtree_tabs_open_on_console_startup=1
@@ -224,15 +232,15 @@ if has('gui_running')
   if has('macunix')
     set guifont=Inconsolata\ for\ Powerline:h11     "set fonts for gui vim
   elseif has("gui_gtk2")                           "per vim wiki set gui font for most WMs
-    set guifont=Inconsolata\ 10
+    set guifont=Inconsolata\ for\ Powerline\ 10
   elseif has("gui_photon")
-    set guifont=Inconsolata:s10
+    set guifont=Inconsolata\ for\ Powerline:s10
   elseif has("gui_kde")
-    set guifont=Inconsolata/10/-1/5/50/0/0/0/1/0
+    set guifont=Inconsolata\ for\ Powerline/10/-1/5/50/0/0/0/1/0
   elseif has("x11")
     set guifont=-*-inconsolata-medium-r-normal-*-*-180-*-*-m-*-*
   else
-    set guifont=Inconsolata:h10:cDEFAULT
+    set guifont=Inconsolata\ for\ Powerline:h10:cDEFAULT
   endif
   set guioptions-=egmt                            "hide the gui elements
   set guioptions-=T
@@ -240,7 +248,7 @@ if has('gui_running')
   set guioptions-=L                               "odd fix for to get scrollbars 
   set guioptions-=r                               "properly hidden on left and right
   set background=dark
-  colorscheme zenburn
+  colorscheme seoul256
 endif
 " }}}
 " Misc settings ------------------------------------------------------------ {{{

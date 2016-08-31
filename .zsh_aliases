@@ -12,6 +12,7 @@ alias irssi="TERM=screen-256color irssi" #fix for the xterm fix above with xfce4
 alias weechat-curses="TERM=screen-256color weechat-curses" #attempting same irssi fix with weechat
 alias psmem="ps auxf | sort -nr -k 4 | head -10" #top 10 process eating memory
 alias pscpu="ps auxf | sort -nr -k 3 | head -10" #top 10 processes eating cpu
+alias weather="curl wttr.in"
 
 #From alias.sh
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
