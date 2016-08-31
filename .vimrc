@@ -16,7 +16,7 @@ endif
 call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
-"Plug 'bling/vim-airline'
+Plug 'bling/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'fatih/vim-go'
@@ -184,6 +184,7 @@ let g:syntastic_check_on_wq = 0
   "end recommended syntastic
 let g:syntastic_loc_list_height = 6
 
+let g:syntastic_sass_checkers = ['sass']
 let g:syntastic_javascript_checkers = ['jshint']
 " }}}
 

@@ -24,6 +24,8 @@ alias upgrade="apt-get update && apt-get upgrade && apt-get clean"
 # SO 5828324 - git submodule recursive updates
 alias gitsup="git submodule foreach git pull origin master"
 
+# giving nvim the full monty for now
+alias vim="nvim"
 
 function randocommissian() {
     git commit -m"`curl -s http://whatthecommit.com/index.txt`"
