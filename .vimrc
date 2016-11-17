@@ -79,7 +79,7 @@ set backupdir=~/.vim/tmp/backups//                "backup dir -- // saves full f
 set directory=~/.vim/tmp/swap//                   "temporary dir for swap files
 set backup                                        "file backups enabled
 set writebackup                                   "enabling backups
-set noswapfile                                    "disable swaps - were using backups in 2015
+set noswapfile                                    "disable swaps - were using backups
 "set noerrorbells                                 "kill the noise
 set visualbell                                    "kill the noise
 set timeoutlen=350                                "delay for accepting key combination

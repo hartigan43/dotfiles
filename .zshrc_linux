@@ -47,7 +47,6 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/git
     zgen oh-my-zsh plugins/pass
     zgen oh-my-zsh plugins/ruby
-    zgen oh-my-zsh plugins/rails
     zgen oh-my-zsh plugins/rbenv
     zgen oh-my-zsh plugins/sudo
     zgen oh-my-zsh plugins/systemd

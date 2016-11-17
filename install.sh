@@ -15,13 +15,7 @@ prereqCheck() {
    done
 }
 
-#Install oh-my-zsh
-ohmyzsh() {
-  echo -e "Installing oh-my-zsh...\n"
-  curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
-  #in case prompt fails for zsh
-  chsh -s /bin/zsh
-}
+#TODO zgen and zsh
 
 #TODO Replace with vim-plug
 #Install Vundle
@@ -38,6 +32,7 @@ gitConf() {
   read -p "Enter your git email address: " email
   git config --global user.name "$name"
   git config --global user.email "$email"
+  git config --global core.editor vim
 }
 
 Install rbenv and ruby-build
@@ -72,8 +67,7 @@ mkdir -p $HOME/.vim/tmp/backups $HOME/.vim/tmp/undo $HOME/.vim/tmp/swap
 #Vundle installation and plugin install from vimrc
 #installVundle
 
-#zsh and ohmyzsh
-#ohmyzsh
+#zsh and zgen
 
 #Setup git
 gitConf
@@ -82,17 +76,9 @@ gitConf
 setRealName
 }
 
-#Check for server installation
-serverInstall() {
-  ln -s $HOME/.dotfiles/.zshrc_server $HOME/.zshrc
-  ln -s $HOME/.dotfiles/.zsh_aliases $HOME/.zsh_aliases
-  ln -s $HOME/.dotfiles/.vimrc_server $HOME/.vimrc
-  ln -s $HOME/.dotfiles/.screenrc $HOME/.screenrc
-  commonInstall
-}
-
 workstationInstall() {
-  ln -s $HOME/.dotfiles/antigen/antigen.zsh $HOME/.antigen.zsh
+  #TODO replace antigen with zgen
+  #ln -s $HOME/.dotfiles/antigen/antigen.zsh $HOME/.antigen.zsh
   ln -s $HOME/.dotfiles/.zshrc_linux $HOME/.zshrc
   #ln -s $HOME/.dotfiles/.zshrc_linux $HOME/.zshenv
   ln -s $HOME/.dotfiles/.tmux_linux.conf $HOME/.tmux.conf
@@ -104,6 +90,7 @@ workstationInstall() {
   #rbenv installation
   #rbenvInstall
 
+  #TODO see if this is still valid
   #ip tables to prevent a good bit of ISP video throttling
   echo -e "Adding ISP throttling IP to iptables...\n"
   sudo iptables -A INPUT -s 173.194.55.0/24 -j DROP
@@ -112,13 +99,5 @@ workstationInstall() {
 
 ####END FUNCTIONS####
 
-#Run it all
 prereqCheck
 workstationInstall
-#Check if this will be a server installation
-#read -p "Is this a server installation?" Yn
-#case $Yn in
-#  Yy) serverInstall ;;
-#  Nn) workstationInstall ;;
-#   *) echo "Enter Y/N please. \n";;
-#esac
