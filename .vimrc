@@ -23,12 +23,13 @@ Plug 'fatih/vim-go'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'easymotion/vim-easymotion'
 Plug 'majutsushi/tagbar'
+Plug 'mileszs/ack.vim'
 Plug 'pangloss/vim-javascript'
-"Plug 'rking/ag.vim' "deprecated, consider ack.vim
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim'
 Plug 'takac/vim-commandcaps'
+Plug 'ternjs/tern_for_vim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-haml'
@@ -165,6 +166,16 @@ let g:ctrlp_match_window = 'bottom,order:ttb'                     "order matches
 let g:ctrlp_switch_buffer = 0                                     "always open new file in new buffer
 let g:ctrlp_working_path_mode = 0                                 "ctrlp respect dir change in vim session
 let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'    "allow ctrl p to use ag and be fast
+
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
 " }}}
 
 " gundo.vim settings ------------------------------------------------------- {{{
@@ -226,6 +237,19 @@ cmap w!! %!sudo tee > /dev/null %
 " disable help key
 noremap  <F1> :checktime<cr>
 inoremap <F1> <esc>:checktime<cr>
+
+" bind K to grep word under cursor
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
+"use ag for ack.vim
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
+"do not have ack jump to first response
+cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Ack!<Space>
+
 
 " }}}
 " GUI-settings ------------------------------------------------------------- {{{
