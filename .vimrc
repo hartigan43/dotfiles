@@ -248,7 +248,8 @@ endif
 
 "do not have ack jump to first response
 cnoreabbrev Ack Ack!
-nnoremap <Leader>a :Ack!<Space>
+"ack for the current word under cursor
+nnoremap <Leader>a :Ack!<Space><C-R><C-W>
 
 
 " }}}
