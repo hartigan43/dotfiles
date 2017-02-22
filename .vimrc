@@ -24,6 +24,7 @@ Plug 'jistr/vim-nerdtree-tabs'
 Plug 'easymotion/vim-easymotion'
 Plug 'majutsushi/tagbar'
 Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 "Plug 'rking/ag.vim' "deprecated, consider ack.vim
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
@@ -89,9 +90,10 @@ set incsearch                                     "search as characters are ente
 set ignorecase                                    "ignore case while searching
 set smartcase                                     "ignores lower case if search pattern is uppercase
 set hlsearch                                      "highlight matches
+"set list!                                         "toggles list, default is off, enables whitespace characters
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode characters for tab,eol,and with wrap on
 set showbreak=↪
-      
+ 
 " set leader key -- originally \ -- now localleader
 let mapleader = ","
 let maplocalleader = "\\"
