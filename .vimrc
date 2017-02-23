@@ -207,7 +207,7 @@ let g:ycm_min_num_of_chars_for_completion = 6 "default is 2, less results on sma
 " }}}
 
 "nerdtree shown on file open
-let g:nerdtree_tabs_open_on_console_startup=1
+"let g:nerdtree_tabs_open_on_console_startup=1
 
 "enable powerline symbols with airline
 let g:airline_powerline_fonts = 1
@@ -253,6 +253,10 @@ endif
 cnoreabbrev Ack Ack!
 "ack for the current word under cursor
 nnoremap <Leader>a :Ack!<Space><C-R><C-W>
+
+nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
+"nnoremap <leader>t :tabe <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>s :split <C-R>=expand("%:p:h") . "/" <CR>
 
 
 " }}}
