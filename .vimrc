@@ -254,9 +254,12 @@ cnoreabbrev Ack Ack!
 "ack for the current word under cursor
 nnoremap <Leader>a :Ack!<Space><C-R><C-W>
 
+"use leader e or leader s to open or vsplit with filename in current directory
+"leade E,S uses parent directory
 nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
-"nnoremap <leader>t :tabe <C-R>=expand("%:p:h") . "/" <CR>
-nnoremap <leader>s :split <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>E :e <C-R>=expand("%:p:h:h") . "/" <CR>
+nnoremap <leader>s :vsplit <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>S :vsplit <C-R>=expand("%:p:h:h") . "/" <CR>
 
 
 " }}}
