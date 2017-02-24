@@ -5,7 +5,8 @@ export VISUAL="/usr/bin/gvim"
 #export XDG_CONFIG_HOME:="$HOME/.config"
 
 #vi mode with backspace
-set -o vi
+#set -o vi
+bindkey -v
 bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
 
 #Arch - export pacmatic pacman program
