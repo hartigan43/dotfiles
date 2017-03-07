@@ -1,8 +1,6 @@
 " .vimrc
 " many things from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 
-filetype off                   " required!
-
 if !has('nvim')                " vim specific vs neovim below
   set nocompatible             " be iMproved
 endif
@@ -58,17 +56,12 @@ call plug#end()
 
 " }}}
 
-filetype plugin indent on
-" TESTING
-"filetype indent on
-
 " Powerline ---------------------------------------------------------------- {{{
 let g:powerline_pycmd = 'py3' " enables powerline with python 3
 
 " }}}
 " Basic options ------------------------------------------------------------ {{{
 
-syntax enable
 set number                                        "show line numbers
 set ts=2                                          "tabs width as two spaces
 set shiftwidth=2                                  
