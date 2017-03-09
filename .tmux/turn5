@@ -1,0 +1,12 @@
+# Turn 5
+# AM, AT, XT, scratch windows
+
+rename-window AM
+send 'cd ~/Workspace/Projects/Turn5/AmericanMuscle/Web/Turn5.AM.Web.UI' ENTER
+new-window
+rename-window AT 
+send 'cd ~/Workspace/Projects/Turn5/AmericanMuscle/Web/Turn5.AT.Web.UI' ENTER
+new-window
+rename-window XT 
+send 'cd ~/Workspace/Projects/Turn5/AmericanMuscle/Web/Turn5.XT.Web.UI' ENTER
+new-window

@@ -1,7 +1,7 @@
 " .vimrc
 " many things from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 
-filetype off                   " required!
+"filetype off                   " required!
 
 if !has('nvim')                " vim specific vs neovim below
   set nocompatible             " be iMproved
@@ -13,22 +13,34 @@ endif
 
 " Vim-plug ----------------------------------------------------------------- {{{
 
+" automatically install vim-plug if not instlaled
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
+Plug 'ap/vim-css-color'
 Plug 'bling/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'fatih/vim-go'
-Plug 'jistr/vim-nerdtree-tabs'
 Plug 'easymotion/vim-easymotion'
+Plug 'fatih/vim-go'
+Plug 'groenewege/vim-less'
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'majutsushi/tagbar'
+Plug 'mileszs/ack.vim'
+Plug 'OrangeT/vim-csharp'
 Plug 'pangloss/vim-javascript'
-"Plug 'rking/ag.vim' "deprecated, consider ack.vim
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim'
 Plug 'takac/vim-commandcaps'
+Plug 'ternjs/tern_for_vim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-haml'
@@ -49,7 +61,7 @@ call plug#end()
 
 " }}}
 
-filetype plugin indent on
+"filetype plugin indent on
 "filetype indent on
 
 " Powerline ---------------------------------------------------------------- {{{
@@ -58,10 +70,10 @@ let g:powerline_pycmd = 'py3' " enables powerline with python 3
 " }}}
 " Basic options ------------------------------------------------------------ {{{
 
-syntax enable
+"syntax enable
 set number                                        "show line numbers
-set ts=2                                          "tabs width as two spaces
-set shiftwidth=2                                  
+set ts=4                                          "tabs width as two spaces
+set shiftwidth=4                                  
 set autoindent                                    "keep indentation of current line
 set smarttab
 set expandtab                                     "converts tabs to spaces
@@ -91,6 +103,7 @@ set smartcase                                     "ignores lower case if search 
 set hlsearch                                      "highlight matches
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode characters for tab,eol,and with wrap on
 set showbreak=↪
+set updatetime=250
       
 " set leader key -- originally \ -- now localleader
 let mapleader = ","
@@ -127,7 +140,7 @@ set foldlevelstart=0
 " Make zO recursively open whatever fold we're in, even if it's partially open.
 nnoremap zO zczO
 
-" "Focus" the current line.  Basically:
+" Focus the current line.  Basically:
 "
 " 1. Close all folds.
 " 2. Open just the folds containing the current line.
@@ -137,7 +150,7 @@ nnoremap zO zczO
 " This mapping wipes out the z mark, which I never use.
 "
 " I use :sus for the rare times I want to actually background Vim.
-nnoremap <c-z> mzzMzvzz15<c-e>`z:Pulse<cr>
+" nnoremap <c-z> mzzMzvzz15<c-e>`z:Pulse<cr>
 
 function! MyFoldText() " {{{
     let line = getline(v:foldstart)
@@ -155,8 +168,10 @@ function! MyFoldText() " {{{
     return line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
 endfunction " }}}
 
-set foldtext=MyFoldText()
-set foldmethod=marker
+"set foldtext=MyFoldText()
+"set foldmethod=marker
+set foldmethod=syntax
+"set foldclose=all
 
 " }}}
 " Plugin-settings ---------------------------------------------------------- {{{
@@ -165,6 +180,16 @@ let g:ctrlp_match_window = 'bottom,order:ttb'                     "order matches
 let g:ctrlp_switch_buffer = 0                                     "always open new file in new buffer
 let g:ctrlp_working_path_mode = 0                                 "ctrlp respect dir change in vim session
 let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'    "allow ctrl p to use ag and be fast
+
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
 " }}}
 
 " gundo.vim settings ------------------------------------------------------- {{{
@@ -193,10 +218,14 @@ let g:ycm_min_num_of_chars_for_completion = 6 "default is 2, less results on sma
 " }}}
 
 "nerdtree shown on file open
-let g:nerdtree_tabs_open_on_console_startup=1
+"let g:nerdtree_tabs_open_on_console_startup=1
 
 "enable powerline symbols with airline
 let g:airline_powerline_fonts = 1
+
+" GitGutter settings - t5 -------------------------------------------------- {{{
+let g:gitgutter_max_signs=4000
+" }}}
 " }}}
 " Custom keys -------------------------------------------------------------- {{{
 " Clean trailing whitespace
@@ -226,6 +255,25 @@ cmap w!! %!sudo tee > /dev/null %
 " disable help key
 noremap  <F1> :checktime<cr>
 inoremap <F1> <esc>:checktime<cr>
+
+" bind K to grep word under cursor
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
+"use ag for ack.vim
+if executable('ag')
+    let g:ackprg = 'ag --vimgrep'
+endif
+
+"Ack for word under cursor
+cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Ack!<Space><C-R><C-W>
+
+"use leader e or leader s to open or vsplit with filename in current directory
+"leade E,S uses parent directory
+nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>E :e <C-R>=expand("%:p:h:h") . "/" <CR>
+nnoremap <leader>s :vsplit <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>S :vsplit <C-R>=expand("%:p:h:h") . "/" <CR>
 
 " }}}
 " GUI-settings ------------------------------------------------------------- {{{
@@ -266,6 +314,12 @@ endif
 " endfunction
 " au FileType javascript call JavaScriptFold()
 " au FileType javascript setl fen
+
+"build less in same directory on save
+"uncomment working on brandsites
+" T5
+"autocmd BufWritePost *.less exe '!lessc ' . shellescape(expand('<afile>')) . ' ' . shellescape(expand('<afile>:r')) . '.css'
+autocmd BufWritePost /media/sf_Projects/BrandSites/*.less exe '!lessc ' . shellescape(expand('<afile>')) . ' ' . shellescape(expand('<afile>:r')) . '.css'
 
 " fix so powerline updates faster 
 if ! has('gui_running')
