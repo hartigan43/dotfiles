@@ -83,7 +83,6 @@ set directory=~/.vim/tmp/swap//                   "temporary dir for swap files
 set backup                                        "file backups enabled
 set writebackup                                   "enabling backups
 set noswapfile                                    "disable swaps - were using backups
-"set noerrorbells                                 "kill the noise
 set visualbell                                    "kill the noise
 set timeoutlen=350                                "delay for accepting key combination
 set mousehide                                     "hide mouse while editing
@@ -95,6 +94,7 @@ set hlsearch                                      "highlight matches
 "set list!                                         "toggles list, default is off, enables whitespace characters
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode characters for tab,eol,and with wrap on
 set showbreak=↪
+set modelines=1                                   "use modelines at end of file for specifc settings
  
 " set leader key -- originally \ -- now localleader
 let mapleader = ","
@@ -127,40 +127,10 @@ endif
 " Folding ------------------------------------------------------------------ {{{
 
 set foldlevelstart=0
+set foldmethod=syntax
 
 " Make zO recursively open whatever fold we're in, even if it's partially open.
 nnoremap zO zczO
-
-" "Focus" the current line.  Basically:
-"
-" 1. Close all folds.
-" 2. Open just the folds containing the current line.
-" 3. Move the line to a little bit (15 lines) above the center of the screen.
-" 4. Pulse the cursor line.  My eyes are bad.
-"
-" This mapping wipes out the z mark, which I never use.
-"
-" I use :sus for the rare times I want to actually background Vim.
-"nnoremap <c-z> mzzMzvzz15<c-e>`z:Pulse<cr>
-
-function! MyFoldText() " {{{
-    let line = getline(v:foldstart)
-
-    let nucolwidth = &fdc + &number * &numberwidth
-    let windowwidth = winwidth(0) - nucolwidth - 3
-    let foldedlinecount = v:foldend - v:foldstart
-
-    " expand tabs into spaces
-    let onetab = strpart('          ', 0, &tabstop)
-    let line = substitute(line, '\t', onetab, 'g')
-
-    let line = strpart(line, 0, windowwidth - 2 -len(foldedlinecount))
-    let fillcharcount = windowwidth - len(line) - len(foldedlinecount)
-    return line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
-endfunction " }}}
-
-set foldtext=MyFoldText()
-set foldmethod=marker
 
 " }}}
 " Plugin-settings ---------------------------------------------------------- {{{
@@ -281,26 +251,13 @@ if has('gui_running')
   set guioptions-=egmt                            "hide the gui elements
   set guioptions-=T
   set guioptions-=m
-  set guioptions-=L                               "odd fix for to get scrollbars 
+  set guioptions-=L                               "oddly, only way to get scrollbars 
   set guioptions-=r                               "properly hidden on left and right
   set background=dark
   colorscheme seoul256
 endif
 " }}}
 " Misc settings ------------------------------------------------------------ {{{
-" javascript folding http://amix.dk/blog/post/19132
-" function! JavaScriptFold()
-"   setl foldmethod=syntax
-"   setl foldlevelstart=1
-"   syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
-" 
-"   function! FoldText()
-"     return substitute(getline(v:foldstart), '{.*', '{...}', '')
-"   endfunction
-"   setl foldtext=FoldText()
-" endfunction
-" au FileType javascript call JavaScriptFold()
-" au FileType javascript setl fen
 
 " fix so powerline updates faster 
 if ! has('gui_running')
@@ -312,3 +269,5 @@ if ! has('gui_running')
     augroup END
 endif
 " }}}
+"
+" vim:foldmethod=marker:foldlevel=0
