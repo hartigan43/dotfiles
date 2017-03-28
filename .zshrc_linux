@@ -2,34 +2,21 @@
 DEFAULT_USER="jake"
 export EDITOR="/usr/bin/vim"
 export VISUAL="/usr/bin/gvim"
-#export XDG_CONFIG_HOME:="$HOME/.config"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+#export PATH="$HOME/.rbenv/bin:$PATH"
+export TERM="xterm-256color" #fix so tmux colors, and vim colors all play nice
 
 #vi mode with backspace
 #set -o vi
 bindkey -v
 bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
 
-#Arch - export pacmatic pacman program
-#export pacman_program="pacaur"
-
-#tmux
-export TERM="xterm-256color" #fix so tmux colors, and vim colors all play nice
 # tmux on start with zsh
 if [ "$TMUX" = "" ]; then tmux; fi
 
 #Miscellaneous functions
 source $HOME/.zsh_aliases
-
-#Set tmux title based on hostname
-#printf "\033k`hostname -s`\033\\"
-
-#Go
-#export GOPATH="$HOME/Code/Go"
-#export PATH="$GOPATH/bin:$PATH"
-
-#rbenv
-#export PATH="$HOME/.rbenv/bin:$PATH:/opt/andoid-sdk-tools"
-#eval "$(rbenv init -)"
 
 # zgen
 #
@@ -72,4 +59,5 @@ EOPLUGINS
     zgen save
 fi
 
+#fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
