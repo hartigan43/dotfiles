@@ -126,7 +126,7 @@ endif
 " }}}
 " Folding ------------------------------------------------------------------ {{{
 
-set foldlevelstart=0
+set foldlevelstart=4
 set foldmethod=syntax
 
 " Make zO recursively open whatever fold we're in, even if it's partially open.
