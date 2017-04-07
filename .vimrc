@@ -23,7 +23,6 @@ endif
 call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
-Plug 'ap/vim-css-color'
 Plug 'bling/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -100,6 +99,8 @@ set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode character
 set showbreak=↪
 set updatetime=250
 set modelines=1                                   "use modelines at end of file for specifc settings
+set formatoptions=qrn1j
+set shell=zsh
       
 " set leader key -- originally \ -- now localleader
 let mapleader = ","
@@ -131,7 +132,7 @@ endif
 " }}}
 " Folding ------------------------------------------------------------------ {{{
 
-set foldlevelstart=0
+set foldlevelstart=4
 set foldmethod=syntax
 
 " Make zO recursively open whatever fold we're in, even if it's partially open.
@@ -139,6 +140,9 @@ nnoremap zO zczO
 
 " }}}
 " Plugin-settings ---------------------------------------------------------- {{{
+
+let g:javascript_plugin_flow = 1
+
 " ctrlp settings  ---------------------------------------------------------- {{{
 let g:ctrlp_match_window = 'bottom,order:ttb'                     "order matches top to bottom
 let g:ctrlp_switch_buffer = 0                                     "always open new file in new buffer
@@ -174,7 +178,7 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_loc_list_height = 6
 
 let g:syntastic_sass_checkers = ['sass']
-let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_javascript_checkers = ['eslint']
 " }}}
 
 " YouCompleteMe settings ------------------------------------------------------- {{{
