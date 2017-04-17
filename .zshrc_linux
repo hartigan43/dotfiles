@@ -13,7 +13,7 @@ bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
 export pacman_program="pacaur"
 
 #tmux
-export TERM="xterm-256color" #fix so tmux colors, and vim colors all play nice
+export TERM="screen-256color" #fix so tmux colors, and vim colors all play nice
 # tmux on start with zsh
 if [ "$TMUX" = "" ]; then tmux; fi
 
