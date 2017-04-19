@@ -27,14 +27,14 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go'
 "Plug 'gregsexton/MatchTag'
-Plug 'jistr/vim-nerdtree-tabs',         { 'on': ['NERDTreeTabsToggle', 'NERDTreeToggle'], 'for': ['NERDTreeTabsToggle', 'NERDTreeToggle'] }
+Plug 'jistr/vim-nerdtree-tabs',         { 'on': 'NERDTreeTabsToggle' }
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'majutsushi/tagbar'
 Plug 'mileszs/ack.vim'
 Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
-Plug 'scrooloose/nerdtree',             { 'on': ['NERDTreeTabsToggle', 'NERDTreeToggle'], 'for': ['NERDTreeTabsToggle', 'NERDTreeToggle'] }
+Plug 'scrooloose/nerdtree',             { 'on': ['NERDTreeToggle', 'NERDTreeTabsToggle'] }
 Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
 Plug 'takac/vim-commandcaps'
@@ -191,7 +191,8 @@ let g:airline_powerline_fonts = 1
 "nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
 " toggle nerdtree display
-map <C-n> <plug>NERDTreeTabsToggle<CR>
+"map <C-n> <plug>NERDTreeTabsToggle<CR> below works with lazy loaded nerdtree
+noremap <C-n> :NERDTreeTabsToggle<CR>
 
 " show/hide tagbar
 nmap <F3> :TagbarToggle<CR>
