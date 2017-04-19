@@ -258,6 +258,8 @@ if has('gui_running')
   set guioptions-=r                               "properly hidden on left and right
   set background=dark
   colorscheme gruvbox                             "or seoul256
+  set noerrorbells                                "stop flashing screen
+  set novisualbell
 endif
 " }}}
 " Misc settings ------------------------------------------------------------ {{{
