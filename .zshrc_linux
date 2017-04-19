@@ -2,14 +2,18 @@
 DEFAULT_USER="jake"
 export EDITOR="/usr/bin/vim"
 export VISUAL="/usr/bin/gvim"
-export XDG_CONFIG_HOME="$HOME/.config"
+#export XDG_CONFIG_HOME="$HOME/.config"
+#export XDG_CONFIG_HOME:="$HOME/.config"
 
 #vi mode with backspace
 set -o vi
 bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
 
+#Arch - export pacmatic pacman program
+export pacman_program="pacaur"
+
 #tmux
-export TERM=xterm-256color #fix so tmux colors, and vim colors all play nice
+export TERM="xterm-256color" #fix so tmux colors, and vim colors all play nice
 # tmux on start with zsh
 if [ "$TMUX" = "" ]; then tmux; fi
 
@@ -17,37 +21,15 @@ if [ "$TMUX" = "" ]; then tmux; fi
 source $HOME/.zsh_aliases
 
 #Set tmux title based on hostname
-printf "\033k`hostname -s`\033\\"
+#printf "\033k`hostname -s`\033\\"
 
 #Go
-export GOPATH="$HOME/Code/Go"
-export PATH="$GOPATH/bin:$PATH"
+#export GOPATH="$HOME/Code/Go"
+#export PATH="$GOPATH/bin:$PATH"
 
 #rbenv
 export PATH="$HOME/.rbenv/bin:$PATH:/opt/andoid-sdk-tools"
 eval "$(rbenv init -)"
-
-##Antigen
-#source ~/.antigen.zsh
-##load oh-my-zsh library
-#antigen use oh-my-zsh  #antigen bundle robbyrussell/oh-my-zsh lib/
-##Antigen Bundles
-##antigen bundle robbyrussell/oh-my-zsh plugins/ruby
-#antigen bundle command-not-found
-#antigen bundle git
-#antigen bundle pass
-#antigen bundle rails
-#antigen bundle ruby
-#antigen bundle rbenv
-#antigen bundle rupa/z
-#antigen bundle systemd
-#antigen bundle tmux
-#antigen bundle vundle
-#antigen bundle zsh-users/zsh-syntax-highlighting
-##Antigen Theme
-#antigen-theme robbyrussell/oh-my-zsh themes/clean
-### (random) clean miloshadzic takashiyoshida sporty_256 sorin robbyrussell nicoulaj
-#antigen apply
 
 # zgen
 #
@@ -62,15 +44,16 @@ if ! zgen saved; then
 
     # plugins
     zgen oh-my-zsh plugins/command-not-found
+    zgen oh-my-zsh plugins/colored-man-pages
     zgen oh-my-zsh plugins/git
     zgen oh-my-zsh plugins/pass
     zgen oh-my-zsh plugins/ruby
     zgen oh-my-zsh plugins/rails
-    zgen oh-my-zsh plugins/rupa/z
     zgen oh-my-zsh plugins/rbenv
     zgen oh-my-zsh plugins/sudo
     zgen oh-my-zsh plugins/systemd
     zgen oh-my-zsh plugins/tmux
+    zgen oh-my-zsh plugins/z
     zgen load zsh-users/zsh-syntax-highlighting
 
     # bulk load

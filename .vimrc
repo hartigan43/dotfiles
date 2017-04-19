@@ -2,23 +2,29 @@
 " many things from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 
 filetype off                   " required!
-set nocompatible               " be iMproved
+
+if !has('nvim')                " vim specific vs neovim below
+  set nocompatible             " be iMproved
+endif
+
+if has('nvim')
+  set mouse-=a                 " not ready for mouse use yet
+endif
 
 " Vim-plug ----------------------------------------------------------------- {{{
 
 call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
-Plug 'bling/vim-airline'
+"Plug 'bling/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'fatih/vim-go'
-"Plug  'FredKSchott/CoVim'
 Plug 'jistr/vim-nerdtree-tabs'
-"Plug 'Lokaltog/vim-easymotion'
+Plug 'easymotion/vim-easymotion'
 Plug 'majutsushi/tagbar'
 Plug 'pangloss/vim-javascript'
-Plug 'rking/ag.vim'
+"Plug 'rking/ag.vim' "deprecated, consider ack.vim
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim'
@@ -27,7 +33,12 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-haml'
 Plug 'tpope/vim-surround'
-Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
+
+" nvim specific plugins
+if has('nvim')
+  Plug 'bling/vim-airline'
+endif
 
 call plug#end()
 
@@ -36,6 +47,10 @@ call plug#end()
 filetype plugin indent on
 "filetype indent on
 
+" Powerline ---------------------------------------------------------------- {{{
+"let g:powerline_pycmd = 'py3' " enables powerline with python 3
+
+" }}}
 " Basic options ------------------------------------------------------------ {{{
 
 syntax enable
