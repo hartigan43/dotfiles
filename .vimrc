@@ -26,8 +26,9 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go'
+"Plug 'gregsexton/MatchTag'
 Plug 'jistr/vim-nerdtree-tabs',         { 'on': ['NERDTreeTabsToggle', 'NERDTreeToggle'], 'for': ['NERDTreeTabsToggle', 'NERDTreeToggle'] }
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'majutsushi/tagbar'
 Plug 'mileszs/ack.vim'
@@ -35,7 +36,7 @@ Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
 Plug 'scrooloose/nerdtree',             { 'on': ['NERDTreeTabsToggle', 'NERDTreeToggle'], 'for': ['NERDTreeTabsToggle', 'NERDTreeToggle'] }
 Plug 'scrooloose/syntastic'
-Plug 'sjl/gundo.vim'
+Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
 Plug 'takac/vim-commandcaps'
 Plug 'ternjs/tern_for_vim'
 Plug 'tpope/vim-fugitive'
