@@ -1,40 +1,4 @@
-#user and default editor
-DEFAULT_USER="jake"
-export EDITOR="/usr/bin/vim"
-export VISUAL="/usr/bin/gvim"
-#export XDG_CONFIG_HOME="$HOME/.config"
-#export XDG_CONFIG_HOME:="$HOME/.config"
-
-#vi mode with backspace
-#set -o vi
-bindkey -v
-bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
-
-#Arch - export pacmatic pacman program
-export pacman_program="pacaur"
-
-#tmux
-export TERM="screen-256color" #fix so tmux colors, and vim colors all play nice
-# tmux on start with zsh
-if [ "$TMUX" = "" ]; then tmux; fi
-
-#Miscellaneous functions
-source $HOME/.zsh_aliases
-
-#Set tmux title based on hostname
-#printf "\033k`hostname -s`\033\\"
-
-#Go
-#export GOPATH="$HOME/Code/Go"
-#export PATH="$GOPATH/bin:$PATH"
-
-#rbenv
-export PATH="$HOME/.rbenv/bin:$PATH:/opt/andoid-sdk-tools"
-eval "$(rbenv init -)"
-
 # zgen
-#
-# load zgen
 source "${HOME}/.dotfiles/zgen/zgen.zsh"
 
 # check if there's no init script
@@ -60,7 +24,7 @@ if ! zgen saved; then
     zgen loadall <<EOPLUGINS
         zsh-users/zsh-history-substring-search
 EOPLUGINS
-    # ^ can't indent this EOPLUGINS
+    # ^ can't indent this EOPLUGINS ?
 
     # completions
     zgen load zsh-users/zsh-completions src
@@ -71,3 +35,53 @@ EOPLUGINS
     # save all to init script
     zgen save
 fi
+
+#platform detection
+unamestr=$(uname)
+
+if [[ $unamestr == 'Linux' ]]; then
+
+  export XDG_CONFIG_HOME="$HOME/.config"
+  export XDG_CACHE_HOME="$HOME/.cache"
+  export XDG_DATA_HOME="$HOME/.local/share"
+
+elif [[ $unamestr == 'Darwin' ]]; then
+  #homebrew/nix here
+fi
+
+#user and default editor
+DEFAULT_USER="jake"
+export EDITOR=$(command -v vim)
+export VISUAL=$(command -v gvim)
+
+# tmux TERM value and auto start
+export TERM="screen-256color" #fix so tmux colors, and vim colors all play nice
+if [ "$TMUX" = "" ]; then tmux; fi
+
+# check for a command within your path
+function command_exists() {
+  command -v $1 >/dev/null 2>&1;
+}
+
+#Go
+if command_exists go ; then
+  #TODO fix code/workspace paths across devices and one GOPATH
+  #export GOPATH="$HOME/Code/Go"
+  #export PATH="$GOPATH/bin:$PATH"
+fi
+
+#rbenv
+if [ -d "$HOME/.rbenv/bin" ] ; then
+    #loaded above with zgen, unnecessary? TODO update check
+    #export PATH="$HOME/.rbenv/bin:$PATH"
+fi
+
+#vi mode with backspace
+bindkey -v
+bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
+
+#load fzf if it exists
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+#source aliases
+source $HOME/.zsh_aliases

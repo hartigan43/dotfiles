@@ -24,14 +24,16 @@ Plug 'airblade/vim-gitgutter'
 Plug 'bling/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'fatih/vim-go'
-Plug 'jistr/vim-nerdtree-tabs'
 Plug 'easymotion/vim-easymotion'
+Plug 'fatih/vim-go'
+Plug 'jistr/vim-nerdtree-tabs',         { 'on': ['NERDTreeTabsToggle', 'NERDTreeToggle'], 'for': ['NERDTreeTabsToggle', 'NERDTreeToggle'] }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'majutsushi/tagbar'
 Plug 'mileszs/ack.vim'
-Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
-Plug 'scrooloose/nerdtree'
+Plug 'pangloss/vim-javascript'
+Plug 'scrooloose/nerdtree',             { 'on': ['NERDTreeTabsToggle', 'NERDTreeToggle'], 'for': ['NERDTreeTabsToggle', 'NERDTreeToggle'] }
 Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim'
 Plug 'takac/vim-commandcaps'
@@ -40,7 +42,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-haml'
 Plug 'tpope/vim-surround'
-"Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe'
 
 " nvim specific plugins
 if has('nvim')
@@ -49,7 +51,8 @@ endif
 
 " gvim specific plugins
 if has('gui_running')
-  Plug 'junegunn/seoul256.vim'
+"  Plug 'junegunn/seoul256.vim'
+  Plug 'morhetz/gruvbox'
 endif
 
 call plug#end()
@@ -95,6 +98,7 @@ set hlsearch                                      "highlight matches
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode characters for tab,eol,and with wrap on
 set showbreak=↪
 set modelines=1                                   "use modelines at end of file for specifc settings
+
 " set leader key -- originally \ -- now localleader
 let mapleader = ","
 let maplocalleader = "\\"

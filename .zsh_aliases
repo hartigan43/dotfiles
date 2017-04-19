@@ -25,9 +25,14 @@ alias upgrade="apt-get update && apt-get upgrade && apt-get clean"
 alias gitsup="git submodule foreach git pull origin master"
 
 # giving nvim the full monty for now
-alias vim='nvim'
-# fzf fuzzy vim open TODO fzf check & " -> '
-alias fvim='nvim $(fzf --height 40%)'
+if command_exists nvim ; then
+  alias vim='nvim'
+fi
+
+# fzf fuzzy vim open, uses vim/nvim depending on alias
+if command_exists fzf ; then
+  alias fvim='vim $(fzf --height 40%)'
+fi
 
 function randocommissian() {
     git commit -m"`curl -s http://whatthecommit.com/index.txt`"
