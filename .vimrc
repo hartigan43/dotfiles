@@ -241,15 +241,15 @@ if has('gui_running')
   if has('macunix')
     set guifont=Inconsolata\ for\ Powerline:h11     "set fonts for gui vim
   elseif has("gui_gtk2")                           "per vim wiki set gui font for most WMs
-    set guifont=Inconsolata\ for\ Powerline\ 10
+    set guifont=Inconsolata\ 11
   elseif has("gui_photon")
-    set guifont=Inconsolata\ for\ Powerline:s10
+    set guifont=Inconsolata:s11
   elseif has("gui_kde")
-    set guifont=Inconsolata\ for\ Powerline/10/-1/5/50/0/0/0/1/0
+    set guifont=Inconsolata/11/-1/5/50/0/0/0/1/0
   elseif has("x11")
     set guifont=-*-inconsolata-medium-r-normal-*-*-180-*-*-m-*-*
   else
-    set guifont=Inconsolata\ for\ Powerline:h10:cDEFAULT
+    set guifont=Inconsolata:h10:cDEFAULT
   endif
   set guioptions-=egmt                            "hide the gui elements
   set guioptions-=T
@@ -257,7 +257,7 @@ if has('gui_running')
   set guioptions-=L                               "oddly, only way to get scrollbars 
   set guioptions-=r                               "properly hidden on left and right
   set background=dark
-  colorscheme seoul256
+  colorscheme gruvbox                             "or seoul256
 endif
 " }}}
 " Misc settings ------------------------------------------------------------ {{{
