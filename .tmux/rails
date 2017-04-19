@@ -1,6 +1,5 @@
 # Rails development layout
 # 0: top (vim) | 1: bottom-left (shell) | 2: bottom-mid (guard/server) | 3: bottom-right (guard/server) 
-# 4: right-top (pianobar) | 5: right-bottom (irssi)
 
 # select first pane -- only one if empty
 select-pane -t 0

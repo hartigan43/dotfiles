@@ -1,3 +1,0 @@
-- Branch each os off into its own script.
-- Add in a RHEL, FED, CENT configuration
-- Don't settle for broken shit -- find and fix - powerline python issues for example

@@ -6,14 +6,15 @@ export VISUAL="/usr/bin/gvim"
 #export XDG_CONFIG_HOME:="$HOME/.config"
 
 #vi mode with backspace
-set -o vi
+#set -o vi
+bindkey -v
 bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
 
 #Arch - export pacmatic pacman program
 export pacman_program="pacaur"
 
 #tmux
-export TERM="xterm-256color" #fix so tmux colors, and vim colors all play nice
+export TERM="screen-256color" #fix so tmux colors, and vim colors all play nice
 # tmux on start with zsh
 if [ "$TMUX" = "" ]; then tmux; fi
 
@@ -48,7 +49,6 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/git
     zgen oh-my-zsh plugins/pass
     zgen oh-my-zsh plugins/ruby
-    zgen oh-my-zsh plugins/rails
     zgen oh-my-zsh plugins/rbenv
     zgen oh-my-zsh plugins/sudo
     zgen oh-my-zsh plugins/systemd
