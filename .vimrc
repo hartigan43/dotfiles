@@ -37,6 +37,7 @@ Plug 'mileszs/ack.vim'
 Plug 'OrangeT/vim-csharp'
 Plug 'pangloss/vim-javascript'
 Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim'
 Plug 'takac/vim-commandcaps'
@@ -184,6 +185,8 @@ let g:syntastic_javascript_checkers = ['eslint']
 
 " YouCompleteMe settings ------------------------------------------------------- {{{
 let g:ycm_min_num_of_chars_for_completion = 6 "default is 2, less results on smaller words/vars
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_autoclose_preview_window_after_insertion = 1 
 " }}}
 
 "nerdtree shown on file open
