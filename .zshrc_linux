@@ -79,6 +79,7 @@ fi
 #vi mode with backspace
 bindkey -v
 bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
+bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using vim mode in zsh
 
 #load fzf if it exists
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

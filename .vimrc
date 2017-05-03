@@ -35,6 +35,7 @@ Plug 'mileszs/ack.vim'
 Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
 Plug 'scrooloose/nerdtree',             { 'on': ['NERDTreeToggle', 'NERDTreeTabsToggle'] }
+Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
 Plug 'takac/vim-commandcaps'
@@ -173,11 +174,15 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_loc_list_height = 6
 
 let g:syntastic_sass_checkers = ['sass']
-let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_javascript_checkers = ['eslint']
 " }}}
 
 " YouCompleteMe settings ------------------------------------------------------- {{{
-let g:ycm_min_num_of_chars_for_completion = 6 "default is 2, less results on smaller words/vars
+let g:ycm_min_num_of_chars_for_completion = 6               "default is 2, less results on smaller words/vars
+let g:ycm_autoclose_preview_window_after_insertion = 1      "close preview window after insert is exited
+                                                            "after a completion is used. consider after_completion
+let g:ycm_complete_in_comments = 1                          "enable completion in comments
+let g:ycm_collect_identifiers_from_comments_and_strings = 0 "collect identifiers from strings and comments
 " }}}
 
 "nerdtree shown on file open
