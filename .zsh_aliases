@@ -24,6 +24,11 @@ alias upgrade="apt-get update && apt-get upgrade && apt-get clean"
 # SO 5828324 - git submodule recursive updates
 alias gitsup="git submodule foreach git pull origin master"
 
+#SO 113529 - emulate pbcopy
+# cat filename.ext | alias to copy files, etc
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
+
 # giving nvim the full monty for now
 if command_exists nvim ; then
   alias vim='nvim'

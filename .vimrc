@@ -3,25 +3,31 @@
 
 if !has('nvim')                " vim specific vs neovim below
   set nocompatible             " be iMproved
+
+  " install Vim-plug if not installed
+  if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  endif
 endif
 
 if has('nvim')
   set mouse-=a                 " not ready for mouse use yet
+
+  if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+    silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  endif
 endif
 
 " Vim-plug ----------------------------------------------------------------- {{{
 
-" install Vim-plug if not installed
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
 call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'easymotion/vim-easymotion'
@@ -34,6 +40,7 @@ Plug 'majutsushi/tagbar'
 Plug 'mileszs/ack.vim'
 Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
+Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': ['NERDTreeToggle', 'NERDTreeTabsToggle'] }
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/syntastic'
@@ -48,7 +55,7 @@ Plug 'Valloric/YouCompleteMe'
 
 " nvim specific plugins
 if has('nvim')
-  Plug 'bling/vim-airline'
+  Plug 'vim-airline/vim-airline'
 endif
 
 " gvim specific plugins
@@ -99,7 +106,8 @@ set hlsearch                                      "highlight matches
 "set list!                                         "toggles list, default is off, enables whitespace characters
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode characters for tab,eol,and with wrap on
 set showbreak=↪
-set modelines=1                                   "use modelines at end of file for specifc settings
+set modeline
+set modelines=2                                   "use modelines at end of file for specifc settings
 
 " set leader key -- originally \ -- now localleader
 let mapleader = ","
@@ -188,8 +196,16 @@ let g:ycm_collect_identifiers_from_comments_and_strings = 0 "collect identifiers
 "nerdtree shown on file open
 "let g:nerdtree_tabs_open_on_console_startup=1
 
+" Airline settings ------------------------------------------------------- {{{
 "enable powerline symbols with airline
 let g:airline_powerline_fonts = 1
+
+let g:airline#extensions#tabline#enabled = 1                "enable tabline to show open buffers or tabs
+let g:airline#extensions#tabline#left_sep = ' '             "use ' | ' as separator instead of the normal powerline separators
+let g:airline#extensions#tabline#left_alt_sep = '|'         
+let g:airline#extensions#tabline#buffer_min_count = 2       "only show the tabline with at least two buffers open
+" }}}
+
 " }}}
 " Custom keys -------------------------------------------------------------- {{{
 " Clean trailing whitespace
