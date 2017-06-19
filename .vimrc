@@ -47,6 +47,7 @@ Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
 Plug 'takac/vim-commandcaps'
 Plug 'ternjs/tern_for_vim'
+Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-haml'
@@ -213,7 +214,7 @@ let g:airline#extensions#tabline#buffer_min_count = 2       "only show the tabli
 
 " toggle nerdtree display
 "map <C-n> <plug>NERDTreeTabsToggle<CR> below works with lazy loaded nerdtree
-noremap <C-n> :NERDTreeTabsToggle<CR>
+"noremap <C-n> :NERDTreeTabsToggle<CR> currently disabled while testing multiple cursors
 
 " show/hide tagbar
 nmap <F3> :TagbarToggle<CR>
@@ -298,4 +299,4 @@ if ! has('gui_running')
 endif
 " }}}
 "
-" vim:foldmethod=marker:foldlevel=0
+" vim:foldmethod=marker:foldlevel=0:

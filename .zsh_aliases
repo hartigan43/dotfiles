@@ -39,6 +39,10 @@ if command_exists fzf ; then
   alias fvim='vim $(fzf --height 40%)'
 fi
 
+if command_exists pygmentize ; then
+  alias cat='pygmentize -g'
+fi
+
 function randocommissian() {
     git commit -m"`curl -s http://whatthecommit.com/index.txt`"
 }
