@@ -165,8 +165,9 @@ nnoremap zO zczO
 " }}}
  
 " fzf settings  ---------------------------------------------------------- {{{
-"nnoremap 
 nnoremap <C-P> :FZF <CR>
+nnoremap <leader>p :Lines <CR>
+"nnoremap 
 " }}}
 
 " gundo.vim settings ------------------------------------------------------- {{{
