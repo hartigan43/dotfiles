@@ -29,7 +29,7 @@ call plug#begin('~/.vim/plugged') "load vim-plug
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'ctrlpvim/ctrlp.vim'
+"Plug 'ctrlpvim/ctrlp.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go'
 "Plug 'gregsexton/MatchTag'
@@ -68,7 +68,6 @@ endif
 call plug#end()
 
 " }}}
-
 " Powerline ---------------------------------------------------------------- {{{
 "let g:powerline_pycmd = 'py3' " enables powerline with python 3
 
@@ -114,7 +113,7 @@ set modelines=2                                   "use modelines at end of file 
 let mapleader = ","
 let maplocalleader = "\\"
 
-set runtimepath^=~/.vim/bundle/ctrlp.vim
+"set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 " disable arrow keys / ctrl + hjkl window swap
 map <up> <nop>
@@ -149,20 +148,25 @@ nnoremap zO zczO
 " }}}
 " Plugin-settings ---------------------------------------------------------- {{{
 " ctrlp settings  ---------------------------------------------------------- {{{
-let g:ctrlp_match_window = 'bottom,order:ttb'                     "order matches top to bottom
-let g:ctrlp_switch_buffer = 0                                     "always open new file in new buffer
-let g:ctrlp_working_path_mode = 0                                 "ctrlp respect dir change in vim session
-let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'    "allow ctrl p to use ag and be fast
-
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
-set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
-
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ 'link': 'some_bad_symbolic_links',
-  \ }
+"let g:ctrlp_match_window = 'bottom,order:ttb'                     "order matches top to bottom
+"let g:ctrlp_switch_buffer = 0                                     "always open new file in new buffer
+"let g:ctrlp_working_path_mode = 0                                 "ctrlp respect dir change in vim session
+"let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'    "allow ctrl p to use ag and be fast
+"
+"set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+"set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+"
+"let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+"let g:ctrlp_custom_ignore = {
+"  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+"  \ 'file': '\v\.(exe|so|dll)$',
+"  \ 'link': 'some_bad_symbolic_links',
+"  \ }
+" }}}
+ 
+" fzf settings  ---------------------------------------------------------- {{{
+"nnoremap 
+nnoremap <C-P> :FZF <CR>
 " }}}
 
 " gundo.vim settings ------------------------------------------------------- {{{
@@ -258,6 +262,9 @@ nnoremap <leader>E :e <C-R>=expand("%:p:h:h") . "/" <CR>
 nnoremap <leader>s :vsplit <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>S :vsplit <C-R>=expand("%:p:h:h") . "/" <CR>
 
+"underlinethe current line - mostly for taking notes until I start using
+"something with cloud support
+nnoremap <leader><F5> yyp<c-v>$r-
 
 " }}}
 " GUI-settings ------------------------------------------------------------- {{{
