@@ -40,7 +40,7 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'majutsushi/tagbar'
 Plug 'mileszs/ack.vim'
-Plug 'mxw/vim-jsx'
+Plug 'mxw/vim-jsx',                     { 'for': ['jsx', 'javascript.jsx'] }
 Plug 'pangloss/vim-javascript'
 Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': ['NERDTreeToggle', 'NERDTreeTabsToggle'] }
@@ -52,7 +52,7 @@ Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
-Plug 'tpope/vim-haml',                  { 'for': ['.html.haml', '.haml'] }
+Plug 'tpope/vim-haml',                  { 'for': 'haml' }
 Plug 'tpope/vim-surround'
 
 " https://github.com/junegunn/dotfiles/blob/master/vimrc
@@ -63,6 +63,10 @@ function! BuildYCM(info)
 endfunction
 
 Plug 'Valloric/YouCompleteMe',          { 'do': function('BuildYCM') }
+
+" note taking and writing
+Plug 'rhysd/vim-grammarous',            { 'for': 'text' }
+Plug 'beloglazov/vim-online-thesaurus', { 'for': 'text' }
 
 " nvim specific plugins
 if has('nvim')
