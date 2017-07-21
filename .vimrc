@@ -54,7 +54,15 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-haml'
 Plug 'tpope/vim-surround'
-Plug 'Valloric/YouCompleteMe'
+
+" https://github.com/junegunn/dotfiles/blob/master/vimrc
+function! BuildYCM(info)  " BuildYCM from junebugg vimrc
+  if a:info.status == 'installed' || a:info.force
+    !./install.py --all
+  endif
+endfunction
+
+Plug 'Valloric/YouCompleteMe',          { 'do': function('BuildYCM') }
 
 " nvim specific plugins
 if has('nvim')
@@ -244,7 +252,6 @@ let g:syntastic_javascript_checkers = ['eslint']
 " }}}
 
 " YouCompleteMe settings ------------------------------------------------------- {{{
-" TODO see junegunn dotfiles on a YCM build function
 let g:ycm_min_num_of_chars_for_completion = 6               "default is 2, less results on smaller words/vars
 let g:ycm_autoclose_preview_window_after_insertion = 1      "close preview window after insert is exited
                                                             "after a completion is used. consider after_completion
