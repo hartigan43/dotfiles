@@ -31,7 +31,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
 "Plug 'ctrlpvim/ctrlp.vim'
 Plug 'easymotion/vim-easymotion'
-Plug 'fatih/vim-go'
+Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
 "Plug 'gregsexton/MatchTag'
 Plug 'jistr/vim-nerdtree-tabs',         { 'on': 'NERDTreeTabsToggle' }
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
@@ -52,11 +52,11 @@ Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
-Plug 'tpope/vim-haml'
+Plug 'tpope/vim-haml',                  { 'for': ['.html.haml', '.haml'] }
 Plug 'tpope/vim-surround'
 
 " https://github.com/junegunn/dotfiles/blob/master/vimrc
-function! BuildYCM(info)  " BuildYCM from junebugg vimrc
+function! BuildYCM(info)
   if a:info.status == 'installed' || a:info.force
     !./install.py --all
   endif
@@ -269,8 +269,8 @@ let g:ycm_collect_identifiers_from_comments_and_strings = 0 "collect identifiers
 nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
 " toggle nerdtree display
-"map <C-n> <plug>NERDTreeTabsToggle<CR> below works with lazy loaded nerdtree
-"noremap <C-n> :NERDTreeTabsToggle<CR> currently disabled while testing multiple cursors
+"map <F11> <plug>NERDTreeTabsToggle<CR> below works with lazy loaded nerdtree
+noremap <F11> :NERDTreeTabsToggle<CR> currently disabled while testing multiple cursors
 
 " show/hide tagbar
 nmap <F3> :TagbarToggle<CR>
