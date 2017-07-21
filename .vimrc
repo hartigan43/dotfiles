@@ -36,6 +36,8 @@ Plug 'fatih/vim-go'
 Plug 'jistr/vim-nerdtree-tabs',         { 'on': 'NERDTreeTabsToggle' }
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-peekaboo'
+Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'majutsushi/tagbar'
 Plug 'mileszs/ack.vim'
 Plug 'mxw/vim-jsx'
@@ -147,6 +149,27 @@ nnoremap zO zczO
 
 " }}}
 " Plugin-settings ---------------------------------------------------------- {{{
+ 
+" Ack settings  ---------------------------------------------------------- {{{
+" TODO mentally monitor useage, with fzf#vim#ag, unsure of total use of ack
+if executable('ag')
+  let &grepprg = 'ag --nogroup --nocolor --column'
+  let g:ackprg = 'ag --vimgrep'
+else
+  let &grepprg = 'grep -rn $* *'
+endif
+" }}}
+
+" Airline settings ------------------------------------------------------- {{{
+"enable powerline symbols with airline
+let g:airline_powerline_fonts = 1
+
+let g:airline#extensions#tabline#enabled = 1                "enable tabline to show open buffers or tabs
+let g:airline#extensions#tabline#left_sep = ' '             "use ' | ' as separator instead of the normal powerline separators
+let g:airline#extensions#tabline#left_alt_sep = '|'         
+let g:airline#extensions#tabline#buffer_min_count = 2       "only show the tabline with at least two buffers open
+" }}}
+ 
 " ctrlp settings  ---------------------------------------------------------- {{{
 "let g:ctrlp_match_window = 'bottom,order:ttb'                     "order matches top to bottom
 "let g:ctrlp_switch_buffer = 0                                     "always open new file in new buffer
@@ -165,6 +188,10 @@ nnoremap zO zczO
 " }}}
  
 " fzf settings  ---------------------------------------------------------- {{{
+if has('nvim')
+  let $FZF_DEFAULT_OPTS .= ' --inline-info'
+endif
+
 nnoremap <C-P> :FZF <CR>
 nnoremap <leader>p :Ag <CR>
 
@@ -217,6 +244,7 @@ let g:syntastic_javascript_checkers = ['eslint']
 " }}}
 
 " YouCompleteMe settings ------------------------------------------------------- {{{
+" TODO see junegunn dotfiles on a YCM build function
 let g:ycm_min_num_of_chars_for_completion = 6               "default is 2, less results on smaller words/vars
 let g:ycm_autoclose_preview_window_after_insertion = 1      "close preview window after insert is exited
                                                             "after a completion is used. consider after_completion
@@ -227,20 +255,11 @@ let g:ycm_collect_identifiers_from_comments_and_strings = 0 "collect identifiers
 "nerdtree shown on file open
 "let g:nerdtree_tabs_open_on_console_startup=1
 
-" Airline settings ------------------------------------------------------- {{{
-"enable powerline symbols with airline
-let g:airline_powerline_fonts = 1
-
-let g:airline#extensions#tabline#enabled = 1                "enable tabline to show open buffers or tabs
-let g:airline#extensions#tabline#left_sep = ' '             "use ' | ' as separator instead of the normal powerline separators
-let g:airline#extensions#tabline#left_alt_sep = '|'         
-let g:airline#extensions#tabline#buffer_min_count = 2       "only show the tabline with at least two buffers open
 " }}}
-
-" }}}
-" Custom keys -------------------------------------------------------------- {{{
+" Keymaps -------------------------------------------------------------- {{{
+ 
 " Clean trailing whitespace
-"nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
+nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
 " toggle nerdtree display
 "map <C-n> <plug>NERDTreeTabsToggle<CR> below works with lazy loaded nerdtree
@@ -270,11 +289,6 @@ inoremap <F1> <esc>:checktime<cr>
 
 " bind K to grep word under cursor
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-
-"use ag for ack.vim
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
 
 "do not have ack jump to first response
 cnoreabbrev Ack Ack!
