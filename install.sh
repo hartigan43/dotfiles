@@ -1,5 +1,4 @@
 #! /bin/sh
-# TODO maybe ignore creating vim directories with new vimrc
 
 #Check for git and curl
 prereqCheck() {
@@ -15,16 +14,6 @@ prereqCheck() {
    done
 }
 
-#TODO zgen and zsh
-
-#TODO Replace with vim-plug
-#Install Vundle
-#installVundle() {
-#  echo -e "Installing Vundle and running BundleInstall for vim plugins...\n"
-#  git clone https://github.com/gmarik/vundle.git $HOME/.vim/bundle/vundle
-#  vim +BundleInstall +qall
-#}
-
 #Git Config
 gitConf() {
   echo -e "Running basic git configuration...\n"
@@ -33,6 +22,13 @@ gitConf() {
   git config --global user.name "$name"
   git config --global user.email "$email"
   git config --global core.editor vim
+}
+
+installNERDFont() {
+  echo -e "Installing Inconsolata for Powerline Nerd Font..."
+  mkdir -p $HOME/.local/share/fonts
+  cd $HOME/.local/share/fonts 
+  curl -fLo "Inconsolata for Powerline Nerd Font Complete.otf" https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/Inconsolata/complete/Inconsolata%20for%20Powerline%20Nerd%20Font%20Complete.otf
 }
 
 Install rbenv and ruby-build
@@ -56,48 +52,44 @@ setRealName() {
 #  case
 #}
 
-#common settings
-commonInstall() {
-#Symlink vimrc, zshrc and aliases/functions
-echo -e "Configuration files symlinked to HOME...\n"
-mv $HOME/.zshrc $HOME/.zshrc.bak #remove original zshrc
+install() {
+  #install zgen
+  git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
 
-mkdir -p $HOME/.vim/tmp/backups $HOME/.vim/tmp/undo $HOME/.vim/tmp/swap
+  #Symlink vimrc, zshrc and aliases/functions
+  echo -e "Configuration files symlinked to HOME...\n"
+  mv $HOME/.zshrc $HOME/.zshrc.bak #remove original zshrc
 
-#Vundle installation and plugin install from vimrc
-#installVundle
+  mkdir -p $HOME/.config/vim
+  mkdir -p $HOME/.vim
 
-#zsh and zgen
-
-#Setup git
-gitConf
-
-#set the real username
-setRealName
-}
-
-workstationInstall() {
-  #TODO replace antigen with zgen
   #ln -s $HOME/.dotfiles/antigen/antigen.zsh $HOME/.antigen.zsh
   ln -s $HOME/.dotfiles/.zshrc_linux $HOME/.zshrc
-  #ln -s $HOME/.dotfiles/.zshrc_linux $HOME/.zshenv
   ln -s $HOME/.dotfiles/.tmux_linux.conf $HOME/.tmux.conf
   ln -s $HOME/.dotfiles/.zsh_aliases $HOME/.zsh_aliases
   ln -s $HOME/.dotfiles/.vimrc $HOME/.vimrc
   ln -s $HOME/.dotfiles/.tmux $HOME/.tmux
-  commonInstall
+  ln -s $HOME/.dotfiles/.vimrc $HOME/.config/nvim/init.vim
+
+  #Setup git
+  gitConf
+
+  #set the real username
+  setRealName
+
+  installNERDFont
 
   #rbenv installation
   #rbenvInstall
 
   #TODO see if this is still valid
   #ip tables to prevent a good bit of ISP video throttling
-  echo -e "Adding ISP throttling IP to iptables...\n"
-  sudo iptables -A INPUT -s 173.194.55.0/24 -j DROP
-  sudo iptables -A INPUT -s 206.111.0.0/16 -j DROP
+  #echo -e "Adding ISP throttling IP to iptables...\n"
+  #sudo iptables -A INPUT -s 173.194.55.0/24 -j DROP
+  #sudo iptables -A INPUT -s 206.111.0.0/16 -j DROP
 }
 
 ####END FUNCTIONS####
 
 prereqCheck
-workstationInstall
+install
