@@ -41,6 +41,7 @@ Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'majutsushi/tagbar'
 Plug 'mileszs/ack.vim'
 Plug 'mxw/vim-jsx',                     { 'for': ['jsx', 'javascript.jsx'] }
+Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': ['NERDTreeToggle', 'NERDTreeTabsToggle'] }
@@ -265,6 +266,7 @@ let g:ycm_collect_identifiers_from_comments_and_strings = 0 "collect identifiers
 
 "nerdtree shown on file open
 "let g:nerdtree_tabs_open_on_console_startup=1
+let g:used_javascript_libs = 'angular,jquery'
 
 " }}}
 " Keymaps -------------------------------------------------------------- {{{
