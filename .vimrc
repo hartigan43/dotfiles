@@ -164,7 +164,7 @@ nnoremap zO zczO
 " Plugin-settings ---------------------------------------------------------- {{{
  
 " Ack settings  ---------------------------------------------------------- {{{
-" TODO mentally monitor useage, with fzf#vim#ag, unsure of total use of ack
+" TODO monitor usage, with fzf#vim#ag, unsure of total use of ack
 if executable('ag')
   let &grepprg = 'ag --nogroup --nocolor --column'
   let g:ackprg = 'ag --vimgrep'
@@ -238,6 +238,12 @@ command! -bang -nargs=* Ag
 " gundo.vim settings ------------------------------------------------------- {{{
 let g:gundo_width = 60
 let g:gundo_preview_height = 40
+" }}}
+
+" NERDCommenter settings --------------------------------------------------- {{{
+let g:NERDDefaultAlign = 'left'
+let g:NERDCommentEmptyLines = 1
+let g:NERDTrimTrailingWhiteSpace = 1
 " }}}
 
 " syntastic settings ------------------------------------------------------- {{{
@@ -319,6 +325,13 @@ nnoremap <leader>S :vsplit <C-R>=expand("%:p:h:h") . "/" <CR>
 "something with cloud support
 nnoremap <leader><F5> yyp<c-v>$r-
 
+"yank the whole file to clipboard
+nmap <leader>y :%y+<cr>
+
+
+" }}}
+" Syntax ------------------------------------------------------------------- {{{
+autocmd BufNewFile,BufRead *.html.twig   set syntax=html
 " }}}
 " GUI-settings ------------------------------------------------------------- {{{
 if has('gui_running')
