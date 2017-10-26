@@ -47,7 +47,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': ['NERDTreeToggle', 'NERDTreeTabsToggle'] }
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
 Plug 'takac/vim-commandcaps'
 Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 'do': 'yarn install' }
@@ -56,6 +56,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-haml',                  { 'for': 'haml' }
 Plug 'tpope/vim-surround'
+Plug 'w0rp/ale'
 
 " https://github.com/junegunn/dotfiles/blob/master/vimrc
 function! BuildYCM(info)
@@ -67,8 +68,8 @@ endfunction
 Plug 'Valloric/YouCompleteMe',          { 'do': function('BuildYCM') }
 
 " note taking and writing
-Plug 'rhysd/vim-grammarous',            { 'for': 'text' }
-Plug 'beloglazov/vim-online-thesaurus', { 'for': 'text' }
+Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
+Plug 'beloglazov/vim-online-thesaurus', { 'for': ['text', 'markdown'] }
 
 " nvim specific plugins
 if has('nvim')
@@ -239,6 +240,10 @@ command! -bang -nargs=* Ag
 " gundo.vim settings ------------------------------------------------------- {{{
 let g:gundo_width = 60
 let g:gundo_preview_height = 40
+" }}}
+
+" Markdown Preview settings --------------------------------------------------- {{{
+let g:mkdp_path_to_chrome = "/usr/bin/firefox"
 " }}}
 
 " NERDCommenter settings --------------------------------------------------- {{{
