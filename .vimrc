@@ -102,7 +102,7 @@ set history=1000
 set lazyredraw                                    "only redraw when necessary
 set encoding=utf-8
 set laststatus=2                                  "always shows statusline / powerline
-set noshowmode                                    "hides the mode for default statusline
+set noshowmode                                    "hides the mode for default statusline as its unnecessary with powerline/airline/lightline
 set nowrap                                        "no word wrapping
 set undofile                                      "allow per file undo persistance
 set undoreload=10000
@@ -174,22 +174,29 @@ else
   let &grepprg = 'grep -rn $* *'
 endif
 " }}}
+ 
+" ALE settings ------------------------------------------------------- {{{
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%][%severity%] %s'             "define the format of the messages
+let g:airline#extensions#ale#enabled = 1                            "let ALE work within airline
+" }}}
 
 " Airline settings ------------------------------------------------------- {{{
 "enable powerline symbols with airline
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 1                                   
 
-let g:airline#extensions#tabline#enabled = 1                "enable tabline to show open buffers or tabs
-let g:airline#extensions#tabline#left_sep = ' '             "use ' | ' as separator instead of the normal powerline separators
+let g:airline#extensions#tabline#enabled = 1                        "enable tabline to show open buffers or tabs
+let g:airline#extensions#tabline#left_sep = ' '                     "use ' | ' as separator instead of the normal powerline separators
 let g:airline#extensions#tabline#left_alt_sep = '|'         
-let g:airline#extensions#tabline#buffer_min_count = 2       "only show the tabline with at least two buffers open
+let g:airline#extensions#tabline#buffer_min_count = 2               "only show the tabline with at least two buffers open
 " }}}
  
 " ctrlp settings  ---------------------------------------------------------- {{{
-"let g:ctrlp_match_window = 'bottom,order:ttb'                     "order matches top to bottom
-"let g:ctrlp_switch_buffer = 0                                     "always open new file in new buffer
-"let g:ctrlp_working_path_mode = 0                                 "ctrlp respect dir change in vim session
-"let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'    "allow ctrl p to use ag and be fast
+"let g:ctrlp_match_window = 'bottom,order:ttb'                      "order matches top to bottom
+"let g:ctrlp_switch_buffer = 0                                      "always open new file in new buffer
+"let g:ctrlp_working_path_mode = 0                                  "ctrlp respect dir change in vim session
+"let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'     "allow ctrl p to use ag and be fast
 "
 "set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 "set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
