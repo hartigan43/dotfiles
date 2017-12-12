@@ -34,7 +34,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
 "Plug 'gregsexton/MatchTag'
 Plug 'iamcco/markdown-preview.vim',     {'for': ['md', 'markdown'] }
-Plug 'jistr/vim-nerdtree-tabs',         { 'on': 'NERDTreeTabsToggle' }
+"Plug 'jistr/vim-nerdtree-tabs',         { 'on': 'NERDTreeTabsToggle' }
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
@@ -47,7 +47,6 @@ Plug 'pangloss/vim-javascript'
 Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': ['NERDTreeToggle', 'NERDTreeTabsToggle'] }
 Plug 'scrooloose/nerdcommenter'
-"Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
 Plug 'takac/vim-commandcaps'
 Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 'do': 'yarn install' }
@@ -253,6 +252,11 @@ let g:gundo_preview_height = 40
 let g:mkdp_path_to_chrome = "/usr/bin/firefox"
 " }}}
 
+" NERDTree settings --------------------------------------------------- {{{
+" close vim if NERDTree is the only thing open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" }}}
+
 " NERDCommenter settings --------------------------------------------------- {{{
 let g:NERDDefaultAlign = 'left'
 let g:NERDCommentEmptyLines = 1
@@ -295,13 +299,13 @@ nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
 " toggle nerdtree display
 "map <F11> <plug>NERDTreeTabsToggle<CR> below works with lazy loaded nerdtree
-noremap <F11> :NERDTreeTabsToggle<CR> currently disabled while testing multiple cursors
+noremap <F4> :NERDTreeToggle<CR> 
 
 " show/hide tagbar
 nmap <F3> :TagbarToggle<CR>
 
 " syntastic window
-nmap <F4> :lwindow<CR>
+"nmap <F4> :lwindow<CR> testing ale
 
 " hide search highlighting
 nnoremap <leader><space> :nohlsearch<CR> 
