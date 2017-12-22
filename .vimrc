@@ -1,5 +1,6 @@
 " .vimrc
 " many things from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
+" testing visitor traffic for dean
 
 if !has('nvim')                " vim specific vs neovim below
   set nocompatible             " be iMproved
@@ -151,6 +152,10 @@ endif
 if !isdirectory(expand(&directory))
     call mkdir(expand(&directory), "p")
 endif
+
+"hide ugly code past 120 characters on a line
+"from https://kinbiko.com/vim/my-shiniest-vim-gems/
+match ErrorMsg '\%>120v.\+'
 
 " }}}
 " Folding ------------------------------------------------------------------ {{{
