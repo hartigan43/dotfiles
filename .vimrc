@@ -30,12 +30,10 @@ call plug#begin('~/.vim/plugged') "load vim-plug
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
-"Plug 'ctrlpvim/ctrlp.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
 "Plug 'gregsexton/MatchTag'
 Plug 'iamcco/markdown-preview.vim',     {'for': ['md', 'markdown'] }
-"Plug 'jistr/vim-nerdtree-tabs',         { 'on': 'NERDTreeTabsToggle' }
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
@@ -46,7 +44,7 @@ Plug 'mxw/vim-jsx',                     { 'for': ['jsx', 'javascript.jsx'] }
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'ryanoasis/vim-devicons'
-Plug 'scrooloose/nerdtree',             { 'on': ['NERDTreeToggle', 'NERDTreeTabsToggle'] }
+Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
 Plug 'takac/vim-commandcaps'
@@ -184,6 +182,8 @@ let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%][%severity%] %s'             "define the format of the messages
 let g:airline#extensions#ale#enabled = 1                            "let ALE work within airline
+let g:ale_completion_delay = 250                                    "delay before ale completion, def 100
+let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
 " }}}
 
 " Airline settings ------------------------------------------------------- {{{
@@ -196,22 +196,6 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#buffer_min_count = 2               "only show the tabline with at least two buffers open
 " }}}
  
-" ctrlp settings  ---------------------------------------------------------- {{{
-"let g:ctrlp_match_window = 'bottom,order:ttb'                      "order matches top to bottom
-"let g:ctrlp_switch_buffer = 0                                      "always open new file in new buffer
-"let g:ctrlp_working_path_mode = 0                                  "ctrlp respect dir change in vim session
-"let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'     "allow ctrl p to use ag and be fast
-"
-"set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
-"set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
-"
-"let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-"let g:ctrlp_custom_ignore = {
-"  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-"  \ 'file': '\v\.(exe|so|dll)$',
-"  \ 'link': 'some_bad_symbolic_links',
-"  \ }
-" }}}
  
 " fzf settings  ---------------------------------------------------------- {{{
 if has('nvim')
@@ -221,7 +205,6 @@ endif
 nnoremap <C-P> :FZF <CR>
 nnoremap <leader>p :Ag <CR>
 
-"TODO get ripgrep working and compare speed with ag
 " Augmenting Ag command using fzf#vim#with_preview function
 "   * fzf#vim#with_preview([[options], preview window, [toggle keys...]])
 "     * For syntax-highlighting, Ruby and any of the following tools are required:
@@ -292,8 +275,6 @@ let g:ycm_complete_in_comments = 1                          "enable completion i
 let g:ycm_collect_identifiers_from_comments_and_strings = 0 "collect identifiers from strings and comments
 " }}}
 
-"nerdtree shown on file open
-"let g:nerdtree_tabs_open_on_console_startup=1
 let g:used_javascript_libs = 'angular,jquery'
 
 " }}}
@@ -303,14 +284,10 @@ let g:used_javascript_libs = 'angular,jquery'
 nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
 " toggle nerdtree display
-"map <F11> <plug>NERDTreeTabsToggle<CR> below works with lazy loaded nerdtree
 noremap <F4> :NERDTreeToggle<CR> 
 
 " show/hide tagbar
 nmap <F3> :TagbarToggle<CR>
-
-" syntastic window
-"nmap <F4> :lwindow<CR> testing ale
 
 " hide search highlighting
 nnoremap <leader><space> :nohlsearch<CR> 
