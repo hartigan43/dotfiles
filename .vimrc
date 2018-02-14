@@ -153,7 +153,7 @@ endif
 
 "hide ugly code past 120 characters on a line
 "from https://kinbiko.com/vim/my-shiniest-vim-gems/
-match ErrorMsg '\%>120v.\+'
+autocmd Filetype if &ft!="txt,md" match ErrorMsg '\%>120v.\+' endif
 
 " }}}
 " Folding ------------------------------------------------------------------ {{{
@@ -329,8 +329,13 @@ nmap <leader>y :%y+<cr>
 
 
 " }}}
-" Syntax ------------------------------------------------------------------- {{{
+" File specific overrides -------------------------------------------------- {{{
 autocmd BufNewFile,BufRead *.html.twig   set syntax=html
+augroup WrapLineForTextFiles
+  autocmd!
+  autocmd FileType md,markdown setlocal wrap
+  autocmd FileType txt,text setlocal wrap
+augroup END
 " }}}
 " GUI-settings ------------------------------------------------------------- {{{
 if has('gui_running')
