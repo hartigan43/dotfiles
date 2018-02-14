@@ -333,8 +333,8 @@ nmap <leader>y :%y+<cr>
 autocmd BufNewFile,BufRead *.html.twig   set syntax=html
 augroup WrapLineForTextFiles
   autocmd!
-  autocmd FileType md,markdown setlocal wrap
-  autocmd FileType txt,text setlocal wrap
+  autocmd FileType md,markdown setlocal wrap spell spelllang=en_us
+  autocmd FileType txt,text setlocal wrap spell spelllang=en_us
 augroup END
 " }}}
 " GUI-settings ------------------------------------------------------------- {{{
