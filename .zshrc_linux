@@ -58,7 +58,7 @@ export EDITOR=$(command -v vim)
 export VISUAL=$(command -v vim)
 
 # tmux TERM value and auto start
-export TERM="screen-256color" #fix so tmux colors, and vim colors all play nice
+export TERM="xterm-256color" #now uses true color
 if [ "$TMUX" = "" ]; then tmux; fi
 
 # check for a command within your path
