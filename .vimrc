@@ -203,7 +203,7 @@ if has('nvim')
 endif
 
 nnoremap <C-P> :FZF <CR>
-nnoremap <leader>p :Ag <CR>
+nnoremap <leader>p :Rg <CR>
 
 " Augmenting Ag command using fzf#vim#with_preview function
 "   * fzf#vim#with_preview([[options], preview window, [toggle keys...]])
