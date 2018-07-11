@@ -1,6 +1,5 @@
 " .vimrc
 " many things from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
-" testing visitor traffic for dean
 
 if !has('nvim')                " vim specific vs neovim below
   set nocompatible             " be iMproved
@@ -33,7 +32,9 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
 "Plug 'gregsexton/MatchTag'
+Plug 'honza/vim-snippets'
 Plug 'iamcco/markdown-preview.vim',     {'for': ['md', 'markdown'] }
+"Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
@@ -46,12 +47,14 @@ Plug 'pangloss/vim-javascript'
 Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
+"Plug 'shinchu/lightline-gruvbox.vim'
+Plug 'SirVer/ultisnips'
 Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
 Plug 'takac/vim-commandcaps'
 Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 'do': 'yarn install' }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rails'
+Plug 'tpope/vim-rails',                 { 'for': 'rb' }
 Plug 'tpope/vim-haml',                  { 'for': 'haml' }
 Plug 'tpope/vim-surround'
 Plug 'w0rp/ale'
@@ -70,9 +73,6 @@ Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
 Plug 'beloglazov/vim-online-thesaurus', { 'for': ['text', 'markdown'] }
 
 " nvim specific plugins
-if has('nvim')
-  Plug 'vim-airline/vim-airline'
-endif
 
 " gvim specific plugins
 if has('gui_running')
@@ -116,7 +116,7 @@ set mousehide                                     "hide mouse while editing
 set pastetoggle=<F2>                              "when in insert mode, allow easy external clipboard pasting
 set incsearch                                     "search as characters are entered
 set ignorecase                                    "ignore case while searching
-set smartcase                                     "ignores lower case if search pattern is uppercase
+set smartcase                                     "case insensitive search if capital letters are used
 set hlsearch                                      "highlight matches
 "set list!                                         "toggles list, default is off, enables whitespace characters
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode characters for tab,eol,and with wrap on
@@ -181,7 +181,7 @@ endif
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%][%severity%] %s'             "define the format of the messages
-let g:airline#extensions#ale#enabled = 1                            "let ALE work within airline
+"let g:airline#extensions#ale#enabled = 1                           "let ALE work within airline
 let g:ale_completion_delay = 250                                    "delay before ale completion, def 100
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
 " }}}
@@ -195,7 +195,6 @@ let g:airline#extensions#tabline#left_sep = ' '                     "use ' | ' a
 let g:airline#extensions#tabline#left_alt_sep = '|'         
 let g:airline#extensions#tabline#buffer_min_count = 2               "only show the tabline with at least two buffers open
 " }}}
- 
  
 " fzf settings  ---------------------------------------------------------- {{{
 if has('nvim')
@@ -236,6 +235,41 @@ let g:gundo_width = 60
 let g:gundo_preview_height = 40
 " }}}
 
+" lightline.vim settings  ------------------------------------------------------- {{{
+" TODO try and fix the tab/bufferline issue
+""let g:lightline = {
+""  \  'active': {
+""  \    'left':[ [ 'mode', 'paste' ],
+""  \             [ 'gitbranch', 'readonly', 'filename', 'modified' ]
+""  \    ]
+""  \  },
+""	\  'component': {
+""	\    'lineinfo': ' %3l:%-2v',
+""	\  },
+""  \  'component_function': {
+""  \    'gitbranch': 'fugitive#head',
+""  \  },
+""  \ 'component_expand': {
+""  \   'bufferline': 'LightlineBufferline',
+""  \ },
+""  \ 'component_type': {
+""  \   'bufferline': 'tabsel',
+""  \ },
+""  \ }
+""let g:lightline.separator = {
+""	\   'left': '', 'right': ''
+""  \}
+""let g:lightline.subseparator = {
+""	\   'left': '', 'right': '' 
+""  \}
+""let g:lightline.tabline = {
+""  \   'left': [ ['bufferline'] ]
+""  \}
+
+"set showtabline=2  " Show tabline
+"set guioptions-=e  " Don't use GUI tabline
+" }}}
+
 " Markdown Preview settings --------------------------------------------------- {{{
 let g:mkdp_path_to_chrome = "/usr/bin/firefox"
 " }}}
@@ -265,6 +299,17 @@ let g:syntastic_loc_list_height = 6
 
 let g:syntastic_sass_checkers = ['sass']
 let g:syntastic_javascript_checkers = ['eslint']
+" }}}
+
+" UltiSnips settings ------------------------------------------------------- {{{
+let g:UltiSnipsExpandTrigger="<c-;>"
+let g:UltiSnipsListSnippets="<c-e>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
 " }}}
 
 " YouCompleteMe settings ------------------------------------------------------- {{{
