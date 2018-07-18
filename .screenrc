@@ -1,1 +1,19 @@
+#export term
+term xterm-256color
+
+#scrollback limit
+defscrollback 5000
+
+#vim movement bindings
+bind j focus down
+bind k focus up
+bind l focus right
+bind h focus left
+
+#basic status line
 hardstatus alwayslastline "%w+ --  Host: %H Date: %D-%M-%Y: Load: %l "
+# Untested statusline String 
+# hardstatus alwayslastline "%{= kb}[ %1` ]%= %{= kw}%?%-w%?%{r}(%{g} %n %t%?(%u)%?%{r} )%{w}%?%+w%?%?%= [%{Y} %d/%m %{Y}%c %{W}]"
+
+# in the event there are issues with Esc in Vim add timeout
+maptimeout 5
