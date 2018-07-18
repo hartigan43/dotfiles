@@ -128,8 +128,6 @@ set modelines=2                                   "use modelines at end of file 
 let mapleader = ","
 let maplocalleader = "\\"
 
-"set runtimepath^=~/.vim/bundle/ctrlp.vim
-
 " disable arrow keys / ctrl + hjkl window swap
 map <up> <nop>
 map <down> <nop>
@@ -181,7 +179,7 @@ endif
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%][%severity%] %s'             "define the format of the messages
-"let g:airline#extensions#ale#enabled = 1                           "let ALE work within airline
+let g:airline#extensions#ale#enabled = 1                           "let ALE work within airline
 let g:ale_completion_delay = 250                                    "delay before ale completion, def 100
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
 " }}}
@@ -204,23 +202,6 @@ endif
 nnoremap <C-P> :FZF <CR>
 nnoremap <leader>p :Rg <CR>
 
-" Augmenting Ag command using fzf#vim#with_preview function
-"   * fzf#vim#with_preview([[options], preview window, [toggle keys...]])
-"     * For syntax-highlighting, Ruby and any of the following tools are required:
-"       - Highlight: http://www.andre-simon.de/doku/highlight/en/highlight.php
-"       - CodeRay: http://coderay.rubychan.de/
-"       - Rouge: https://github.com/jneen/rouge
-"
-"   :Ag  - Start fzf with hidden preview window that can be enabled with "?" key
-"   :Ag! - Start fzf in fullscreen and display the preview window above
-"command! -bang -nargs=* Ag 
-"  \ call fzf#vim#ag(<q-args>,
-"  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-"  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-"  \                 <bang>0)
-
-" Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
-" currently freezing on fedora
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
@@ -286,19 +267,19 @@ let g:NERDTrimTrailingWhiteSpace = 1
 " }}}
 
 " syntastic settings ------------------------------------------------------- {{{
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0 
-let g:syntastic_check_on_wq = 0
-  "end recommended syntastic
-let g:syntastic_loc_list_height = 6
-
-let g:syntastic_sass_checkers = ['sass']
-let g:syntastic_javascript_checkers = ['eslint']
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 0 
+"let g:syntastic_check_on_wq = 0
+"  "end recommended syntastic
+"let g:syntastic_loc_list_height = 6
+"
+"let g:syntastic_sass_checkers = ['sass']
+"let g:syntastic_javascript_checkers = ['eslint']
 " }}}
 
 " UltiSnips settings ------------------------------------------------------- {{{
