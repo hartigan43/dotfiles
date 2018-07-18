@@ -1,5 +1,5 @@
 # zgen
-source "${HOME}/.dotfiles/zgen/zgen.zsh"
+source "${HOME}/.zgen/zgen.zsh"
 
 # check if there's no init script
 if ! zgen saved; then
@@ -94,3 +94,11 @@ fi
 
 #source aliases
 source $HOME/.zsh_aliases
+
+#pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
