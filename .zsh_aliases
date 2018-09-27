@@ -8,8 +8,6 @@ alias mxlookup="nslookup -q=mx"
 alias gob="go build"
 #alias git="hub"
 alias sudo="nocorrect sudo"
-alias irssi="TERM=screen-256color irssi" #fix for the xterm fix above with xfce4term and irssi buffer
-alias weechat-curses="TERM=screen-256color weechat-curses" #attempting same irssi fix with weechat
 alias psmem="ps auxf | sort -nr -k 4 | head -10" #top 10 process eating memory
 alias pscpu="ps auxf | sort -nr -k 3 | head -10" #top 10 processes eating cpu
 alias weather="curl wttr.in"
@@ -80,4 +78,10 @@ function extract () {
 
 function undozip(){
   unzip -l "$1" |  awk 'BEGIN { OFS="" ; ORS="" } ; { for ( i=4; i<NF; i++ ) print $i " "; print $NF "\n" }' | xargs -I{} rm -r {}
+}
+
+function rainymood() {
+  FILE=$((RANDOM%4))
+  URL="https://rainymood.com/audio1110/${FILE}.ogg"
+  mpv ${URL} && rainymood
 }

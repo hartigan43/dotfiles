@@ -27,19 +27,19 @@ endif
 call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
-Plug 'vim-airline/vim-airline'
+"Plug 'airblade/vim-rooter'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
-"Plug 'gregsexton/MatchTag'
 Plug 'honza/vim-snippets'
 Plug 'iamcco/markdown-preview.vim',     {'for': ['md', 'markdown'] }
-"Plug 'itchyny/lightline.vim'
+Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'majutsushi/tagbar'
+Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
 Plug 'mxw/vim-jsx',                     { 'for': ['jsx', 'javascript.jsx'] }
 Plug 'othree/javascript-libraries-syntax.vim'
@@ -58,6 +58,11 @@ Plug 'tpope/vim-rails',                 { 'for': 'rb' }
 Plug 'tpope/vim-haml',                  { 'for': 'haml' }
 Plug 'tpope/vim-surround'
 Plug 'w0rp/ale'
+
+"TODO test greyscale life
+"Plug 'Lokaltog/vim-monotone'
+"Plug 'fxn/vim-monochrome'
+"ENDTEST
 
 " https://github.com/junegunn/dotfiles/blob/master/vimrc
 function! BuildYCM(info)
@@ -81,14 +86,9 @@ if has('gui_running')
 endif
 
 call plug#end()
-
 " }}}
-" Powerline ---------------------------------------------------------------- {{{
-"let g:powerline_pycmd = 'py3' " enables powerline with python 3
 
-" }}}
 " Basic options ------------------------------------------------------------ {{{
-
 set number                                        "show line numbers
 set ts=2                                          "tabs width as two spaces
 set shiftwidth=2                                  
@@ -217,38 +217,48 @@ let g:gundo_preview_height = 40
 " }}}
 
 " lightline.vim settings  ------------------------------------------------------- {{{
-" TODO try and fix the tab/bufferline issue
-""let g:lightline = {
-""  \  'active': {
-""  \    'left':[ [ 'mode', 'paste' ],
-""  \             [ 'gitbranch', 'readonly', 'filename', 'modified' ]
-""  \    ]
-""  \  },
-""	\  'component': {
-""	\    'lineinfo': ' %3l:%-2v',
-""	\  },
-""  \  'component_function': {
-""  \    'gitbranch': 'fugitive#head',
-""  \  },
-""  \ 'component_expand': {
-""  \   'bufferline': 'LightlineBufferline',
-""  \ },
-""  \ 'component_type': {
-""  \   'bufferline': 'tabsel',
-""  \ },
-""  \ }
-""let g:lightline.separator = {
-""	\   'left': '', 'right': ''
-""  \}
-""let g:lightline.subseparator = {
-""	\   'left': '', 'right': '' 
-""  \}
-""let g:lightline.tabline = {
-""  \   'left': [ ['bufferline'] ]
-""  \}
+"  \  'colorscheme': 'gruvbox',
+let g:lightline = {
+  \  'active': {
+  \    'left':[ [ 'mode', 'paste' ],
+  \             [ 'gitbranch', 'readonly', 'filename', 'modified' ]
+  \    ]
+  \  },
+	\  'component': {
+	\    'lineinfo': ' %3l:%-2v',
+	\  },
+  \  'component_function': {
+  \    'gitbranch': 'fugitive#head',
+  \  },
+  \ 'component_expand': {
+  \   'buffers': 'lightline#bufferline#buffers',
+  \ },
+  \ 'component_type': {
+  \   'buffers': 'tabsel',
+  \ },
+  \ }
+let g:lightline.separator = {
+	\   'left': '', 'right': ''
+  \}
+let g:lightline.subseparator = {
+	\   'left': '', 'right': '' 
+  \}
+let g:lightline.tabline = {
+  \   'left': [ ['buffers'] ],
+  \   'right': [[]],
+  \}
+" TODO not possible / PR?
+"let g:lightline.tabline.separator = {
+"  \   'left': '', 'right': '|'
+"  \}
 
-"set showtabline=2  " Show tabline
-"set guioptions-=e  " Don't use GUI tabline
+" lightline-bufferline settings
+let g:lightline#bufferline#min_buffer_count = 2
+let g:lightline#bufferline#enable_devicons = 1
+
+"enable the bufferline with lightline+lightline-bufferline
+set showtabline=2  " Show tabline
+set guioptions-=e  " Don't use GUI tabline
 " }}}
 
 " Markdown Preview settings --------------------------------------------------- {{{
@@ -266,22 +276,6 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhiteSpace = 1
 " }}}
 
-" syntastic settings ------------------------------------------------------- {{{
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 0 
-"let g:syntastic_check_on_wq = 0
-"  "end recommended syntastic
-"let g:syntastic_loc_list_height = 6
-"
-"let g:syntastic_sass_checkers = ['sass']
-"let g:syntastic_javascript_checkers = ['eslint']
-" }}}
-
 " UltiSnips settings ------------------------------------------------------- {{{
 let g:UltiSnipsExpandTrigger="<c-;>"
 let g:UltiSnipsListSnippets="<c-e>"
@@ -290,7 +284,6 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
-
 " }}}
 
 " YouCompleteMe settings ------------------------------------------------------- {{{
@@ -305,7 +298,6 @@ let g:used_javascript_libs = 'angular,jquery'
 
 " }}}
 " Keymaps -------------------------------------------------------------- {{{
- 
 " Clean trailing whitespace
 nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
@@ -352,9 +344,8 @@ nnoremap <leader><F5> yyp<c-v>$r-
 
 "yank the whole file to clipboard
 nmap <leader>y :%y+<cr>
-
-
 " }}}
+
 " File specific overrides -------------------------------------------------- {{{
 autocmd BufNewFile,BufRead *.html.twig   set syntax=html
 augroup WrapLineForTextFiles
@@ -363,6 +354,7 @@ augroup WrapLineForTextFiles
   autocmd FileType txt,text setlocal wrap spell spelllang=en_us
 augroup END
 " }}}
+
 " GUI-settings ------------------------------------------------------------- {{{
 if has('gui_running')
   if has('macunix')
@@ -389,17 +381,9 @@ if has('gui_running')
   set novisualbell
 endif
 " }}}
-" Misc settings ------------------------------------------------------------ {{{
 
-" fix so powerline updates faster 
-if ! has('gui_running')
-    set ttimeoutlen=10
-    augroup FastEscape
-        autocmd!
-        au InsertEnter * set timeoutlen=0
-        au InsertLeave * set timeoutlen=1000
-    augroup END
-endif
+" Misc settings ------------------------------------------------------------ {{{
+" once contained powerline specific fix.. now barren
 " }}}
-"
+
 " vim:foldmethod=marker:foldlevel=0:

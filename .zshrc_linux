@@ -57,7 +57,7 @@ DEFAULT_USER="jake"
 export EDITOR=$(command -v vim)
 export VISUAL=$(command -v vim)
 
-# tmux TERM value and auto start
+# TERM value and tmux auto start
 export TERM="xterm-256color" #now uses true color
 if [ "$TMUX" = "" ]; then tmux; fi
 
