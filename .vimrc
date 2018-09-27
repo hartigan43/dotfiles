@@ -221,7 +221,7 @@ let g:gundo_preview_height = 40
 let g:lightline = {
   \  'active': {
   \    'left':[ [ 'mode', 'paste' ],
-  \             [ 'gitbranch', 'readonly', 'filename', 'modified' ]
+  \             [ 'gitbranch', 'readonly', 'filename' ]
   \    ]
   \  },
 	\  'component': {
@@ -229,6 +229,7 @@ let g:lightline = {
 	\  },
   \  'component_function': {
   \    'gitbranch': 'fugitive#head',
+  \    'filename': 'LightlineFilename',
   \  },
   \ 'component_expand': {
   \   'buffers': 'lightline#bufferline#buffers',
@@ -251,6 +252,13 @@ let g:lightline.tabline = {
 "let g:lightline.tabline.separator = {
 "  \   'left': '', 'right': '|'
 "  \}
+
+"remove the divider between filename and modified which is added by default lightline
+function! LightlineFilename()
+  let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
+  let modified = &modified ? ' +' : ''
+  return filename . modified
+endfunction
 
 " lightline-bufferline settings
 let g:lightline#bufferline#min_buffer_count = 2
