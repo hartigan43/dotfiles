@@ -252,6 +252,13 @@ let g:lightline.tabline = {
 "let g:lightline.tabline.separator = {
 "  \   'left': '', 'right': '|'
 "  \}
+"
+let s:palette = g:lightline#colorscheme#default#palette
+":let s:palette.tabline.tabsel = [ [ '#d0d0d0', '#5f8787', 252, 66, 'bold' ] ]
+"inactive text, inactive bg, active text, active background 
+let s:palette.tabline.tabsel = [ [ 3, 236, 253, 9 ] ]
+let s:palette.tabline.middle = s:palette.normal.middle
+unlet s:palette
 
 "remove the divider between filename and modified which is added by default lightline
 function! LightlineFilename()
@@ -394,4 +401,4 @@ endif
 " once contained powerline specific fix.. now barren
 " }}}
 
-" vim:foldmethod=marker:foldlevel=0:
+"vim:foldmethod=marker:foldlevel=0:
