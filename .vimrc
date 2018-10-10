@@ -1,4 +1,4 @@
-" .vimrc
+"" .vimrc
 " many things from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 
 if !has('nvim')                " vim specific vs neovim below
@@ -254,7 +254,6 @@ let g:lightline.tabline = {
 "  \}
 "
 let s:palette = g:lightline#colorscheme#default#palette
-":let s:palette.tabline.tabsel = [ [ '#d0d0d0', '#5f8787', 252, 66, 'bold' ] ]
 "inactive text, inactive bg, active text, active background 
 let s:palette.tabline.tabsel = [ [ 3, 236, 253, 9 ] ]
 let s:palette.tabline.middle = s:palette.normal.middle
