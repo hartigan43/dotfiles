@@ -225,7 +225,7 @@ let g:lightline = {
   \    ]
   \  },
 	\  'component': {
-	\    'lineinfo': ' %3l:%-2v',
+	\    'lineinfo': '%3l:%-2v',
 	\  },
   \  'component_function': {
   \    'gitbranch': 'fugitive#head',
@@ -239,10 +239,10 @@ let g:lightline = {
   \ },
   \ }
 let g:lightline.separator = {
-	\   'left': '', 'right': ''
+	\   'left': ' ', 'right': ' '
   \}
 let g:lightline.subseparator = {
-	\   'left': '', 'right': '' 
+	\   'left': ' ', 'right': ' ' 
   \}
 let g:lightline.tabline = {
   \   'left': [ ['buffers'] ],
