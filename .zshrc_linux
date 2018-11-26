@@ -13,7 +13,9 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/docker
     zgen oh-my-zsh plugins/docker-compose
     zgen oh-my-zsh plugins/git
-    zgen oh-my-zsh plugins/pass
+    zgen oh-my-zsh plugins/python
+    zgen oh-my-zsh plugins/pyenv
+    zgen oh-my-zsh plugins/pip
     zgen oh-my-zsh plugins/ruby
     zgen oh-my-zsh plugins/rbenv
     zgen oh-my-zsh plugins/safe-paste
@@ -49,7 +51,7 @@ if [[ $unamestr == 'Linux' ]]; then
   export XDG_DATA_HOME="$HOME/.local/share"
 
 elif [[ $unamestr == 'Darwin' ]]; then
-  #homebrew/nix here
+  #homebrew/nix here if I'm ever back on the mac train
 fi
 
 #user and default editor
@@ -74,10 +76,10 @@ if command_exists go ; then
 fi
 
 #rbenv
-if [ -d "$HOME/.rbenv/bin" ] ; then
-    #loaded above with zgen, unnecessary? TODO update check
-    #export PATH="$HOME/.rbenv/bin:$PATH"
-fi
+#if [ -d "$HOME/.rbenv/bin" ] ; then
+#    #loaded above with zgen, unnecessary? TODO
+#    #export PATH="$HOME/.rbenv/bin:$PATH"
+#fi
 
 #vi mode with backspace
 bindkey -v
@@ -95,14 +97,15 @@ fi
 #source aliases
 source $HOME/.zsh_aliases
 
-#pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
+#pyenv TODO loaded by zgen
+#export PYENV_ROOT="$HOME/.pyenv"
+#export PATH="$PYENV_ROOT/bin:$PATH"
+#if command -v pyenv 1>/dev/null 2>&1; then
+#  eval "$(pyenv init -)"
+#fi
 
 if command_exists cargo ; then
  export PATH="$PATH:$HOME/.cargo/bin"
 fi
+
+eval $(thefuck --alias)

@@ -59,7 +59,7 @@ Plug 'tpope/vim-haml',                  { 'for': 'haml' }
 Plug 'tpope/vim-surround'
 Plug 'w0rp/ale'
 
-"TODO test greyscale life
+"TODO TEST greyscale life
 "Plug 'Lokaltog/vim-monotone'
 "Plug 'fxn/vim-monochrome'
 "ENDTEST
@@ -248,7 +248,7 @@ let g:lightline.tabline = {
   \   'left': [ ['buffers'] ],
   \   'right': [[]],
   \}
-" TODO not possible / PR?
+" TODO not possible?
 "let g:lightline.tabline.separator = {
 "  \   'left': '', 'right': '|'
 "  \}
