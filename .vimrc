@@ -66,8 +66,12 @@ Plug 'w0rp/ale'
 
 " https://github.com/junegunn/dotfiles/blob/master/vimrc
 function! BuildYCM(info)
+  " info is a dictionary with 3 fields
+  " - name:   name of the plugin
+  " - status: 'installed', 'updated', or 'unchanged'
+  " - force:  set on PlugInstall! or PlugUpdate!
   if a:info.status == 'installed' || a:info.force
-    !./install.py --all
+    !python3 ./install.py --clang-completer --go-completer --ts-completer --rust-completer
   endif
 endfunction
 
