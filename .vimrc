@@ -187,6 +187,17 @@ let g:ale_echo_msg_format = '[%linter%][%severity%] %s'             "define the 
 let g:airline#extensions#ale#enabled = 1                           "let ALE work within airline
 let g:ale_completion_delay = 250                                    "delay before ale completion, def 100
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
+
+let g:ale_linters = {
+\ 'javascript': ['prettier'],
+\}
+
+let g:ale_fixers = {
+\ 'javascript': ['prettier'],
+\ 'css': ['prettier'],
+\}
+
+let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
 " }}}
 
 " Airline settings ------------------------------------------------------- {{{
@@ -260,7 +271,9 @@ let g:lightline.tabline = {
 "
 let s:palette = g:lightline#colorscheme#default#palette
 "inactive text, inactive bg, active text, active background 
-let s:palette.tabline.tabsel = [ [ 3, 236, 253, 9 ] ]
+if has('nvim') "vim is very unhappy with color 236 at the moment, could nto find a quick fix for err 254
+  let s:palette.tabline.tabsel = [ [ 3, 236, 253, 9 ] ]   "https://github.com/itchyny/lightline.vim/issues/207 might have clues to fix
+endif
 let s:palette.tabline.middle = s:palette.normal.middle
 unlet s:palette
 
