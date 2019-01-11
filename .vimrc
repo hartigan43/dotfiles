@@ -51,7 +51,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'SirVer/ultisnips'
 Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
 Plug 'takac/vim-commandcaps'
-Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 'do': 'yarn install' }
+"Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 'do': 'yarn install' }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails',                 { 'for': 'rb' }
@@ -94,6 +94,7 @@ call plug#end()
 
 " Basic options ------------------------------------------------------------ {{{
 set number                                        "show line numbers
+set background=light                              "nvim 0.3.3 got weird and required this with dark gruvbox term settings
 set ts=2                                          "tabs width as two spaces
 set shiftwidth=2                                  
 set autoindent                                    "keep indentation of current line
