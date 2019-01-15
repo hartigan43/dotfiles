@@ -41,7 +41,7 @@ Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'majutsushi/tagbar'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
-Plug 'mxw/vim-jsx',                     { 'for': ['jsx', 'javascript.jsx'] }
+Plug 'mxw/vim-jsx',                     { 'for': ['jsx'] }
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'ryanoasis/vim-devicons'
