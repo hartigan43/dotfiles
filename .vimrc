@@ -199,6 +199,8 @@ let g:ale_fixers = {
 \}
 
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
+let g:ale_cpp_clang_executable = 'clang++'
+let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
 " }}}
 
 " Airline settings ------------------------------------------------------- {{{
@@ -327,8 +329,9 @@ let g:ycm_complete_in_comments = 1                          "enable completion i
 let g:ycm_collect_identifiers_from_comments_and_strings = 0 "collect identifiers from strings and comments
 " }}}
 
-let g:used_javascript_libs = 'angular,jquery'
+let g:used_javascript_libs = 'angular,jquery,react'
 
+let g:ycm_extra_conf_globlist = ['~/Workspace/handmade/*']
 " }}}
 " Keymaps -------------------------------------------------------------- {{{
 " Clean trailing whitespace
