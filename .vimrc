@@ -184,17 +184,18 @@ endif
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%][%severity%] %s'             "define the format of the messages
-let g:airline#extensions#ale#enabled = 1                           "let ALE work within airline
+"let g:airline#extensions#ale#enabled = 1                           "let ALE work within airline
 let g:ale_completion_delay = 250                                    "delay before ale completion, def 100
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
 
 let g:ale_linters = {
+\ 'cpp': ['clang'],
 \ 'javascript': ['prettier'],
 \}
 
 let g:ale_fixers = {
-\ 'javascript': ['prettier'],
 \ 'css': ['prettier'],
+\ 'javascript': ['prettier'],
 \}
 
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
@@ -202,12 +203,12 @@ let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-un
 
 " Airline settings ------------------------------------------------------- {{{
 "enable powerline symbols with airline
-let g:airline_powerline_fonts = 1                                   
-
-let g:airline#extensions#tabline#enabled = 1                        "enable tabline to show open buffers or tabs
-let g:airline#extensions#tabline#left_sep = ' '                     "use ' | ' as separator instead of the normal powerline separators
-let g:airline#extensions#tabline#left_alt_sep = '|'         
-let g:airline#extensions#tabline#buffer_min_count = 2               "only show the tabline with at least two buffers open
+"let g:airline_powerline_fonts = 1                                   
+"
+"let g:airline#extensions#tabline#enabled = 1                        "enable tabline to show open buffers or tabs
+"let g:airline#extensions#tabline#left_sep = ' '                     "use ' | ' as separator instead of the normal powerline separators
+"let g:airline#extensions#tabline#left_alt_sep = '|'         
+"let g:airline#extensions#tabline#buffer_min_count = 2               "only show the tabline with at least two buffers open
 " }}}
  
 " fzf settings  ---------------------------------------------------------- {{{
