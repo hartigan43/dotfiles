@@ -30,34 +30,34 @@ Plug 'airblade/vim-gitgutter'
 "Plug 'airblade/vim-rooter'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
-Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
-Plug 'honza/vim-snippets'
-Plug 'iamcco/markdown-preview.vim',     {'for': ['md', 'markdown'] }
+"Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
+"Plug 'honza/vim-snippets'
+"Plug 'iamcco/markdown-preview.vim',     {'for': ['md', 'markdown'] }
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/vim-peekaboo'
-Plug 'junegunn/rainbow_parentheses.vim'
+"Plug 'junegunn/vim-peekaboo'
+"Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'majutsushi/tagbar'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
 Plug 'mxw/vim-jsx',                     { 'for': ['jsx'] }
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'pangloss/vim-javascript'
-Plug 'ryanoasis/vim-devicons'
+"Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
 "Plug 'shinchu/lightline-gruvbox.vim'
-Plug 'SirVer/ultisnips'
-Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
+"Plug 'SirVer/ultisnips'
+"Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
 Plug 'takac/vim-commandcaps'
 "Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 'do': 'yarn install' }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rails',                 { 'for': 'rb' }
-Plug 'tpope/vim-haml',                  { 'for': 'haml' }
+"Plug 'tpope/vim-rails',                 { 'for': 'rb' }
+"Plug 'tpope/vim-haml',                  { 'for': 'haml' }
 Plug 'tpope/vim-surround'
-Plug 'w0rp/ale'
+"Plug 'w0rp/ale'
 
 "TODO TEST greyscale life
 "Plug 'Lokaltog/vim-monotone'
@@ -75,7 +75,7 @@ function! BuildYCM(info)
   endif
 endfunction
 
-Plug 'Valloric/YouCompleteMe',          { 'do': function('BuildYCM') }
+"Plug 'Valloric/YouCompleteMe',          { 'do': function('BuildYCM') }
 
 " note taking and writing
 Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }

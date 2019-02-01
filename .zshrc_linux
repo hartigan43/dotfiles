@@ -108,4 +108,4 @@ if command_exists cargo ; then
  export PATH="$PATH:$HOME/.cargo/bin"
 fi
 
-eval $(thefuck --alias)
+#eval $(thefuck --alias)
