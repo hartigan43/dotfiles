@@ -41,7 +41,7 @@ Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'majutsushi/tagbar'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
-Plug 'mxw/vim-jsx',                     { 'for': ['jsx', 'javascript.jsx'] }
+Plug 'mxw/vim-jsx',                     { 'for': ['jsx'] }
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'ryanoasis/vim-devicons'
@@ -51,7 +51,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'SirVer/ultisnips'
 Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
 Plug 'takac/vim-commandcaps'
-Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 'do': 'yarn install' }
+"Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 'do': 'yarn install' }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails',                 { 'for': 'rb' }
@@ -66,8 +66,12 @@ Plug 'w0rp/ale'
 
 " https://github.com/junegunn/dotfiles/blob/master/vimrc
 function! BuildYCM(info)
+  " info is a dictionary with 3 fields
+  " - name:   name of the plugin
+  " - status: 'installed', 'updated', or 'unchanged'
+  " - force:  set on PlugInstall! or PlugUpdate!
   if a:info.status == 'installed' || a:info.force
-    !./install.py --all
+    !./install.py --clang-completer --go-completer --ts-completer --rust-completer
   endif
 endfunction
 
@@ -90,6 +94,7 @@ call plug#end()
 
 " Basic options ------------------------------------------------------------ {{{
 set number                                        "show line numbers
+set background=light                              "nvim 0.3.3 got weird and required this with dark gruvbox term settings
 set ts=2                                          "tabs width as two spaces
 set shiftwidth=2                                  
 set autoindent                                    "keep indentation of current line
@@ -179,19 +184,33 @@ endif
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%][%severity%] %s'             "define the format of the messages
-let g:airline#extensions#ale#enabled = 1                           "let ALE work within airline
+"let g:airline#extensions#ale#enabled = 1                           "let ALE work within airline
 let g:ale_completion_delay = 250                                    "delay before ale completion, def 100
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
+
+let g:ale_linters = {
+\ 'cpp': ['clang'],
+\ 'javascript': ['prettier'],
+\}
+
+let g:ale_fixers = {
+\ 'css': ['prettier'],
+\ 'javascript': ['prettier'],
+\}
+
+let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
+let g:ale_cpp_clang_executable = 'clang++'
+let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
 " }}}
 
 " Airline settings ------------------------------------------------------- {{{
 "enable powerline symbols with airline
-let g:airline_powerline_fonts = 1                                   
-
-let g:airline#extensions#tabline#enabled = 1                        "enable tabline to show open buffers or tabs
-let g:airline#extensions#tabline#left_sep = ' '                     "use ' | ' as separator instead of the normal powerline separators
-let g:airline#extensions#tabline#left_alt_sep = '|'         
-let g:airline#extensions#tabline#buffer_min_count = 2               "only show the tabline with at least two buffers open
+"let g:airline_powerline_fonts = 1                                   
+"
+"let g:airline#extensions#tabline#enabled = 1                        "enable tabline to show open buffers or tabs
+"let g:airline#extensions#tabline#left_sep = ' '                     "use ' | ' as separator instead of the normal powerline separators
+"let g:airline#extensions#tabline#left_alt_sep = '|'         
+"let g:airline#extensions#tabline#buffer_min_count = 2               "only show the tabline with at least two buffers open
 " }}}
  
 " fzf settings  ---------------------------------------------------------- {{{
@@ -255,7 +274,9 @@ let g:lightline.tabline = {
 "
 let s:palette = g:lightline#colorscheme#default#palette
 "inactive text, inactive bg, active text, active background 
-let s:palette.tabline.tabsel = [ [ 3, 236, 253, 9 ] ]
+if has('nvim') "vim is very unhappy with color 236 at the moment, could nto find a quick fix for err 254
+  let s:palette.tabline.tabsel = [ [ 3, 236, 253, 9 ] ]   "https://github.com/itchyny/lightline.vim/issues/207 might have clues to fix
+endif
 let s:palette.tabline.middle = s:palette.normal.middle
 unlet s:palette
 
@@ -308,8 +329,9 @@ let g:ycm_complete_in_comments = 1                          "enable completion i
 let g:ycm_collect_identifiers_from_comments_and_strings = 0 "collect identifiers from strings and comments
 " }}}
 
-let g:used_javascript_libs = 'angular,jquery'
+let g:used_javascript_libs = 'angular,jquery,react'
 
+let g:ycm_extra_conf_globlist = ['~/Workspace/handmade/*']
 " }}}
 " Keymaps -------------------------------------------------------------- {{{
 " Clean trailing whitespace
