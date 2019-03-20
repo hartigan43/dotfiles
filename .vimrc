@@ -38,7 +38,7 @@ Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --al
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/rainbow_parentheses.vim'
-Plug 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar',                { 'on': 'TagbarToggle' }
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
 Plug 'mxw/vim-jsx',                     { 'for': ['jsx'] }
