@@ -89,9 +89,14 @@ bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using
 #load fzf if it exists
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-#yarn globals
+#yarn binaries
 if command_exists yarn ; then
   export PATH="$PATH:$HOME/.yarn/bin"
+fi
+
+#pip binaries
+if command_exists pip ; then
+  export PATH="$PATH:$HOME/.local/bin"
 fi
 
 #source aliases
