@@ -34,6 +34,7 @@ Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
 Plug 'honza/vim-snippets'
 Plug 'iamcco/markdown-preview.vim',     {'for': ['md', 'markdown'] }
 Plug 'itchyny/lightline.vim'
+Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
@@ -49,7 +50,8 @@ Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
 "Plug 'shinchu/lightline-gruvbox.vim'
 Plug 'SirVer/ultisnips'
-Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
+"Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
+Plug 'simnalamburt/vim-mundo',          { 'on': 'MundoToggle' }
 Plug 'takac/vim-commandcaps'
 "Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 'do': 'yarn install' }
 Plug 'terryma/vim-multiple-cursors'
@@ -94,7 +96,7 @@ call plug#end()
 
 " Basic options ------------------------------------------------------------ {{{
 set number                                        "show line numbers
-set background=light                              "nvim 0.3.3 got weird and required this with dark gruvbox term settings
+"set background=light                              "nvim 0.3.3 got weird and required this with dark gruvbox term settings, fixed with dim colorscheme?
 set ts=2                                          "tabs width as two spaces
 set shiftwidth=2                                  
 set autoindent                                    "keep indentation of current line
@@ -128,6 +130,7 @@ set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode character
 set showbreak=↪
 set modeline
 set modelines=2                                   "use modelines at end of file for specifc settings
+colorscheme dim
 
 " set leader key -- originally \ -- now localleader
 let mapleader = ","
