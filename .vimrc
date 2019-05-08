@@ -32,7 +32,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
 Plug 'honza/vim-snippets'
-Plug 'iamcco/markdown-preview.vim',     {'for': ['md', 'markdown'] }
+Plug 'iamcco/markdown-preview.nvim',     { 'do': 'cd app & yarn install', 'for': ['md', 'markdown'] }
 Plug 'itchyny/lightline.vim'
 Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
