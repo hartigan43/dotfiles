@@ -58,6 +58,7 @@ fi
 DEFAULT_USER="jake"
 export EDITOR=$(command -v vim)
 export VISUAL=$(command -v vim)
+export HISTORY_CONTROL="HIST_IGNORE_DUPES:HIST_EXPIRE_DUPES_FIRST"
 
 # TERM value and tmux auto start
 export TERM="xterm-256color" #now uses true color
