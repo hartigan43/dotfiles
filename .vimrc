@@ -40,7 +40,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'liuchengxu/vista.vim',            { 'on': 'Vista'}
-"Plug 'majutsushi/tagbar',                { 'on': 'TagbarToggle' }
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
 Plug 'mxw/vim-jsx',                     { 'for': ['jsx'] }
@@ -51,7 +50,6 @@ Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
 "Plug 'shinchu/lightline-gruvbox.vim'
 Plug 'SirVer/ultisnips'
-"Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
 Plug 'simnalamburt/vim-mundo',          { 'on': 'MundoToggle' }
 Plug 'takac/vim-commandcaps'
 "Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 'do': 'yarn install' }
@@ -188,7 +186,6 @@ endif
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%][%severity%] %s'             "define the format of the messages
-"let g:airline#extensions#ale#enabled = 1                           "let ALE work within airline
 let g:ale_completion_delay = 250                                    "delay before ale completion, def 100
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
 
@@ -207,16 +204,6 @@ let g:ale_cpp_clang_executable = 'clang++'
 let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
 " }}}
 
-" Airline settings ------------------------------------------------------- {{{
-"enable powerline symbols with airline
-"let g:airline_powerline_fonts = 1                                   
-"
-"let g:airline#extensions#tabline#enabled = 1                        "enable tabline to show open buffers or tabs
-"let g:airline#extensions#tabline#left_sep = ' '                     "use ' | ' as separator instead of the normal powerline separators
-"let g:airline#extensions#tabline#left_alt_sep = '|'         
-"let g:airline#extensions#tabline#buffer_min_count = 2               "only show the tabline with at least two buffers open
-" }}}
- 
 " fzf settings  ---------------------------------------------------------- {{{
 if has('nvim')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
@@ -301,7 +288,10 @@ set guioptions-=e  " Don't use GUI tabline
 " }}}
 
 " Markdown Preview settings --------------------------------------------------- {{{
-let g:mkdp_path_to_chrome = "/usr/bin/firefox"
+"let g:mkdp_path_to_chrome = /usr/bin/firefox
+"TODO fix with dev edition
+let g:mkdp_browser = "/home/jake/.local/share/firefox-dev/firefox -P dev-edition-default --class firefox-developer-edition --new-tab \"127.0.0.1:8522/page/1\""
+let g:mkdp_port = "8522"
 " }}}
 
 " NERDTree settings --------------------------------------------------- {{{
@@ -325,6 +315,13 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 " }}}
 
+" Vista Settings  ------------------------------------------------------- {{{
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista_default_executive = 'ctags'
+let g:vista_fzf_preview = ['right:50%']
+let g:vista#renderer#enable_icon = 1
+" }}}
+
 " YouCompleteMe settings ------------------------------------------------------- {{{
 let g:ycm_min_num_of_chars_for_completion = 6               "default is 2, less results on smaller words/vars
 let g:ycm_autoclose_preview_window_after_insertion = 1      "close preview window after insert is exited
@@ -344,14 +341,15 @@ nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 " toggle nerdtree display
 noremap <F4> :NERDTreeToggle<CR> 
 
-" show/hide tagbar
-nmap <F3> :TagbarToggle<CR>
+" show/hide tagbar/vista
+"nmap <F3> :TagbarToggle<CR>
+nmap <F3> :Vista!!<CR>
 
 " hide search highlighting
 nnoremap <leader><space> :nohlsearch<CR> 
 
 " display vim undo tree
-nnoremap <leader>u :GundoToggle<CR>
+nnoremap <leader>u :MundoToggle<CR>
 
 " split line similar to using J to join a line
 nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w
