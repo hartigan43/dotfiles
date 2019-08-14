@@ -114,4 +114,7 @@ if command_exists cargo ; then
  export PATH="$PATH:$HOME/.cargo/bin"
 fi
 
+# if it exists, source the local exports
+[ -f $HOME/.zsh.local ] && source $HOME/.zsh.local
+
 eval $(thefuck --alias)
