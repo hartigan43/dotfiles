@@ -92,3 +92,37 @@ function rainymood() {
   URL="https://rainymood.com/audio1110/${FILE}.ogg"
   mpv ${URL} && rainymood
 }
+
+# Really really crude scp with proxyjump for work
+# rscp(jumpServer, remoteServer, remotePath, localPath, username)
+# TODO rename and fix, broken at the moment? r seems to mean recursive
+function rscp(){
+
+  # check for optionally defined default server
+  if [ -z "$DEF_JUMP_SERVER"] ; then
+    jumpServer=$1;
+  else
+    jumpServer=$DEF_JUMP_SERVER
+  fi
+
+  # check for optionally defined default user
+  if [ -z "$5" && -z "$DEF_JUMP_USER"] ; then
+    username='hartigan'; #set my default if I'm not on a standard machine
+  elif [ -z "$DEF_JUMP_USER" && "$5" ] ; then
+    username=$5
+  else
+    username=$DEF_JUMP_USER
+  fi
+
+  if [ -z "$5" ] || ([ -z "$4" ] && [ $jumpServer -eq $1 ]) ; then 
+    remoteServer=$2
+    remotePath=$3;
+    localPath=$4;
+  elif [ -z "$4" && $jumpServer -eq $DEF_JUMP_SERVER] ; then
+    remoteServer=$1
+    remotePath=$2;
+    localPath=$3;
+  fi
+
+  scp -oProxyJump=$username@$jumpServer $username@$remoteServer:$remotePath $localPath
+}
