@@ -1,0 +1,24 @@
+#TabsToolbar {
+  direction: rtl;
+}
+
+#tabbrowser-tabs {
+  direction: ltr;
+}
+
+.titlebar-buttonbox {
+  display: flex;
+}
+
+.titlebar-min {
+  order: 1;
+}
+
+.titlebar-max {
+  order: 2;
+}
+
+.titlebar-close {
+  order: 3;
+  margin-right: 6px !important;
+}
