@@ -39,20 +39,18 @@ Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --al
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/rainbow_parentheses.vim'
-Plug 'liuchengxu/vista.vim',            { 'on': 'Vista'}
+Plug 'liuchengxu/vista.vim'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
 Plug 'mxw/vim-jsx',                     { 'for': ['jsx'] }
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'pangloss/vim-javascript'
-Plug 'ryanoasis/vim-devicons'
+"Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
-"Plug 'shinchu/lightline-gruvbox.vim'
 Plug 'SirVer/ultisnips'
 Plug 'simnalamburt/vim-mundo',          { 'on': 'MundoToggle' }
 Plug 'takac/vim-commandcaps'
-"Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 'do': 'yarn install' }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails',                 { 'for': 'rb' }
@@ -319,7 +317,8 @@ let g:UltiSnipsEditSplit="vertical"
 let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 let g:vista_default_executive = 'ctags'
 let g:vista_fzf_preview = ['right:50%']
-let g:vista#renderer#enable_icon = 1
+let g:vista#renderer#enable_icon = 0
+autocmd bufenter * if (winnr("$") == 1 && vista#sidebar#IsVisible()) | q | endif
 " }}}
 
 " YouCompleteMe settings ------------------------------------------------------- {{{
@@ -395,19 +394,6 @@ augroup END
 
 " GUI-settings ------------------------------------------------------------- {{{
 if has('gui_running')
-  if has('macunix')
-    set guifont=Inconsolata\ for\ Powerline:h11     "set fonts for gui vim
-  elseif has("gui_gtk2")                           "per vim wiki set gui font for most WMs
-    set guifont=Inconsolata\ 11
-  elseif has("gui_photon")
-    set guifont=Inconsolata:s11
-  elseif has("gui_kde")
-    set guifont=Inconsolata/11/-1/5/50/0/0/0/1/0
-  elseif has("x11")
-    set guifont=-*-inconsolata-medium-r-normal-*-*-180-*-*-m-*-*
-  else
-    set guifont=Inconsolata:h10:cDEFAULT
-  endif
   set guioptions-=egmt                            "hide the gui elements
   set guioptions-=T
   set guioptions-=m

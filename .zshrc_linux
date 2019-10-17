@@ -118,4 +118,6 @@ fi
 # if it exists, source the local exports
 [ -f $HOME/.zsh.local ] && source $HOME/.zsh.local
 
-eval $(thefuck --alias)
+if command_exists fuck ; then
+  eval $(thefuck --alias)
+fi
