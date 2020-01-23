@@ -73,8 +73,9 @@ function command_exists() {
 #Go
 if command_exists go ; then
   #TODO fix code/workspace paths across devices and one GOPATH
-  #export GOPATH="$HOME/Code/Go"
   #export PATH="$GOPATH/bin:$PATH"
+  export GOPATH="$HOME/Workspace/go"
+  export PATH="$GOPATH/bin:$PATH"
 fi
 
 #rbenv
@@ -121,3 +122,4 @@ fi
 if command_exists fuck ; then
   eval $(thefuck --alias)
 fi
+eval "$(pyenv virtualenv-init -)"
