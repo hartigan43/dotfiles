@@ -28,11 +28,12 @@ call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
 "Plug 'airblade/vim-rooter'
+Plug 'amadeus/vim-mjml',                { 'for': 'mljl' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
 Plug 'honza/vim-snippets'
-Plug 'iamcco/markdown-preview.nvim',     { 'do': 'cd app & yarn install', 'for': ['md', 'markdown'] }
+Plug 'iamcco/markdown-preview.nvim',    { 'do': 'cd app & yarn install', 'for': ['md', 'markdown'] }
 Plug 'itchyny/lightline.vim'
 Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
@@ -288,7 +289,8 @@ set guioptions-=e  " Don't use GUI tabline
 " Markdown Preview settings --------------------------------------------------- {{{
 "let g:mkdp_path_to_chrome = /usr/bin/firefox
 "TODO fix with dev edition
-let g:mkdp_browser = "/home/jake/.local/share/firefox-dev/firefox -P dev-edition-default --class firefox-developer-edition --new-tab \"127.0.0.1:8522/page/1\""
+"let g:mkdp_browser = "/home/jake/.local/share/firefox-dev/firefox -P dev-edition-default --class firefox-developer-edition --new-tab \"127.0.0.1:8522/page/1\""
+let g:mkdp_browser = "/usr/bin/firefox"
 let g:mkdp_port = "8522"
 " }}}
 
@@ -318,7 +320,7 @@ let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 let g:vista_default_executive = 'ctags'
 let g:vista_fzf_preview = ['right:50%']
 let g:vista#renderer#enable_icon = 0
-autocmd bufenter * if (winnr("$") == 1 && vista#sidebar#IsVisible()) | q | endif
+autocmd bufenter * if (winnr("$") == 1 && vista#sidebar#IsOpen()) | q | endif
 " }}}
 
 " YouCompleteMe settings ------------------------------------------------------- {{{
