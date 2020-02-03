@@ -28,17 +28,19 @@ call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
 "Plug 'airblade/vim-rooter'
+"Plug 'amadeus/vim-mjml',                { 'for': 'mljl' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
 "Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
 "Plug 'honza/vim-snippets'
 "Plug 'iamcco/markdown-preview.vim',     {'for': ['md', 'markdown'] }
 Plug 'itchyny/lightline.vim'
+Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 "Plug 'junegunn/vim-peekaboo'
 "Plug 'junegunn/rainbow_parentheses.vim'
-Plug 'majutsushi/tagbar'
+Plug 'liuchengxu/vista.vim'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
 Plug 'mxw/vim-jsx',                     { 'for': ['jsx'] }
@@ -47,11 +49,9 @@ Plug 'pangloss/vim-javascript'
 "Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
-"Plug 'shinchu/lightline-gruvbox.vim'
 "Plug 'SirVer/ultisnips'
-"Plug 'sjl/gundo.vim',                   { 'on': 'GundoToggle' }
+Plug 'simnalamburt/vim-mundo',          { 'on': 'MundoToggle' }
 Plug 'takac/vim-commandcaps'
-"Plug 'ternjs/tern_for_vim',             { 'dir': '~/.vim/plugged/tern_for_vim', 'do': 'yarn install' }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
 "Plug 'tpope/vim-rails',                 { 'for': 'rb' }
@@ -78,8 +78,8 @@ endfunction
 "Plug 'Valloric/YouCompleteMe',          { 'do': function('BuildYCM') }
 
 " note taking and writing
-Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
-Plug 'beloglazov/vim-online-thesaurus', { 'for': ['text', 'markdown'] }
+" Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
+" Plug 'beloglazov/vim-online-thesaurus', { 'for': ['text', 'markdown'] }
 
 " nvim specific plugins
 
@@ -94,7 +94,7 @@ call plug#end()
 
 " Basic options ------------------------------------------------------------ {{{
 set number                                        "show line numbers
-set background=light                              "nvim 0.3.3 got weird and required this with dark gruvbox term settings
+"set background=light                              "nvim 0.3.3 got weird and required this with dark gruvbox term settings, fixed with dim colorscheme?
 set ts=2                                          "tabs width as two spaces
 set shiftwidth=2                                  
 set autoindent                                    "keep indentation of current line
@@ -128,6 +128,7 @@ set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode character
 set showbreak=↪
 set modeline
 set modelines=2                                   "use modelines at end of file for specifc settings
+colorscheme dim
 
 " set leader key -- originally \ -- now localleader
 let mapleader = ","
@@ -184,7 +185,6 @@ endif
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%][%severity%] %s'             "define the format of the messages
-"let g:airline#extensions#ale#enabled = 1                           "let ALE work within airline
 let g:ale_completion_delay = 250                                    "delay before ale completion, def 100
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
 
@@ -203,16 +203,6 @@ let g:ale_cpp_clang_executable = 'clang++'
 let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
 " }}}
 
-" Airline settings ------------------------------------------------------- {{{
-"enable powerline symbols with airline
-"let g:airline_powerline_fonts = 1                                   
-"
-"let g:airline#extensions#tabline#enabled = 1                        "enable tabline to show open buffers or tabs
-"let g:airline#extensions#tabline#left_sep = ' '                     "use ' | ' as separator instead of the normal powerline separators
-"let g:airline#extensions#tabline#left_alt_sep = '|'         
-"let g:airline#extensions#tabline#buffer_min_count = 2               "only show the tabline with at least two buffers open
-" }}}
- 
 " fzf settings  ---------------------------------------------------------- {{{
 if has('nvim')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
@@ -297,7 +287,11 @@ set guioptions-=e  " Don't use GUI tabline
 " }}}
 
 " Markdown Preview settings --------------------------------------------------- {{{
-let g:mkdp_path_to_chrome = "/usr/bin/firefox"
+"let g:mkdp_path_to_chrome = /usr/bin/firefox
+"TODO fix with dev edition
+"let g:mkdp_browser = "/home/jake/.local/share/firefox-dev/firefox -P dev-edition-default --class firefox-developer-edition --new-tab \"127.0.0.1:8522/page/1\""
+let g:mkdp_browser = "/usr/bin/firefox"
+let g:mkdp_port = "8522"
 " }}}
 
 " NERDTree settings --------------------------------------------------- {{{
@@ -321,6 +315,14 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 " }}}
 
+" Vista Settings  ------------------------------------------------------- {{{
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista_default_executive = 'ctags'
+let g:vista_fzf_preview = ['right:50%']
+let g:vista#renderer#enable_icon = 0
+autocmd bufenter * if (winnr("$") == 1 && vista#sidebar#IsOpen()) | q | endif
+" }}}
+
 " YouCompleteMe settings ------------------------------------------------------- {{{
 let g:ycm_min_num_of_chars_for_completion = 6               "default is 2, less results on smaller words/vars
 let g:ycm_autoclose_preview_window_after_insertion = 1      "close preview window after insert is exited
@@ -340,14 +342,15 @@ nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 " toggle nerdtree display
 noremap <F4> :NERDTreeToggle<CR> 
 
-" show/hide tagbar
-nmap <F3> :TagbarToggle<CR>
+" show/hide tagbar/vista
+"nmap <F3> :TagbarToggle<CR>
+nmap <F3> :Vista!!<CR>
 
 " hide search highlighting
 nnoremap <leader><space> :nohlsearch<CR> 
 
 " display vim undo tree
-nnoremap <leader>u :GundoToggle<CR>
+nnoremap <leader>u :MundoToggle<CR>
 
 " split line similar to using J to join a line
 nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w
@@ -393,19 +396,6 @@ augroup END
 
 " GUI-settings ------------------------------------------------------------- {{{
 if has('gui_running')
-  if has('macunix')
-    set guifont=Inconsolata\ for\ Powerline:h11     "set fonts for gui vim
-  elseif has("gui_gtk2")                           "per vim wiki set gui font for most WMs
-    set guifont=Inconsolata\ 11
-  elseif has("gui_photon")
-    set guifont=Inconsolata:s11
-  elseif has("gui_kde")
-    set guifont=Inconsolata/11/-1/5/50/0/0/0/1/0
-  elseif has("x11")
-    set guifont=-*-inconsolata-medium-r-normal-*-*-180-*-*-m-*-*
-  else
-    set guifont=Inconsolata:h10:cDEFAULT
-  endif
   set guioptions-=egmt                            "hide the gui elements
   set guioptions-=T
   set guioptions-=m

@@ -55,12 +55,14 @@ elif [[ $unamestr == 'Darwin' ]]; then
 fi
 
 #user and default editor
-DEFAULT_USER="jake"
+DEFAULT_USER="hartigan"
 export EDITOR=$(command -v vim)
 export VISUAL=$(command -v vim)
+export HISTORY_CONTROL="HIST_IGNORE_DUPES:HIST_EXPIRE_DUPES_FIRST"
 
 # TERM value and tmux auto start
-export TERM="xterm-256color" #now uses true color
+#export TERM="xterm-256color" #now uses true color
+export TERM="tmux-256color" #now uses true color
 if [ "$TMUX" = "" ]; then tmux; fi
 
 # check for a command within your path
@@ -71,8 +73,9 @@ function command_exists() {
 #Go
 if command_exists go ; then
   #TODO fix code/workspace paths across devices and one GOPATH
-  #export GOPATH="$HOME/Code/Go"
   #export PATH="$GOPATH/bin:$PATH"
+  export GOPATH="$HOME/Workspace/go"
+  export PATH="$GOPATH/bin:$PATH"
 fi
 
 #rbenv
@@ -89,9 +92,14 @@ bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using
 #load fzf if it exists
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-#yarn globals
+#yarn binaries
 if command_exists yarn ; then
   export PATH="$PATH:$HOME/.yarn/bin"
+fi
+
+#pip binaries
+if command_exists pip ; then
+  export PATH="$PATH:$HOME/.local/bin"
 fi
 
 #source aliases
@@ -109,3 +117,11 @@ if command_exists cargo ; then
 fi
 
 #eval $(thefuck --alias)
+#
+# if it exists, source the local exports
+[ -f $HOME/.zsh.local ] && source $HOME/.zsh.local
+
+if command_exists fuck ; then
+  eval $(thefuck --alias)
+fi
+eval "$(pyenv virtualenv-init -)"
