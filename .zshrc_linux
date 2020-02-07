@@ -49,13 +49,16 @@ if [[ $unamestr == 'Linux' ]]; then
   export XDG_CONFIG_HOME="$HOME/.config"
   export XDG_CACHE_HOME="$HOME/.cache"
   export XDG_DATA_HOME="$HOME/.local/share"
+  if [[ -d /usr/local/bin ]]; then
+    export XDG_DATA_DIRS="$XDG_DATA_DIRS:/usr/local/bin"
+  fi
 
 elif [[ $unamestr == 'Darwin' ]]; then
   #homebrew/nix here if I'm ever back on the mac train
 fi
 
 #user and default editor
-DEFAULT_USER="jake"
+DEFAULT_USER="hartigan"
 export EDITOR=$(command -v vim)
 export VISUAL=$(command -v vim)
 export HISTORY_CONTROL="HIST_IGNORE_DUPES:HIST_EXPIRE_DUPES_FIRST"
@@ -122,4 +125,8 @@ fi
 if command_exists fuck ; then
   eval $(thefuck --alias)
 fi
-eval "$(pyenv virtualenv-init -)"
+
+if command_exists pyenv ; then
+  export PYTHON_CONFIGURE_OPTS="--enable-shared"
+  eval "$(pyenv virtualenv-init -)"
+fi
