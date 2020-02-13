@@ -1,9 +1,7 @@
 # .bashrc
 
 # Source global definitions
-#if [ -f /etc/bashrc ]; then
-# . /etc/bashrc
-#fi
+[ -f /etc/bashrc ] && . /etc/bashrc
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
@@ -67,8 +65,6 @@ export HISTCONTROL=ignoredups:erasedups
 export HISTSIZE=100000
 export HISTFILESIZE=100000
 export LS_COLORS='ln=38;5;199:fi=38;5;222:di=38;5;4'
-#export PS1='\h\e[38;5;200m:\e[39m\w\n\u \e[38;5;200m›\e[0m '
-#export PS1="\u:\[\e[34m\]\W\[\e[m\] \[\e[33m\]\`parse_git_branch\`\[\e[m\] \\$ "
 export PS1="\u:\[\e[34m\]\W\[\e[m\]\[\e[34m\]/\[\e[m\] \[\e[33m\]\`parse_git_branch\`\[\e[m\] \\$ "
 export VISUAL=vim
 export EDITOR=vim
@@ -89,5 +85,7 @@ function getNvim() {
   chmod u+x nvim.appimage
   mv nvim.appimage ~/.bin
 }
+
+[ -f $HOME/.bash.local ] && source $HOME/.bash.local
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
