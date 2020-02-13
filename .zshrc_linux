@@ -41,7 +41,7 @@ EOPLUGINS
     zgen save
 fi
 
-#platform detection
+# platform detection
 unamestr=$(uname)
 
 if [[ $unamestr == 'Linux' ]]; then
@@ -57,14 +57,15 @@ elif [[ $unamestr == 'Darwin' ]]; then
   #homebrew/nix here if I'm ever back on the mac train
 fi
 
-#user and default editor
+# user and default editor
+# override locally with .zsh.lcal
 DEFAULT_USER="hartigan"
 export EDITOR=$(command -v vim)
 export VISUAL=$(command -v vim)
 export HISTORY_CONTROL="HIST_IGNORE_DUPES:HIST_EXPIRE_DUPES_FIRST"
 
 # TERM value and tmux auto start
-#export TERM="xterm-256color" #now uses true color
+# export TERM="xterm-256color" #now uses true color
 export TERM="tmux-256color" #now uses true color
 if [ "$TMUX" = "" ]; then tmux; fi
 
@@ -73,30 +74,21 @@ function command_exists() {
   command -v $1 >/dev/null 2>&1;
 }
 
-#Go
+# Go
 if command_exists go ; then
-  #TODO fix code/workspace paths across devices and one GOPATH
-  #export PATH="$GOPATH/bin:$PATH"
+  mkdir -p $HOME/Workspace/go
   export GOPATH="$HOME/Workspace/go"
   export PATH="$GOPATH/bin:$PATH"
 fi
 
-#rbenv
-#if [ -d "$HOME/.rbenv/bin" ] ; then
-#    #loaded above with zgen, unnecessary? TODO
-#    #export PATH="$HOME/.rbenv/bin:$PATH"
-#fi
-
-#vi mode with backspace
+# vi mode with backspace
 bindkey -v
 bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
 bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using vim mode in zsh
 
-#load fzf if it exists
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-#yarn binaries
+# yarn binaries
 if command_exists yarn ; then
+  mkdir -p $HOME/.yarn/bin
   export PATH="$PATH:$HOME/.yarn/bin"
 fi
 
@@ -108,19 +100,9 @@ fi
 #source aliases
 source $HOME/.zsh_aliases
 
-#pyenv TODO loaded by zgen
-#export PYENV_ROOT="$HOME/.pyenv"
-#export PATH="$PYENV_ROOT/bin:$PATH"
-#if command -v pyenv 1>/dev/null 2>&1; then
-#  eval "$(pyenv init -)"
-#fi
-
 if command_exists cargo ; then
  export PATH="$PATH:$HOME/.cargo/bin"
 fi
-
-# if it exists, source the local exports
-[ -f $HOME/.zsh.local ] && source $HOME/.zsh.local
 
 if command_exists fuck ; then
   eval $(thefuck --alias)
@@ -130,3 +112,10 @@ if command_exists pyenv ; then
   export PYTHON_CONFIGURE_OPTS="--enable-shared"
   eval "$(pyenv virtualenv-init -)"
 fi
+
+# if it exists, source the local exports
+# allow local machine overrides
+[ -f $HOME/.zsh.local ] && source $HOME/.zsh.local
+
+# load fzf if it exists
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
