@@ -1,4 +1,8 @@
+#!/usr/bin/env zsh
 # zgen
+
+# TODO move command checks to separate file, same with aliases, source in bashrc
+# TODO convert to zplug
 source "${HOME}/.zgen/zgen.zsh"
 
 # check if there's no init script
@@ -69,51 +73,14 @@ export HISTORY_CONTROL="HIST_IGNORE_DUPES:HIST_EXPIRE_DUPES_FIRST"
 export TERM="tmux-256color" #now uses true color
 if [ "$TMUX" = "" ]; then tmux; fi
 
-# check for a command within your path
-function command_exists() {
-  command -v $1 >/dev/null 2>&1;
-}
-
-# Go
-if command_exists go ; then
-  mkdir -p $HOME/Workspace/go
-  export GOPATH="$HOME/Workspace/go"
-  export PATH="$GOPATH/bin:$PATH"
-fi
-
 # vi mode with backspace
 bindkey -v
 bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
 bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using vim mode in zsh
 
-# yarn binaries
-if command_exists yarn ; then
-  mkdir -p $HOME/.yarn/bin
-  export PATH="$PATH:$HOME/.yarn/bin"
-fi
+# source aliases
+[ -f $HOME/.aliases.sh ] && source $HOME/.aliases.sh
 
-#pip binaries
-if command_exists pip ; then
-  export PATH="$PATH:$HOME/.local/bin"
-fi
-
-#source aliases
-source $HOME/.zsh_aliases
-
-if command_exists cargo ; then
- export PATH="$PATH:$HOME/.cargo/bin"
-fi
-
-if command_exists fuck ; then
-  eval $(thefuck --alias)
-fi
-
-if command_exists pyenv ; then
-  export PYTHON_CONFIGURE_OPTS="--enable-shared"
-  eval "$(pyenv virtualenv-init -)"
-fi
-
-# if it exists, source the local exports
 # allow local machine overrides
 [ -f $HOME/.zsh.local ] && source $HOME/.zsh.local
 

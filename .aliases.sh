@@ -1,4 +1,5 @@
-#! /bin/bash
+#!/usr/bin/env bash
+# aliases, functions, and path modifications
 
 alias ll="ls -l"
 alias la="ls -a"
@@ -8,6 +9,8 @@ alias mxlookup="nslookup -q=mx"
 alias gob="go build"
 #alias git="hub"
 alias sudo="nocorrect sudo"
+alias tmux="tmux -2" # assume 256 color
+
 alias psmem="ps auxf | sort -nr -k 4 | head -10" #top 10 process eating memory
 alias pscpu="ps auxf | sort -nr -k 3 | head -10" #top 10 processes eating cpu
 alias weather="curl wttr.in"
@@ -26,6 +29,41 @@ alias gitsup="git submodule foreach git pull origin master"
 # cat filename.ext | alias to copy files, etc
 alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'
+
+# check for a command within your path
+function command_exists() {
+  command -v $1 >/dev/null 2>&1;
+}
+
+# Go
+if command_exists go ; then
+  mkdir -p $HOME/Workspace/go
+  export GOPATH="$HOME/Workspace/go"
+  export PATH="$GOPATH/bin:$PATH"
+fi
+# yarn binaries
+if command_exists yarn ; then
+  mkdir -p $HOME/.yarn/bin
+  export PATH="$PATH:$HOME/.yarn/bin"
+fi
+
+#pip binaries
+if command_exists pip ; then
+  export PATH="$PATH:$HOME/.local/bin"
+fi
+if command_exists cargo ; then
+ export PATH="$PATH:$HOME/.cargo/bin"
+fi
+
+if command_exists fuck ; then
+  eval $(thefuck --alias)
+fi
+
+if command_exists pyenv ; then
+  export PYTHON_CONFIGURE_OPTS="--enable-shared"
+  eval "$(pyenv virtualenv-init -)"
+fi
+
 
 # giving nvim the full monty for now
 if command_exists nvim ; then
@@ -91,38 +129,4 @@ function rainymood() {
   FILE=$((RANDOM%4))
   URL="https://rainymood.com/audio1110/${FILE}.ogg"
   mpv ${URL} && rainymood
-}
-
-# Really really crude scp with proxyjump for work
-# rscp(jumpServer, remoteServer, remotePath, localPath, username)
-# TODO rename and fix, broken at the moment? r seems to mean recursive
-function rscp(){
-
-  # check for optionally defined default server
-  if [ -z "$DEF_JUMP_SERVER"] ; then
-    jumpServer=$1;
-  else
-    jumpServer=$DEF_JUMP_SERVER
-  fi
-
-  # check for optionally defined default user
-  if [ -z "$5" && -z "$DEF_JUMP_USER"] ; then
-    username='hartigan'; #set my default if I'm not on a standard machine
-  elif [ -z "$DEF_JUMP_USER" && "$5" ] ; then
-    username=$5
-  else
-    username=$DEF_JUMP_USER
-  fi
-
-  if [ -z "$5" ] || ([ -z "$4" ] && [ $jumpServer -eq $1 ]) ; then 
-    remoteServer=$2
-    remotePath=$3;
-    localPath=$4;
-  elif [ -z "$4" && $jumpServer -eq $DEF_JUMP_SERVER] ; then
-    remoteServer=$1
-    remotePath=$2;
-    localPath=$3;
-  fi
-
-  scp -oProxyJump=$username@$jumpServer $username@$remoteServer:$remotePath $localPath
 }
