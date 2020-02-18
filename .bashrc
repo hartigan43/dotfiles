@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # .bashrc
 
 # Source global definitions
@@ -86,6 +87,11 @@ function getNvim() {
   mv nvim.appimage ~/.bin
 }
 
+# source aliases
+[ -f $HOME/.aliases.sh ] && source $HOME/.aliases.sh
+
+# allow local machine overrides
 [ -f $HOME/.bash.local ] && source $HOME/.bash.local
 
+# load fzf if it exists
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
