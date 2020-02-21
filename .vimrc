@@ -36,16 +36,17 @@ Plug 'honza/vim-snippets'
 Plug 'iamcco/markdown-preview.nvim',    { 'do': 'cd app & yarn install', 'for': ['md', 'markdown'] }
 Plug 'itchyny/lightline.vim'
 Plug 'jeffkreeftmeijer/vim-dim'
+Plug 'jparise/vim-graphql',             { 'for': ['graphql', 'graphqls', 'gql'] }
 Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'liuchengxu/vista.vim'
+Plug 'maxmellon/vim-jsx-pretty'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
-Plug 'mxw/vim-jsx',                     { 'for': ['jsx'] }
 Plug 'othree/javascript-libraries-syntax.vim'
-Plug 'pangloss/vim-javascript'
+"Plug 'pangloss/vim-javascript'
 "Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
@@ -57,6 +58,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails',                 { 'for': 'rb' }
 Plug 'tpope/vim-haml',                  { 'for': 'haml' }
 Plug 'tpope/vim-surround'
+Plug 'yuezk/vim-js'
 Plug 'w0rp/ale'
 
 "TODO TEST greyscale life
