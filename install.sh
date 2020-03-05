@@ -147,9 +147,9 @@ installBasics() {
   
   ln -s $HOME/.dotfiles/.bash_profile $HOME/.bash_profile
   ln -s $HOME/.dotfiles/.bashrc $HOME/.bashrc
-  ln -s $HOME/.dotfiles/.zshrc_linux $HOME/.zshrc
+  ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc
   ln -s $HOME/.dotfiles/.aliases.sh $HOME/.aliases.sh
-  ln -s $HOME/.dotfiles/.tmux_linux.conf $HOME/.tmux.conf
+  ln -s $HOME/.dotfiles/.tmux.conf $HOME/.tmux.conf
   ln -s $HOME/.dotfiles/.tmux $HOME/.tmux
   ln -s $HOME/.dotfiles/.vimrc $HOME/.vimrc
   ln -s $HOME/.dotfiles/.vimrc $HOME/.config/nvim/init.vim
