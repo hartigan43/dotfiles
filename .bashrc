@@ -93,5 +93,8 @@ function getNvim() {
 # load fzf if it exists
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
+# load z
+[ -f ~/.dotfiles/z/z.sh ]  && source ~/.dotfiles/z/z.sh
+
 # source aliases
 [ -f $HOME/.aliases.sh ] && source $HOME/.aliases.sh

@@ -81,7 +81,7 @@ fi
 
 if command_exists fzf ; then
   alias fvim='vim $(fzf --height 40%)'
-  alias fzf"fzf --preview 'head -100 {}"
+  alias fzf="fzf --preview 'head -100 {}"
 
   if command_exists bat ; then
     export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always {}'"
