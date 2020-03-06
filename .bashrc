@@ -3,8 +3,11 @@
 # Source global definitions
 [ -f /etc/bashrc ] && . /etc/bashrc
 
-# Uncomment the following line if you don't like systemctl's auto-paging feature:
-# export SYSTEMD_PAGER=
+# append to history file
+shopt  -s histappend
+
+# bash completion
+[[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
 
 # Helper functions
 # get current branch in git repo
@@ -55,7 +58,6 @@ function parse_git_dirty {
 }
 
 # User specific aliases, exports, and functions
-
 NEOVIM_BIN="$HOME/.bin/nvim.appimage"
 
 set -o vi

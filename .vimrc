@@ -37,7 +37,7 @@ Plug 'iamcco/markdown-preview.nvim',    { 'do': 'cd app & yarn install', 'for': 
 Plug 'itchyny/lightline.vim'
 Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'jparise/vim-graphql',             { 'for': ['graphql', 'graphqls', 'gql'] }
-Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf',                    { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/rainbow_parentheses.vim'
@@ -210,8 +210,11 @@ if has('nvim')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
 endif
 
-nnoremap <C-P> :FZF <CR>
+nnoremap <C-P> :Files <CR>
 nnoremap <leader>p :Rg <CR>
+
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
