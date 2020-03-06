@@ -24,12 +24,15 @@ zplug "plugins/z", from:oh-my-zsh
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting"
 zplug "zsh-users/zsh-history-substring-search"
+zplug 'zplug/zplug', hook-build:'zplug --self-manage' #self managed zplug sometimes slow/hangs?
 
 zplug "themes/clean", from:oh-my-zsh, as:theme
 
-if zplug check || zplug install; then
-  zplug load --verbose #end zplug
+if ! zplug check; then
+  zplug install
 fi
+
+zplug load --verbose #end zplug
 
 # platform detection
 unamestr=$(uname)
@@ -55,7 +58,6 @@ export VISUAL=$(command -v vim)
 export HISTORY_CONTROL="HIST_IGNORE_DUPES:HIST_EXPIRE_DUPES_FIRST"
 
 # TERM value and tmux auto start
-# export TERM="xterm-256color" #now uses true color
 export TERM="tmux-256color" #now uses true color
 if [ "$TMUX" = "" ]; then tmux; fi
 
@@ -72,4 +74,3 @@ bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using
 
 # source aliases
 [ -f ~/.aliases.sh ] && source ~/.aliases.sh
-
