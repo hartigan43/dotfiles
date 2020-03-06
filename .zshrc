@@ -64,11 +64,12 @@ bindkey -v
 bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
 bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using vim mode in zsh
 
-# source aliases
-[ -f ~/.aliases.sh ] && source ~/.aliases.sh
-
 # allow local machine overrides
 [ -f ~/.zsh.local ] && source ~/.zsh.local
 
 # load fzf if it exists
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# source aliases
+[ -f ~/.aliases.sh ] && source ~/.aliases.sh
+
