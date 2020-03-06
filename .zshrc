@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 
+# todo shell [ vs [[ cleanup
 # zplug - https://github.com/zplug/zplug
 export ZPLUG_HOME="$HOME/.zplug"
 

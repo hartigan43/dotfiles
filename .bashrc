@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# .bashrc
 
 # Source global definitions
 [ -f /etc/bashrc ] && . /etc/bashrc
@@ -74,11 +73,10 @@ if [ $VIM ]; then
     export PS1='\h:\w› '
 fi
 
-alias ll="ls -l"
-alias la="ls -a"
-alias lla="ls -la"
-alias vi="vim"
-alias vim=$NEOVIM_BIN
+# use local neovim on servers
+if [ ! -f /usr/bin/nvim ] ; then
+  alias vim=$NEOVIM_BIN
+fi
 
 function getNvim() {
   # precompiled binary for neovim
@@ -87,11 +85,11 @@ function getNvim() {
   mv nvim.appimage ~/.bin
 }
 
-# source aliases
-[ -f $HOME/.aliases.sh ] && source $HOME/.aliases.sh
-
 # allow local machine overrides
 [ -f $HOME/.bash.local ] && source $HOME/.bash.local
 
 # load fzf if it exists
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# source aliases
+[ -f $HOME/.aliases.sh ] && source $HOME/.aliases.sh

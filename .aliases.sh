@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 # aliases, functions, and path modifications
 alias ll="ls -l"
 alias la="ls -a"
@@ -56,8 +57,22 @@ if command_exists fuck ; then
 fi
 
 if command_exists pyenv ; then
+  if [ ! -z "$BASH" ] ; then #zsh configures pyenv via plugin
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+  fi
+
   export PYTHON_CONFIGURE_OPTS="--enable-shared"
   eval "$(pyenv virtualenv-init -)"
+fi
+
+if command_exists rbenv ; then
+  if [ ! -z "$BASH" ] ; then #zsh configures rbenv via plugin
+    export PATH="$HOME/.rbenv/bin:$PATH"
+  fi
+
+  eval "$(rbenv init -)"
 fi
 
 if command_exists nvim ; then
