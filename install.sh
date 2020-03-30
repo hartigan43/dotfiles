@@ -47,7 +47,7 @@ elif [ "$PLATFORM" = "arch" ]; then
   PACKAGER_INSTALL="-S"
   PACKAGER_UPDATE="-Syu"
   PACKAGER_UPGRADE="-Syu"
-  PACKAGES="$PACKAGES base-devel python python-pip"
+  PACKAGES="$PACKAGES base-devel python python-pip cmake"
 elif [ "$PLATFORM" = "Darwin" ]; then
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   PACKAGER="brew"
@@ -65,7 +65,7 @@ fi
 # configure the global get settings for name, email, and editor
 gitConfig() {
   echo -e "Running basic git configuration...\n"
-  read -p "Enter your name (full name): " name
+  read -p "Enter your name (full name) for git: " name
   read -p "Enter your git email address: " email
   git config --global user.name "$name"
   git config --global user.email "$email"
@@ -115,7 +115,7 @@ rbenvInstall() {
 
 # Set real username
 setRealName() {
-  read -p "Please enter you real name. ex: John Doe:\n" realName
+  read -p "Please enter you real name, for your user account. ex: John Doe:\n" realName
   currentUser=whoami
   sudo usermod -c "'$realName'" $currentUser
 }
@@ -138,6 +138,8 @@ installBasics() {
   echo -e "Symlinks for vimrc, zshrc, tmux.conf, etc to HOME...\n"
   touch $HOME/.zshrc
   mv $HOME/.zshrc $HOME/.zshrc.bak #remove original zshrc
+  mv $HOME/.bashrc $HOME/.bashrc.bak
+  mv $HOME/.bash_profile $HOME/.bash_profile.bak
 
 
   # vim/nvim directories
