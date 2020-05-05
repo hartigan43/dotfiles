@@ -1,12 +1,13 @@
-# .bashrc
+#!/usr/bin/env bash
 
 # Source global definitions
-#if [ -f /etc/bashrc ]; then
-# . /etc/bashrc
-#fi
+[ -f /etc/bashrc ] && . /etc/bashrc
 
-# Uncomment the following line if you don't like systemctl's auto-paging feature:
-# export SYSTEMD_PAGER=
+# append to history file
+shopt  -s histappend
+
+# bash completion
+[[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
 
 # Helper functions
 # get current branch in git repo
@@ -57,7 +58,6 @@ function parse_git_dirty {
 }
 
 # User specific aliases, exports, and functions
-
 NEOVIM_BIN="$HOME/.bin/nvim.appimage"
 
 set -o vi
@@ -67,8 +67,6 @@ export HISTCONTROL=ignoredups:erasedups
 export HISTSIZE=100000
 export HISTFILESIZE=100000
 export LS_COLORS='ln=38;5;199:fi=38;5;222:di=38;5;4'
-#export PS1='\h\e[38;5;200m:\e[39m\w\n\u \e[38;5;200m›\e[0m '
-#export PS1="\u:\[\e[34m\]\W\[\e[m\] \[\e[33m\]\`parse_git_branch\`\[\e[m\] \\$ "
 export PS1="\u:\[\e[34m\]\W\[\e[m\]\[\e[34m\]/\[\e[m\] \[\e[33m\]\`parse_git_branch\`\[\e[m\] \\$ "
 export VISUAL=vim
 export EDITOR=vim
@@ -77,11 +75,10 @@ if [ $VIM ]; then
     export PS1='\h:\w› '
 fi
 
-alias ll="ls -l"
-alias la="ls -a"
-alias lla="ls -la"
-alias vi="vim"
-alias vim=$NEOVIM_BIN
+# use local neovim on servers
+if [ ! -f /usr/bin/nvim ] ; then
+  alias vim=$NEOVIM_BIN
+fi
 
 function getNvim() {
   # precompiled binary for neovim
@@ -90,4 +87,14 @@ function getNvim() {
   mv nvim.appimage ~/.bin
 }
 
+# allow local machine overrides
+[ -f $HOME/.bash.local ] && source $HOME/.bash.local
+
+# load fzf if it exists
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# load z
+[ -f ~/.dotfiles/z/z.sh ]  && source ~/.dotfiles/z/z.sh
+
+# source aliases
+[ -f $HOME/.aliases.sh ] && source $HOME/.aliases.sh

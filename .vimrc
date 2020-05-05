@@ -36,16 +36,17 @@ Plug 'easymotion/vim-easymotion'
 "Plug 'iamcco/markdown-preview.vim',     {'for': ['md', 'markdown'] }
 Plug 'itchyny/lightline.vim'
 Plug 'jeffkreeftmeijer/vim-dim'
-Plug 'junegunn/fzf',                    { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'jparise/vim-graphql',             { 'for': ['graphql', 'graphqls', 'gql'] }
+Plug 'junegunn/fzf',                    { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 "Plug 'junegunn/vim-peekaboo'
 "Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'liuchengxu/vista.vim'
+Plug 'maxmellon/vim-jsx-pretty'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
-Plug 'mxw/vim-jsx',                     { 'for': ['jsx'] }
 Plug 'othree/javascript-libraries-syntax.vim'
-Plug 'pangloss/vim-javascript'
+"Plug 'pangloss/vim-javascript'
 "Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
@@ -57,7 +58,8 @@ Plug 'tpope/vim-fugitive'
 "Plug 'tpope/vim-rails',                 { 'for': 'rb' }
 "Plug 'tpope/vim-haml',                  { 'for': 'haml' }
 Plug 'tpope/vim-surround'
-"Plug 'w0rp/ale'
+Plug 'yuezk/vim-js'
+Plug 'w0rp/ale'
 
 "TODO TEST greyscale life
 "Plug 'Lokaltog/vim-monotone'
@@ -71,11 +73,11 @@ function! BuildYCM(info)
   " - status: 'installed', 'updated', or 'unchanged'
   " - force:  set on PlugInstall! or PlugUpdate!
   if a:info.status == 'installed' || a:info.force
-    !./install.py --clang-completer --go-completer --ts-completer --rust-completer
+    !python3 ./install.py --clang-completer --go-completer --ts-completer --rust-completer
   endif
 endfunction
 
-"Plug 'Valloric/YouCompleteMe',          { 'do': function('BuildYCM') }
+"Plug 'ycm-core/YouCompleteMe',          { 'do': function('BuildYCM') }
 
 " note taking and writing
 " Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
@@ -208,8 +210,11 @@ if has('nvim')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
 endif
 
-nnoremap <C-P> :FZF <CR>
+nnoremap <C-P> :Files <CR>
 nnoremap <leader>p :Rg <CR>
+
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(

@@ -1,13 +1,13 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
+# aliases, functions, and path modifications
 alias ll="ls -l"
 alias la="ls -a"
 alias lla="ls -la"
 alias l.="ls -d .*"
 alias mxlookup="nslookup -q=mx"
-alias gob="go build"
-#alias git="hub"
 alias sudo="nocorrect sudo"
+alias tmux="tmux -2" # assume 256 color
 alias psmem="ps auxf | sort -nr -k 4 | head -10" #top 10 process eating memory
 alias pscpu="ps auxf | sort -nr -k 3 | head -10" #top 10 processes eating cpu
 alias weather="curl wttr.in"
@@ -17,7 +17,6 @@ alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cg
 alias memhog="ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6 | tail -15"
 alias aperr="sudo tail -f /var/log/apache2/error.log"
 alias apacc="sudo tail -f /var/log/apache2/access.log"
-alias upgrade="apt-get update && apt-get upgrade && apt-get clean"
 
 # SO 5828324 - git submodule recursive updates
 alias gitsup="git submodule foreach git pull origin master"
@@ -27,14 +26,71 @@ alias gitsup="git submodule foreach git pull origin master"
 alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'
 
-# giving nvim the full monty for now
+# check for a command within your path
+function command_exists() {
+  command -v $1 >/dev/null 2>&1;
+}
+
+# Go
+if command_exists go ; then
+  mkdir -p $HOME/Workspace/go
+  export GOPATH="$HOME/Workspace/go"
+  export PATH="$GOPATH/bin:$PATH"
+fi
+# yarn binaries
+if command_exists yarn ; then
+  mkdir -p $HOME/.yarn/bin
+  export PATH="$PATH:$HOME/.yarn/bin"
+fi
+
+#pip binaries
+if command_exists pip ; then
+  export PATH="$PATH:$HOME/.local/bin"
+fi
+
+if command_exists cargo ; then
+ export PATH="$PATH:$HOME/.cargo/bin"
+fi
+
+if command_exists fuck ; then
+  eval $(thefuck --alias)
+fi
+
+if command_exists pyenv ; then
+  if [ ! -z "$BASH" ] ; then #zsh configures pyenv via plugin
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+  fi
+
+  export PYTHON_CONFIGURE_OPTS="--enable-shared"
+  eval "$(pyenv virtualenv-init -)"
+fi
+
+if command_exists rbenv ; then
+  if [ ! -z "$BASH" ] ; then #zsh configures rbenv via plugin
+    export PATH="$HOME/.rbenv/bin:$PATH"
+  fi
+
+  eval "$(rbenv init -)"
+fi
+
 if command_exists nvim ; then
   alias vim='nvim'
 fi
 
-# fzf fuzzy vim open, uses vim/nvim depending on alias
 if command_exists fzf ; then
   alias fvim='vim $(fzf --height 40%)'
+  alias fzf="fzf --preview 'head -100 {}"
+
+  if command_exists bat ; then
+    export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always {}'"
+    alias fzf="fzf --height 40% --border --preview 'bat --style=numbers --color=always {} | head -500'"
+  fi
+
+  if command_exists tree ; then
+    export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+	fi
 fi
 
 # use bat, or pygmentize for easier cat viewing
@@ -46,6 +102,11 @@ fi
 
 if command_exists markdown-pdf ; then
   alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/modified-gfm.css'
+fi
+
+# have some fun
+if command_exists cmatrix; then
+  alias clear='[ $[$RANDOM % 10] = 0 ] && timeout 3 cmatrix; clear || clear'
 fi
 
 function randocommissian() {
@@ -91,38 +152,4 @@ function rainymood() {
   FILE=$((RANDOM%4))
   URL="https://rainymood.com/audio1110/${FILE}.ogg"
   mpv ${URL} && rainymood
-}
-
-# Really really crude scp with proxyjump for work
-# rscp(jumpServer, remoteServer, remotePath, localPath, username)
-# TODO rename and fix, broken at the moment? r seems to mean recursive
-function rscp(){
-
-  # check for optionally defined default server
-  if [ -z "$DEF_JUMP_SERVER"] ; then
-    jumpServer=$1;
-  else
-    jumpServer=$DEF_JUMP_SERVER
-  fi
-
-  # check for optionally defined default user
-  if [ -z "$5" && -z "$DEF_JUMP_USER"] ; then
-    username='hartigan'; #set my default if I'm not on a standard machine
-  elif [ -z "$DEF_JUMP_USER" && "$5" ] ; then
-    username=$5
-  else
-    username=$DEF_JUMP_USER
-  fi
-
-  if [ -z "$5" ] || ([ -z "$4" ] && [ $jumpServer -eq $1 ]) ; then 
-    remoteServer=$2
-    remotePath=$3;
-    localPath=$4;
-  elif [ -z "$4" && $jumpServer -eq $DEF_JUMP_SERVER] ; then
-    remoteServer=$1
-    remotePath=$2;
-    localPath=$3;
-  fi
-
-  scp -oProxyJump=$username@$jumpServer $username@$remoteServer:$remotePath $localPath
 }
