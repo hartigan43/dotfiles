@@ -93,11 +93,15 @@ fzfInstall() {
   fi
 }
 
-# intall pyenv and pyenv-build
+# intall pyenv and pyenv-virtualenv
 pyenvInstall() {
   if [ ! -d "$HOME/.pyenv" ]; then
     echo -e "Instally pyenv...\n"
     git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv
+  fi
+  if [ ! -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]; then
+    echo -e "Instally pyenv-virualenv...\n"
+    git clone https://github.com/pyenv/pyenv-virtualenv.git $HOME/.pyenv/plugins/pyenv-virtualenv
   fi
 }
 

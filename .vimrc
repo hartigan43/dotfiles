@@ -46,6 +46,7 @@ Plug 'maxmellon/vim-jsx-pretty'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'posva/vim-vue'
 "Plug 'pangloss/vim-javascript'
 "Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
@@ -334,6 +335,22 @@ let g:ycm_autoclose_preview_window_after_insertion = 1      "close preview windo
                                                             "after a completion is used. consider after_completion
 let g:ycm_complete_in_comments = 1                          "enable completion in comments
 let g:ycm_collect_identifiers_from_comments_and_strings = 0 "collect identifiers from strings and comments
+"let g:ycm_filetype_blacklist['peekaboo'] = 1
+let g:ycm_filetype_blacklist = {
+      \ 'tagbar': 1,
+      \ 'notes': 1,
+      \ 'markdown': 1,
+      \ 'netrw': 1,
+      \ 'unite': 1,
+      \ 'text': 1,
+      \ 'vimwiki': 1,
+      \ 'pandoc': 1,
+      \ 'infolog': 1,
+      \ 'leaderf': 1,
+      \ 'mail': 1,
+      \ 'peekabo': 1,
+      \ 'vista': 1
+      \}
 " }}}
 
 let g:used_javascript_libs = 'angular,jquery,react'

@@ -90,6 +90,10 @@ function getNvim() {
 # allow local machine overrides
 [ -f $HOME/.bash.local ] && source $HOME/.bash.local
 
+# ssh-agent
+# TODO figure out why its borked
+[ -f ~/.ssh-agent.sh ] && source ~/.ssh-agent.sh
+
 # load fzf if it exists
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 

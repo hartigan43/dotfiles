@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # aliases, functions, and path modifications
+alias ls="ls --color=auto"
 alias ll="ls -l"
 alias la="ls -a"
 alias lla="ls -la"
@@ -64,7 +65,11 @@ if command_exists pyenv ; then
   fi
 
   export PYTHON_CONFIGURE_OPTS="--enable-shared"
-  eval "$(pyenv virtualenv-init -)"
+  if [ -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]; then
+    eval "$(pyenv virtualenv-init -)"
+  else
+    eval "$(pyenv init -)"
+  fi
 fi
 
 if command_exists rbenv ; then
