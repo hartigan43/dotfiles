@@ -15,9 +15,9 @@ zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/docker", from:oh-my-zsh
 zplug "plugins/docker-compose", from:oh-my-zsh
 zplug "plugins/git", from:oh-my-zsh
-zplug "plugins/pyenv", from:oh-my-zsh
+#zplug "plugins/pyenv", from:oh-my-zsh
 zplug "plugins/pip", from:oh-my-zsh
-zplug "plugins/rbenv", from:oh-my-zsh
+#zplug "plugins/rbenv", from:oh-my-zsh
 zplug "plugins/safe-paste", from:oh-my-zsh
 zplug "plugins/systemd", from:oh-my-zsh
 zplug "plugins/themes", from:oh-my-zsh

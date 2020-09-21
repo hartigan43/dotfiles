@@ -1,6 +1,92 @@
 #!/usr/bin/env bash
 
-# aliases, functions, and path modifications
+# create Workspace dir
+if [ ! -d $HOME/Workspace ]; then
+  mkdir $HOME/Workspace
+fi
+
+# helper func
+# check for a command within your path
+function command_exists() {
+  command -v $1 >/dev/null 2>&1;
+}
+
+# path updates for specific tools 
+if command_exists go ; then
+  mkdir -p $HOME/Workspace/go
+  export GOPATH="$HOME/Workspace/go"
+  export PATH="$GOPATH/bin:$PATH"
+fi
+
+if command_exists yarn ; then
+  mkdir -p $HOME/.yarn/bin
+  export PATH="$PATH:$HOME/.yarn/bin"
+fi
+
+if command_exists pip ; then
+  export PATH="$PATH:$HOME/.local/bin"
+fi
+
+if command_exists cargo ; then
+ export PATH="$PATH:$HOME/.cargo/bin"
+fi
+
+if command_exists fuck ; then
+  eval $(thefuck --alias)
+fi
+
+# asdf-vm
+if [ -d "$HOME/.asdf" ] ; then 
+  . $HOME/.asdf/asdf.sh
+
+  if [ ! -z "$BASH" ] ; then
+    . $HOME/.asdf/completions/asdf.bash
+  else  
+    # zsh -- append completions to fpath
+    fpath=(${ASDF_DIR}/completions $fpath)
+    # initialise completions with ZSH's compinit
+    autoload -Uz compinit
+    compinit
+  fi
+fi
+
+if command_exists nvim ; then
+  alias vim='nvim'
+fi
+
+# use bat, or pygmentize for easier cat viewing
+BAT=false
+if command_exists bat ; then
+  alias cat='bat'
+  BAT=true
+elif command_exists pygmentize ; then
+  alias cat='pygmentize -g'
+fi
+
+if command_exists fzf ; then
+  alias fvim='vim $(fzf --height 40%)'
+  alias fzf="fzf --preview 'head -100 {}"
+
+  if [ "$BAT" = true ] ; then
+    export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always {}'"
+    alias fzf="fzf --height 40% --border --preview 'bat --style=numbers --color=always {} | head -500'"
+  fi
+
+  if command_exists tree ; then
+    export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+	fi
+fi
+
+if command_exists markdown-pdf ; then
+  alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/modified-gfm.css'
+fi
+
+# have some fun
+if command_exists cmatrix; then
+  alias clear='[ $[$RANDOM % 10] = 0 ] && timeout 3 cmatrix; clear || clear'
+fi
+
+# aliases, functions
 alias ls="ls --color=auto"
 alias ll="ls -l"
 alias la="ls -a"
@@ -26,93 +112,6 @@ alias gitsup="git submodule foreach git pull origin master"
 # cat filename.ext | alias to copy files, etc
 alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'
-
-# check for a command within your path
-function command_exists() {
-  command -v $1 >/dev/null 2>&1;
-}
-
-# Go
-if command_exists go ; then
-  mkdir -p $HOME/Workspace/go
-  export GOPATH="$HOME/Workspace/go"
-  export PATH="$GOPATH/bin:$PATH"
-fi
-# yarn binaries
-if command_exists yarn ; then
-  mkdir -p $HOME/.yarn/bin
-  export PATH="$PATH:$HOME/.yarn/bin"
-fi
-
-#pip binaries
-if command_exists pip ; then
-  export PATH="$PATH:$HOME/.local/bin"
-fi
-
-if command_exists cargo ; then
- export PATH="$PATH:$HOME/.cargo/bin"
-fi
-
-if command_exists fuck ; then
-  eval $(thefuck --alias)
-fi
-
-if command_exists pyenv ; then
-  if [ ! -z "$BASH" ] ; then #zsh configures pyenv via plugin
-    export PYENV_ROOT="$HOME/.pyenv"
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
-  fi
-
-  export PYTHON_CONFIGURE_OPTS="--enable-shared"
-  if [ -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]; then
-    eval "$(pyenv virtualenv-init -)"
-  else
-    eval "$(pyenv init -)"
-  fi
-fi
-
-if command_exists rbenv ; then
-  if [ ! -z "$BASH" ] ; then #zsh configures rbenv via plugin
-    export PATH="$HOME/.rbenv/bin:$PATH"
-  fi
-
-  eval "$(rbenv init -)"
-fi
-
-if command_exists nvim ; then
-  alias vim='nvim'
-fi
-
-if command_exists fzf ; then
-  alias fvim='vim $(fzf --height 40%)'
-  alias fzf="fzf --preview 'head -100 {}"
-
-  if command_exists bat ; then
-    export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always {}'"
-    alias fzf="fzf --height 40% --border --preview 'bat --style=numbers --color=always {} | head -500'"
-  fi
-
-  if command_exists tree ; then
-    export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
-	fi
-fi
-
-# use bat, or pygmentize for easier cat viewing
-if command_exists bat ; then
-  alias cat='bat'
-elif command_exists pygmentize ; then
-  alias cat='pygmentize -g'
-fi
-
-if command_exists markdown-pdf ; then
-  alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/modified-gfm.css'
-fi
-
-# have some fun
-if command_exists cmatrix; then
-  alias clear='[ $[$RANDOM % 10] = 0 ] && timeout 3 cmatrix; clear || clear'
-fi
 
 function randocommissian() {
     git commit -m"`curl -s http://whatthecommit.com/index.txt`"

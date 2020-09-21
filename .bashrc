@@ -4,7 +4,7 @@
 [ -f /etc/bashrc ] && . /etc/bashrc
 
 # append to history file
-shopt  -s histappend
+shopt -s histappend
 
 # bash completion
 [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
@@ -87,9 +87,6 @@ function getNvim() {
   mv nvim.appimage ~/.bin
 }
 
-# allow local machine overrides
-[ -f $HOME/.bash.local ] && source $HOME/.bash.local
-
 # ssh-agent
 # TODO figure out why its borked
 [ -f ~/.ssh-agent.sh ] && source ~/.ssh-agent.sh
@@ -102,3 +99,6 @@ function getNvim() {
 
 # source aliases
 [ -f $HOME/.aliases.sh ] && source $HOME/.aliases.sh
+
+# allow local machine overrides
+[ -f $HOME/.bash.local ] && source $HOME/.bash.local

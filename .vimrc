@@ -162,6 +162,9 @@ endif
 "from https://kinbiko.com/vim/my-shiniest-vim-gems/
 autocmd Filetype if &ft!="txt,md" match ErrorMsg '\%>120v.\+' endif
 
+"hacky python autocmd
+autocmd Filetype python setlocal ts=4 softtabstop=4 shiftwidth=4
+
 " }}}
 " Folding ------------------------------------------------------------------ {{{
 
