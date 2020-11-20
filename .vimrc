@@ -28,7 +28,7 @@ call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
 "Plug 'airblade/vim-rooter'
-Plug 'amadeus/vim-mjml',                { 'for': 'mljl' }
+Plug 'amadeus/vim-mjml',                { 'for': 'mjml' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
