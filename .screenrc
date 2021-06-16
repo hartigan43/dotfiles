@@ -4,6 +4,9 @@ term xterm-256color
 #scrollback limit
 defscrollback 5000
 
+#use C-x for screen prefix
+escape ^xa
+
 #vim movement bindings
 bind j focus down
 bind k focus up
