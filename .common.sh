@@ -1,25 +1,27 @@
 #!/usr/bin/env bash
 
 # create Workspace dir
-if [ ! -d $HOME/Workspace ]; then
-  mkdir $HOME/Workspace
+if [ ! -d "$HOME/Workspace" ]; then
+  mkdir "$HOME/Workspace"
 fi
+
+export WORKSPACE="$HOME/Workspace"
 
 # helper func
 # check for a command within your path
 function command_exists() {
-  command -v $1 >/dev/null 2>&1;
+  command -v "$1" >/dev/null 2>&1;
 }
 
 # path updates for specific tools 
 if command_exists go ; then
-  mkdir -p $HOME/Workspace/go
+  mkdir -p "$HOME/Workspace/go"
   export GOPATH="$HOME/Workspace/go"
   export PATH="$GOPATH/bin:$PATH"
 fi
 
 if command_exists yarn ; then
-  mkdir -p $HOME/.yarn/bin
+  mkdir -p "$HOME/.yarn/bin"
   export PATH="$PATH:$HOME/.yarn/bin"
 fi
 
@@ -32,15 +34,15 @@ if command_exists cargo ; then
 fi
 
 if command_exists fuck ; then
-  eval $(thefuck --alias)
+  eval "$(thefuck --alias)"
 fi
 
 # asdf-vm
 if [ -d "$HOME/.asdf" ] ; then 
-  . $HOME/.asdf/asdf.sh
+  . "$HOME/.asdf/asdf.sh"
 
-  if [ ! -z "$BASH" ] ; then
-    . $HOME/.asdf/completions/asdf.bash
+  if [ -n "$BASH" ] ; then
+    . "$HOME/.asdf/completions/asdf.bash"
   else  
     # zsh -- append completions to fpath
     fpath=(${ASDF_DIR}/completions $fpath)
@@ -48,6 +50,15 @@ if [ -d "$HOME/.asdf" ] ; then
     autoload -Uz compinit
     compinit
   fi
+fi
+
+# grab smug for tmux
+if !  command_exists smug  ; then
+  mkdir -p "$WORKSPACE/misc"
+  cd "$WORKSPACE/misc" || exit
+  git clone git clone https://github.com/ivaaaan/smug.git
+  cd smug || exit
+  go install
 fi
 
 if command_exists nvim ; then
@@ -113,34 +124,39 @@ alias gitsup="git submodule foreach git pull origin master"
 alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'
 
+# cleanup multipart rars
+alias rarcleanup='find ./ -regextype posix-egrep -iregex ".*\.r(ar|[0-9]*)$" -exec rm {} \;'
+# unzip rars into their respective directories ignoring overwrites
+alias batchunrar='find ./ -name "*.rar" -execdir unrar e -o- {} \;'
+
 function randocommissian() {
-    git commit -m"`curl -s http://whatthecommit.com/index.txt`"
+  git commit -m"$(curl -s http://whatthecommit.com/index.txt)"
 }
 
 function mcd() {
-  mkdir -p "$1" && cd "$1";
+  mkdir -p "$1" && cd "$1" || exit;
 }
 
 #set the tmux window title to the hostname
 function settmuxtitle() {
-  printf "\033k`hostname -s`\033\\"
+  printf "\033k%s\033\\" "$(hostname -s)"
 }
 
 #alias.sh
 function extract () {
-    if [ -f $1 ] ; then
+    if [ -f "$1" ] ; then
       case $1 in
-        *.tar.bz2)   tar xjf $1     ;;
-        *.tar.gz)    tar xzf $1     ;;
-        *.bz2)       bunzip2 $1     ;;
-        *.rar)       unrar e $1     ;;
-        *.gz)        gunzip $1      ;;
-        *.tar)       tar xf $1      ;;
-        *.tbz2)      tar xjf $1     ;;
-        *.tgz)       tar xzf $1     ;;
-        *.zip)       unzip $1       ;;
-        *.Z)         uncompress $1  ;;
-        *.7z)        7z x $1        ;;
+        *.tar.bz2)   tar xjf "$1"     ;;
+        *.tar.gz)    tar xzf "$1"     ;;
+        *.bz2)       bunzip2 "$1"     ;;
+        *.rar)       unrar e "$1"     ;;
+        *.gz)        gunzip "$1"      ;;
+        *.tar)       tar xf "$1"      ;;
+        *.tbz2)      tar xjf "$1"     ;;
+        *.tgz)       tar xzf "$1"     ;;
+        *.zip)       unzip "$1"       ;;
+        *.Z)         uncompress "$1"  ;;
+        *.7z)        7z x "$1"        ;;
         *)     echo "'$1' cannot be extracted via extract()" ;;
          esac
      else

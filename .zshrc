@@ -73,8 +73,11 @@ setopt EXTENDED_HISTORY
 ##setopt SHARE_HISTORY
 
 #TERM value and tmux auto start/attach, only if installed, https://wiki.archlinux.org/index.php/Tmux
-export TERM="tmux-256color" #now uses true color
-if which tmux >/dev/null 2>&1; then
+export TERM="screen-256color" #now uses true color, use tmux-256color if issues
+if which smug >/dev/null 2>&1; then
+  test -z ${TMUX} && smug start main
+
+elif which tmux >/dev/null 2>&1; then
     # if no session is started, start a new session
     test -z ${TMUX} && tmux
 
@@ -98,8 +101,8 @@ bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using
 # load fzf if it exists
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# source aliases
-[ -f ~/.aliases.sh ] && source ~/.aliases.sh
+# source common
+[ -f ~/.common.sh ] && source ~/.common.sh
 
 # allow local machine overrides
-[ -f ~/.zsh.local ] && source ~/.zsh.local
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
