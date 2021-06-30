@@ -36,3 +36,4 @@ windows:
          root: .
          commands:
            - ssh hartigan@linuxjump01
+           - tmux resize-pane -L 60

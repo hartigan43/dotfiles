@@ -30,6 +30,7 @@ Plug 'airblade/vim-gitgutter'
 "Plug 'airblade/vim-rooter'
 Plug 'amadeus/vim-mjml',                { 'for': 'mjml' }
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'codota/tabnine-vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
 Plug 'honza/vim-snippets'
@@ -68,23 +69,32 @@ Plug 'w0rp/ale'
 "ENDTEST
 
 " https://github.com/junegunn/dotfiles/blob/master/vimrc
-function! BuildYCM(info)
-  " info is a dictionary with 3 fields
-  " - name:   name of the plugin
-  " - status: 'installed', 'updated', or 'unchanged'
-  " - force:  set on PlugInstall! or PlugUpdate!
-  if a:info.status == 'installed' || a:info.force
-    !python3 ./install.py --clang-completer --go-completer --ts-completer --rust-completer
-  endif
-endfunction
-
-Plug 'ycm-core/YouCompleteMe',          { 'do': function('BuildYCM') }
+"function! BuildYCM(info)
+"  " info is a dictionary with 3 fields
+"  " - name:   name of the plugin
+"  " - status: 'installed', 'updated', or 'unchanged'
+"  " - force:  set on PlugInstall! or PlugUpdate!
+"  if a:info.status == 'installed' || a:info.force
+"    !python3 ./install.py --clang-completer --go-completer --ts-completer --rust-completer
+"  endif
+"endfunction
+"
+"" Plug 'ycm-core/YouCompleteMe',          { 'do': function('BuildYCM') }
 
 " note taking and writing
 Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
 Plug 'beloglazov/vim-online-thesaurus', { 'for': ['text', 'markdown'] }
 
-" nvim specific plugins
+" deoplete and tabnine
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
+Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 
 " gvim specific plugins
 if has('gui_running')
@@ -207,6 +217,10 @@ let g:ale_fixers = {
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
 let g:ale_cpp_clang_executable = 'clang++'
 let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
+" }}}
+
+" deoplete settings ------------------------------------------------------- {{{
+let g:deoplete#enable_at_startup = 1
 " }}}
 
 " fzf settings  ---------------------------------------------------------- {{{
@@ -332,33 +346,33 @@ let g:vista#renderer#enable_icon = 0
 autocmd bufenter * if (winnr("$") == 1 && vista#sidebar#IsOpen()) | q | endif
 " }}}
 
-" YouCompleteMe settings ------------------------------------------------------- {{{
-let g:ycm_min_num_of_chars_for_completion = 6               "default is 2, less results on smaller words/vars
-let g:ycm_autoclose_preview_window_after_insertion = 1      "close preview window after insert is exited
-                                                            "after a completion is used. consider after_completion
-let g:ycm_complete_in_comments = 1                          "enable completion in comments
-let g:ycm_collect_identifiers_from_comments_and_strings = 0 "collect identifiers from strings and comments
-"let g:ycm_filetype_blacklist['peekaboo'] = 1
-let g:ycm_filetype_blacklist = {
-      \ 'tagbar': 1,
-      \ 'notes': 1,
-      \ 'markdown': 1,
-      \ 'netrw': 1,
-      \ 'unite': 1,
-      \ 'text': 1,
-      \ 'vimwiki': 1,
-      \ 'pandoc': 1,
-      \ 'infolog': 1,
-      \ 'leaderf': 1,
-      \ 'mail': 1,
-      \ 'peekabo': 1,
-      \ 'vista': 1
-      \}
-" }}}
-
-let g:used_javascript_libs = 'angular,jquery,react'
-
-let g:ycm_extra_conf_globlist = ['~/Workspace/handmade/*']
+"" YouCompleteMe settings ------------------------------------------------------- {{{
+"let g:ycm_min_num_of_chars_for_completion = 6               "default is 2, less results on smaller words/vars
+"let g:ycm_autoclose_preview_window_after_insertion = 1      "close preview window after insert is exited
+"                                                            "after a completion is used. consider after_completion
+"let g:ycm_complete_in_comments = 1                          "enable completion in comments
+"let g:ycm_collect_identifiers_from_comments_and_strings = 0 "collect identifiers from strings and comments
+""let g:ycm_filetype_blacklist['peekaboo'] = 1
+"let g:ycm_filetype_blacklist = {
+"      \ 'tagbar': 1,
+"      \ 'notes': 1,
+"      \ 'markdown': 1,
+"      \ 'netrw': 1,
+"      \ 'unite': 1,
+"      \ 'text': 1,
+"      \ 'vimwiki': 1,
+"      \ 'pandoc': 1,
+"      \ 'infolog': 1,
+"      \ 'leaderf': 1,
+"      \ 'mail': 1,
+"      \ 'peekabo': 1,
+"      \ 'vista': 1
+"      \}
+"" }}}
+"
+"let g:used_javascript_libs = 'angular,jquery,react'
+"
+"let g:ycm_extra_conf_globlist = ['~/Workspace/handmade/*']
 " }}}
 " Keymaps -------------------------------------------------------------- {{{
 " Clean trailing whitespace
