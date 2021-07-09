@@ -27,12 +27,12 @@ endif
 call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
-"Plug 'airblade/vim-rooter'
 Plug 'amadeus/vim-mjml',                { 'for': 'mjml' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'codota/tabnine-vim'
+Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
-Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
+Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries', 'for': 'go' }
 Plug 'honza/vim-snippets'
 Plug 'iamcco/markdown-preview.nvim',    { 'do': 'cd app & yarn install', 'for': ['md', 'markdown'] }
 Plug 'itchyny/lightline.vim'
@@ -43,12 +43,9 @@ Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'liuchengxu/vista.vim'
-Plug 'maxmellon/vim-jsx-pretty'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
-Plug 'posva/vim-vue'
-"Plug 'pangloss/vim-javascript'
 "Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
@@ -60,26 +57,14 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails',                 { 'for': 'rb' }
 Plug 'tpope/vim-haml',                  { 'for': 'haml' }
 Plug 'tpope/vim-surround'
-Plug 'yuezk/vim-js'
-Plug 'w0rp/ale'
+
+" all the JS things
+Plug 'yuezk/vim-js' | Plug 'HerringtonDarkholme/yats.vim' | Plug 'posva/vim-vue' | Plug 'maxmellon/vim-jsx-pretty'
 
 "TODO TEST greyscale life
 "Plug 'Lokaltog/vim-monotone'
 "Plug 'fxn/vim-monochrome'
 "ENDTEST
-
-" https://github.com/junegunn/dotfiles/blob/master/vimrc
-"function! BuildYCM(info)
-"  " info is a dictionary with 3 fields
-"  " - name:   name of the plugin
-"  " - status: 'installed', 'updated', or 'unchanged'
-"  " - force:  set on PlugInstall! or PlugUpdate!
-"  if a:info.status == 'installed' || a:info.force
-"    !python3 ./install.py --clang-completer --go-completer --ts-completer --rust-completer
-"  endif
-"endfunction
-"
-"" Plug 'ycm-core/YouCompleteMe',          { 'do': function('BuildYCM') }
 
 " note taking and writing
 Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
@@ -109,7 +94,7 @@ call plug#end()
 set number                                        "show line numbers
 "set background=light                              "nvim 0.3.3 got weird and required this with dark gruvbox term settings, fixed with dim colorscheme?
 set ts=2                                          "tabs width as two spaces
-set shiftwidth=2                                  
+set shiftwidth=2
 set autoindent                                    "keep indentation of current line
 set smarttab
 set expandtab                                     "converts tabs to spaces
@@ -186,7 +171,7 @@ nnoremap zO zczO
 
 " }}}
 " Plugin-settings ---------------------------------------------------------- {{{
- 
+
 " Ack settings  ---------------------------------------------------------- {{{
 " TODO monitor usage, with fzf#vim#ag, unsure of total use of ack
 if executable('ag')
@@ -196,7 +181,7 @@ else
   let &grepprg = 'grep -rn $* *'
 endif
 " }}}
- 
+
 " ALE settings ------------------------------------------------------- {{{
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
@@ -206,17 +191,25 @@ let g:ale_lint_delay = 550                                          "delay befor
 
 let g:ale_linters = {
 \ 'cpp': ['clang'],
-\ 'javascript': ['prettier'],
+\ 'go': ['gofmt', 'golint'],
+\ 'javascript': ['prettier', 'eslint'],
+\ 'python': ['flake8', 'pylint'],
 \}
 
 let g:ale_fixers = {
+\  '*': ['remove_trailing_lines', 'trim_whitespace'],
 \ 'css': ['prettier'],
-\ 'javascript': ['prettier'],
+\ 'go': ['gofmt'],
+\ 'javascript': ['prettier', 'eslint'],
+\ 'python': ['autopep8', 'isort'],
 \}
 
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
 let g:ale_cpp_clang_executable = 'clang++'
 let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
+
+" Set this variable to 1 to fix files when you save them.
+let g:ale_fix_on_save = 1
 " }}}
 
 " deoplete settings ------------------------------------------------------- {{{
@@ -274,19 +267,21 @@ let g:lightline.separator = {
 	\   'left': '', 'right': ''
   \}
 let g:lightline.subseparator = {
-	\   'left': '', 'right': '' 
+	\   'left': '', 'right': ''
   \}
 let g:lightline.tabline = {
   \   'left': [ ['buffers'] ],
   \   'right': [[]],
   \}
-" TODO not possible?
-"let g:lightline.tabline.separator = {
-"  \   'left': '', 'right': '|'
-"  \}
+let g:lightline.tabline_separator = {
+  \   'left': '', 'right': '|'
+  \}
+let g:lightline.tabline_subseparator = {
+  \   'left': '', 'right': '|'
+  \}
 "
 let s:palette = g:lightline#colorscheme#default#palette
-"inactive text, inactive bg, active text, active background 
+"inactive text, inactive bg, active text, active background
 if has('nvim') "vim is very unhappy with color 236 at the moment, could nto find a quick fix for err 254
   let s:palette.tabline.tabsel = [ [ 3, 236, 253, 9 ] ]   "https://github.com/itchyny/lightline.vim/issues/207 might have clues to fix
 endif
@@ -310,9 +305,6 @@ set guioptions-=e  " Don't use GUI tabline
 " }}}
 
 " Markdown Preview settings --------------------------------------------------- {{{
-"let g:mkdp_path_to_chrome = /usr/bin/firefox
-"TODO fix with dev edition
-"let g:mkdp_browser = "/home/jake/.local/share/firefox-dev/firefox -P dev-edition-default --class firefox-developer-edition --new-tab \"127.0.0.1:8522/page/1\""
 let g:mkdp_browser = "/usr/bin/firefox"
 let g:mkdp_port = "8522"
 " }}}
@@ -346,47 +338,19 @@ let g:vista#renderer#enable_icon = 0
 autocmd bufenter * if (winnr("$") == 1 && vista#sidebar#IsOpen()) | q | endif
 " }}}
 
-"" YouCompleteMe settings ------------------------------------------------------- {{{
-"let g:ycm_min_num_of_chars_for_completion = 6               "default is 2, less results on smaller words/vars
-"let g:ycm_autoclose_preview_window_after_insertion = 1      "close preview window after insert is exited
-"                                                            "after a completion is used. consider after_completion
-"let g:ycm_complete_in_comments = 1                          "enable completion in comments
-"let g:ycm_collect_identifiers_from_comments_and_strings = 0 "collect identifiers from strings and comments
-""let g:ycm_filetype_blacklist['peekaboo'] = 1
-"let g:ycm_filetype_blacklist = {
-"      \ 'tagbar': 1,
-"      \ 'notes': 1,
-"      \ 'markdown': 1,
-"      \ 'netrw': 1,
-"      \ 'unite': 1,
-"      \ 'text': 1,
-"      \ 'vimwiki': 1,
-"      \ 'pandoc': 1,
-"      \ 'infolog': 1,
-"      \ 'leaderf': 1,
-"      \ 'mail': 1,
-"      \ 'peekabo': 1,
-"      \ 'vista': 1
-"      \}
-"" }}}
-"
-"let g:used_javascript_libs = 'angular,jquery,react'
-"
-"let g:ycm_extra_conf_globlist = ['~/Workspace/handmade/*']
-" }}}
 " Keymaps -------------------------------------------------------------- {{{
 " Clean trailing whitespace
 nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
 " toggle nerdtree display
-noremap <F4> :NERDTreeToggle<CR> 
+noremap <F4> :NERDTreeToggle<CR>
 
 " show/hide tagbar/vista
 "nmap <F3> :TagbarToggle<CR>
 nmap <F3> :Vista!!<CR>
 
 " hide search highlighting
-nnoremap <leader><space> :nohlsearch<CR> 
+nnoremap <leader><space> :nohlsearch<CR>
 
 " display vim undo tree
 nnoremap <leader>u :MundoToggle<CR>
@@ -438,7 +402,7 @@ if has('gui_running')
   set guioptions-=egmt                            "hide the gui elements
   set guioptions-=T
   set guioptions-=m
-  set guioptions-=L                               "oddly, only way to get scrollbars 
+  set guioptions-=L                               "oddly, only way to get scrollbars
   set guioptions-=r                               "properly hidden on left and right
   set background=dark
   colorscheme gruvbox                             "or seoul256
