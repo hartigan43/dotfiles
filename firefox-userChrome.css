@@ -1,3 +1,5 @@
+`@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
 #TabsToolbar {
   direction: rtl;
 }
@@ -8,17 +10,5 @@
 
 .titlebar-buttonbox {
   display: flex;
-}
-
-.titlebar-min {
-  order: 1;
-}
-
-.titlebar-max {
-  order: 2;
-}
-
-.titlebar-close {
-  order: 3;
-  margin-right: 6px !important;
+  flex-direction: row-reverse;
 }
