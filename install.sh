@@ -150,11 +150,12 @@ installBasics() {
   mkdir -p $HOME/.config/vim
   mkdir -p $HOME/.vim
   mkdir -p $HOME/.config/nvim
-  
+
+  # symlinks to $HOME
   ln -s $HOME/.dotfiles/.bash_profile $HOME/.bash_profile
   ln -s $HOME/.dotfiles/.bashrc $HOME/.bashrc
+  ln -s $HOME/.dotfiles/.common.sh $HOME/.common.sh
   ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc
-  ln -s $HOME/.dotfiles/.aliases.sh $HOME/.aliases.sh
   ln -s $HOME/.dotfiles/.tmux.conf $HOME/.tmux.conf
   ln -s $HOME/.dotfiles/.tmux $HOME/.tmux
   ln -s $HOME/.dotfiles/.vimrc $HOME/.vimrc

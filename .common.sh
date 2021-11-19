@@ -13,7 +13,19 @@ function command_exists() {
   command -v "$1" >/dev/null 2>&1;
 }
 
-# path updates for specific tools 
+# somewhat janky mosh + ssh failover, requires two connections
+#function ssh() {
+#    if ! [ -x "$(command -v mosh)" ]; then
+#        echo "mosh client not found, using ssh."
+#        command ssh "$@"
+#    else
+#        echo "Trying mosh login."
+#        command mosh "$@"
+#        [[ $? -ne 0 ]] && (echo "mosh server not found" ; command ssh "$@")
+#    fi
+#}
+
+# path updates for specific tools
 if command_exists go ; then
   mkdir -p "$HOME/Workspace/go"
   export GOPATH="$HOME/Workspace/go"
@@ -38,14 +50,14 @@ if command_exists fuck ; then
 fi
 
 # asdf-vm
-if [ -d "$HOME/.asdf" ] ; then 
+if [ -d "$HOME/.asdf" ] ; then
   . "$HOME/.asdf/asdf.sh"
 
   if [ -n "$BASH" ] ; then
     . "$HOME/.asdf/completions/asdf.bash"
-  else  
+  else
     # zsh -- append completions to fpath
-    fpath=(${ASDF_DIR}/completions $fpath)
+    fpath=("${ASDF_DIR}/completions $fpath")
     # initialise completions with ZSH's compinit
     autoload -Uz compinit
     compinit
@@ -53,7 +65,7 @@ if [ -d "$HOME/.asdf" ] ; then
 fi
 
 # grab smug for tmux
-if !  command_exists smug  ; then
+if ! command_exists smug  ; then
   mkdir -p "$WORKSPACE/misc"
   cd "$WORKSPACE/misc" || exit
   git clone git clone https://github.com/ivaaaan/smug.git
@@ -109,6 +121,7 @@ alias tmux="tmux -2" # assume 256 color
 alias psmem="ps auxf | sort -nr -k 4 | head -10" #top 10 process eating memory
 alias pscpu="ps auxf | sort -nr -k 3 | head -10" #top 10 processes eating cpu
 alias weather="curl wttr.in"
+alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose stop && docker-compose build --no-cache && docker-compose up -d'"
 
 #From alias.sh
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"

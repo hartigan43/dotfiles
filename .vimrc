@@ -192,7 +192,7 @@ let g:ale_lint_delay = 550                                          "delay befor
 let g:ale_linters = {
 \ 'cpp': ['clang'],
 \ 'go': ['gofmt', 'golint'],
-\ 'javascript': ['prettier', 'eslint'],
+\ 'javascript': ['prettier'],
 \ 'python': ['flake8', 'pylint'],
 \}
 
@@ -200,7 +200,7 @@ let g:ale_fixers = {
 \  '*': ['remove_trailing_lines', 'trim_whitespace'],
 \ 'css': ['prettier'],
 \ 'go': ['gofmt'],
-\ 'javascript': ['prettier', 'eslint'],
+\ 'javascript': ['prettier'],
 \ 'python': ['autopep8', 'isort'],
 \}
 
