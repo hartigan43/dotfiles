@@ -60,6 +60,7 @@ if [ -d "$HOME/.asdf" ] ; then
     fpath=("${ASDF_DIR}/completions $fpath")
     # initialise completions with ZSH's compinit
     autoload -Uz compinit
+    zcomet compinit
     compinit
   fi
 fi
@@ -68,7 +69,7 @@ fi
 if ! command_exists smug  ; then
   mkdir -p "$WORKSPACE/misc"
   cd "$WORKSPACE/misc" || exit
-  git clone git clone https://github.com/ivaaaan/smug.git
+  git clone https://github.com/ivaaaan/smug.git
   cd smug || exit
   go install
 fi
@@ -116,7 +117,6 @@ alias la="ls -a"
 alias lla="ls -la"
 alias l.="ls -d .*"
 alias mxlookup="nslookup -q=mx"
-alias sudo="nocorrect sudo"
 alias tmux="tmux -2" # assume 256 color
 alias psmem="ps auxf | sort -nr -k 4 | head -10" #top 10 process eating memory
 alias pscpu="ps auxf | sort -nr -k 3 | head -10" #top 10 processes eating cpu

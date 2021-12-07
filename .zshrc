@@ -1,39 +1,34 @@
 #!/usr/bin/env zsh
-
 # todo shell [ vs [[ cleanup
-# zplug - https://github.com/zplug/zplug
-export ZPLUG_HOME="$HOME/.zplug"
 
-if [[ ! -d ~/.zplug ]]; then
-  git clone https://github.com/zplug/zplug $ZPLUG_HOME
+# clone zcomet if doesnt exist
+if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
+  command git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.zcomet/bin
 fi
 
-source ~/.zplug/init.zsh
+source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
+echo "done zcomet"
+zcomet load agkozak/zsh-z
+zcomet load ohmyzsh themes/clean
 
-zplug "plugins/command-not-found", from:oh-my-zsh
-zplug "plugins/colored-man-pages", from:oh-my-zsh
-zplug "plugins/docker", from:oh-my-zsh
-zplug "plugins/docker-compose", from:oh-my-zsh
-zplug "plugins/git", from:oh-my-zsh
-#zplug "plugins/pyenv", from:oh-my-zsh
-zplug "plugins/pip", from:oh-my-zsh
-#zplug "plugins/rbenv", from:oh-my-zsh
-zplug "plugins/safe-paste", from:oh-my-zsh
-zplug "plugins/systemd", from:oh-my-zsh
-zplug "plugins/themes", from:oh-my-zsh
-zplug "plugins/z", from:oh-my-zsh
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-syntax-highlighting"
-zplug "zsh-users/zsh-history-substring-search"
-zplug 'zplug/zplug', hook-build:'zplug --self-manage' #self managed zplug sometimes slow/hangs?
+zcomet load ohmyzsh plugins/command-not-found
+zcomet load ohmyzsh plugins/docker
+zcomet load ohmyzsh plugins/docker-compose
+zcomet load ohmyzsh plugins/gitfast
+zcomet load ohmyzsh plugins safe-paste
+zcomet load ohmyzsh plugins/systemd
 
-zplug "themes/clean", from:oh-my-zsh, as:theme
+# lazy load the archive from prezto without full library
+zcomet trigger --no-submodules archive unarchive lsarchive \
+    sorin-ionescu/prezto modules/archive
 
-if ! zplug check; then
-  zplug install
-fi
+# It is good to load these popular plugins last, and in this order:
+zcomet load zsh-users/zsh-completions
+zcomet load zsh-users/zsh-syntax-highlighting
+zcomet load zsh-users/zsh-autosuggestions
 
-zplug load --verbose #end zplug
+zcomet load zsh-users/zsh-history-substring-search
+zcomet compinit
 
 # platform detection
 # TODO move platform and defaults to separate include for bash/zsh
@@ -98,6 +93,8 @@ bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using
 # [ -f ~/.ssh-agent.sh ] && source ~/.ssh-agent.sh
 #eval $(keychain --eval --quiet id_rsa ~/.ssh/id_rsa)
 #eval $(keychain --eval --quiet id_rsa ~/.ssh/hartigan)
+
+alias sudo="nocorrect sudo"
 
 # load fzf if it exists
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
