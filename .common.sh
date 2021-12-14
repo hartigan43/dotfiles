@@ -57,11 +57,9 @@ if [ -d "$HOME/.asdf" ] ; then
     . "$HOME/.asdf/completions/asdf.bash"
   else
     # zsh -- append completions to fpath
-    fpath=("${ASDF_DIR}/completions $fpath")
+    fpath=("${ASDF_DIR}"/completions $fpath)
     # initialise completions with ZSH's compinit
-    autoload -Uz compinit
-    zcomet compinit
-    compinit
+    autoload -Uz compinit && compinit
   fi
 fi
 
@@ -89,7 +87,7 @@ fi
 
 if command_exists fzf ; then
   alias fvim='vim $(fzf --height 40%)'
-  alias fzf="fzf --preview 'head -100 {}"
+  alias fzf="fzf --preview 'head -100 {}'"
 
   if [ "$BAT" = true ] ; then
     export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always {}'"
@@ -148,11 +146,6 @@ function randocommissian() {
 
 function mcd() {
   mkdir -p "$1" && cd "$1" || exit;
-}
-
-#set the tmux window title to the hostname
-function settmuxtitle() {
-  printf "\033k%s\033\\" "$(hostname -s)"
 }
 
 #alias.sh

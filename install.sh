@@ -48,7 +48,7 @@ elif [ "$PLATFORM" = "arch" ]; then
   PACKAGER_INSTALL="-S"
   PACKAGER_UPDATE="-Syu"
   PACKAGER_UPGRADE="-Syu"
-  PACKAGES="$PACKAGES base-devel python python-pip cmake"
+  PACKAGES="$PACKAGES base-devel python python-pip cmake vim neovim python-pynvim"
 elif [ "$PLATFORM" = "Darwin" ]; then
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   PACKAGER="brew"
@@ -151,6 +151,7 @@ installBasics() {
   mkdir -p "$HOME/.config/vim"
   mkdir -p "$HOME/.vim"
   mkdir -p "$HOME/.config/nvim"
+  mkdir -p "$HOME/.config/alacritty"
 
   # symlinks to $HOME
   ln -s "$HOME/.dotfiles/.bash_profile" "$HOME/.bash_profile"
@@ -161,6 +162,7 @@ installBasics() {
   ln -s "$HOME/.dotfiles/.tmux" "$HOME/.tmux"
   ln -s "$HOME/.dotfiles/.vimrc" "$HOME/.vimrc"
   ln -s "$HOME/.dotfiles/.vimrc" "$HOME/.config/nvim/init.vim"
+  ln -s "$HOME/.dotfiles/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
 }
 
 ####END FUNCTIONS####

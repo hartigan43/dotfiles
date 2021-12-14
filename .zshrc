@@ -1,21 +1,22 @@
 #!/usr/bin/env zsh
 # todo shell [ vs [[ cleanup
 
+#################
+# zcomet config #
+#################
 # clone zcomet if doesnt exist
 if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
   command git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.zcomet/bin
 fi
 
 source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
-echo "done zcomet"
 zcomet load agkozak/zsh-z
-zcomet load ohmyzsh themes/clean
 
 zcomet load ohmyzsh plugins/command-not-found
 zcomet load ohmyzsh plugins/docker
 zcomet load ohmyzsh plugins/docker-compose
 zcomet load ohmyzsh plugins/gitfast
-zcomet load ohmyzsh plugins safe-paste
+zcomet load ohmyzsh plugins/safe-paste
 zcomet load ohmyzsh plugins/systemd
 
 # lazy load the archive from prezto without full library
@@ -28,10 +29,39 @@ zcomet load zsh-users/zsh-syntax-highlighting
 zcomet load zsh-users/zsh-autosuggestions
 
 zcomet load zsh-users/zsh-history-substring-search
-zcomet compinit
+#zcomet compinit
+#################
 
-# platform detection
-# TODO move platform and defaults to separate include for bash/zsh
+#################
+# prompt config #
+#################
+if [ $UID -eq 0 ]; then NCOLOR="red"; else NCOLOR="white"; fi
+
+autoload -Uz add-zsh-hook vcs_info
+setopt prompt_subst
+add-zsh-hook precmd vcs_info
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*' check-for-changes true
+# Set custom strings for an unstaged vcs repo changes (*) and staged changes (+)
+zstyle ':vcs_info:*' unstagedstr ' *'
+zstyle ':vcs_info:*' stagedstr ' +'
+# Set the format of the Git information for vcs_info
+zstyle ':vcs_info:git:*' formats       '(%b%u%c)'
+#zstyle ':vcs_info:git*' formats "%s  %r/%S %b (%a) %m%u%c "
+zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
+
+PROMPT='%n:%B%F{75}%1~/%f%b %F{228}${vcs_info_msg_0_}%f $ '
+RPROMPT='[%*]'
+
+# LS colors, made with https://geoff.greer.fm/lscolors/
+# taken from old ohmyzsh theme clean
+export LSCOLORS="Gxfxcxdxbxegedabagacad"
+export LS_COLORS='no=00:fi=00:di=01;34:ln=00;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=41;33;01:ex=00;32:*.cmd=00;32:*.exe=01;32:*.com=01;32:*.bat=01;32:*.btm=01;32:*.dll=01;32:*.tar=00;31:*.tbz=00;31:*.tgz=00;31:*.rpm=00;31:*.deb=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.lzma=00;31:*.zip=00;31:*.zoo=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.tb2=00;31:*.tz2=00;31:*.tbz2=00;31:*.avi=01;35:*.bmp=01;35:*.fli=01;35:*.gif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mng=01;35:*.mov=01;35:*.mpg=01;35:*.pcx=01;35:*.pbm=01;35:*.pgm=01;35:*.png=01;35:*.ppm=01;35:*.tga=01;35:*.tif=01;35:*.xbm=01;35:*.xpm=01;35:*.dl=01;35:*.gl=01;35:*.wmv=01;35:*.aiff=00;32:*.au=00;32:*.mid=00;32:*.mp3=00;32:*.ogg=00;32:*.voc=00;32:*.wav=00;32:'
+#################
+
+######################
+# platform detection #
+######################
 unamestr=$(uname)
 
 if [[ $unamestr == 'Linux' ]]; then
@@ -47,6 +77,7 @@ if [[ $unamestr == 'Linux' ]]; then
 elif [[ $unamestr == 'Darwin' ]]; then
   #homebrew/nix here if I'm ever back on the mac train
 fi
+######################
 
 # user and default editor and history
 # override locally with .zsh.local
@@ -104,3 +135,5 @@ alias sudo="nocorrect sudo"
 
 # allow local machine overrides
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
+zcomet compinit

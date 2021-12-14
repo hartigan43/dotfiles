@@ -346,7 +346,6 @@ nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 noremap <F4> :NERDTreeToggle<CR>
 
 " show/hide tagbar/vista
-"nmap <F3> :TagbarToggle<CR>
 nmap <F3> :Vista!!<CR>
 
 " hide search highlighting
@@ -374,13 +373,13 @@ cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space><C-R><C-W>
 
 "use leader e or leader s to open or vsplit with filename in current directory
-"leade E,S uses parent directory
+"leader E,S uses parent directory
 nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>E :e <C-R>=expand("%:p:h:h") . "/" <CR>
 nnoremap <leader>s :vsplit <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>S :vsplit <C-R>=expand("%:p:h:h") . "/" <CR>
 
-"underlinethe current line - mostly for taking notes until I start using
+"underline the current line - mostly for taking notes until I start using
 "something with cloud support
 nnoremap <leader><F5> yyp<c-v>$r-
 
