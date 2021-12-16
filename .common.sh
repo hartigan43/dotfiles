@@ -25,41 +25,43 @@ function command_exists() {
 #    fi
 #}
 
-# path updates for specific tools
-if command_exists go ; then
-  mkdir -p "$HOME/Workspace/go"
-  export GOPATH="$HOME/Workspace/go"
-  export PATH="$GOPATH/bin:$PATH"
-fi
+if [[ -z $TMUX ]]; then
+  # path updates for specific tools
+  if command_exists go ; then
+    mkdir -p "$HOME/Workspace/go"
+    export GOPATH="$HOME/Workspace/go"
+    export PATH="$GOPATH/bin:$PATH"
+  fi
 
-if command_exists yarn ; then
-  mkdir -p "$HOME/.yarn/bin"
-  export PATH="$PATH:$HOME/.yarn/bin"
-fi
+  if command_exists yarn ; then
+    mkdir -p "$HOME/.yarn/bin"
+    export PATH="$PATH:$HOME/.yarn/bin"
+  fi
 
-if command_exists pip ; then
-  export PATH="$PATH:$HOME/.local/bin"
-fi
+  if command_exists pip ; then
+    export PATH="$PATH:$HOME/.local/bin"
+  fi
 
-if command_exists cargo ; then
- export PATH="$PATH:$HOME/.cargo/bin"
-fi
+  if command_exists cargo ; then
+   export PATH="$PATH:$HOME/.cargo/bin"
+  fi
 
-if command_exists fuck ; then
-  eval "$(thefuck --alias)"
-fi
+  if command_exists fuck ; then
+    eval "$(thefuck --alias)"
+  fi
 
-# asdf-vm
-if [ -d "$HOME/.asdf" ] ; then
-  . "$HOME/.asdf/asdf.sh"
+  # asdf-vm
+  if [ -d "$HOME/.asdf" ] ; then
+    . "$HOME/.asdf/asdf.sh"
 
-  if [ -n "$BASH" ] ; then
-    . "$HOME/.asdf/completions/asdf.bash"
-  else
-    # zsh -- append completions to fpath
-    fpath=("${ASDF_DIR}"/completions $fpath)
-    # initialise completions with ZSH's compinit
-    autoload -Uz compinit && compinit
+    if [ -n "$BASH" ] ; then
+      . "$HOME/.asdf/completions/asdf.bash"
+    else
+      # zsh -- append completions to fpath
+      fpath=("${ASDF_DIR}"/completions $fpath)
+      # initialise completions with ZSH's compinit
+      autoload -Uz compinit && compinit
+    fi
   fi
 fi
 

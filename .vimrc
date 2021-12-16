@@ -72,6 +72,7 @@ Plug 'beloglazov/vim-online-thesaurus', { 'for': ['text', 'markdown'] }
 
 " deoplete and tabnine
 if has('nvim')
+  Plug 'nvim-lua/plenary.nvim' | Plug 'NTBBloodbath/rest.nvim'
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
   Plug 'Shougo/deoplete.nvim'
