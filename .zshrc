@@ -118,6 +118,7 @@ export TERM="screen-256color" #now uses true color, use tmux-256color if issues
 bindkey -v
 bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
 bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using vim mode in zsh
+bindkey '^R' history-incremental-search-backward # reverse histroy search
 
 # ssh-agent
 # TODO figure out why its borked
@@ -128,7 +129,7 @@ bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using
 alias sudo="nocorrect sudo"
 
 # load fzf if it exists
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
 # source common
 [ -f ~/.common.sh ] && source ~/.common.sh
