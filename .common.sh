@@ -7,10 +7,24 @@ fi
 
 export WORKSPACE="$HOME/Workspace"
 
-# helper func
+### helper funcs
 # check for a command within your path
 function command_exists() {
   command -v "$1" >/dev/null 2>&1;
+}
+
+# prepend to path
+function prepend_to_path() {
+  if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+      PATH="$1:${PATH:+"$PATH:"}"
+  fi
+}
+
+# add to path
+function add_to_path() {
+  if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+      PATH="${PATH:+"$PATH:"}$1"
+  fi
 }
 
 # somewhat janky mosh + ssh failover, requires two connections
@@ -24,46 +38,36 @@ function command_exists() {
 #        [[ $? -ne 0 ]] && (echo "mosh server not found" ; command ssh "$@")
 #    fi
 #}
+###
 
-if [[ -z $TMUX ]]; then
-  # path updates for specific tools
-  if command_exists go ; then
-    mkdir -p "$HOME/Workspace/go"
-    export GOPATH="$HOME/Workspace/go"
-    export PATH="$GOPATH/bin:$PATH"
-  fi
+### path updates for specific tools
 
-  if command_exists yarn ; then
-    mkdir -p "$HOME/.yarn/bin"
-    export PATH="$PATH:$HOME/.yarn/bin"
-  fi
+add_to_path "$GOPATH/bin"
+add_to_path "$HOME/.cargo/bin"
 
-  if command_exists pip ; then
-    export PATH="$PATH:$HOME/.local/bin"
-  fi
+prepend_to_path "$HOME/.yarn/bin"
+prepend_to_path "$HOME/.local/bin"
 
-  if command_exists cargo ; then
-   export PATH="$PATH:$HOME/.cargo/bin"
-  fi
+export PATH
 
-  if command_exists fuck ; then
-    eval "$(thefuck --alias)"
-  fi
+if command_exists fuck ; then
+  eval "$(thefuck --alias)"
+fi
 
-  # asdf-vm
-  if [ -d "$HOME/.asdf" ] ; then
-    . "$HOME/.asdf/asdf.sh"
+# asdf-vm
+if [ -d "$HOME/.asdf" ] ; then
+  . "$HOME/.asdf/asdf.sh"
 
-    if [ -n "$BASH" ] ; then
-      . "$HOME/.asdf/completions/asdf.bash"
-    else
-      # zsh -- append completions to fpath
-      fpath=("${ASDF_DIR}"/completions $fpath)
-      # initialise completions with ZSH's compinit
-      autoload -Uz compinit && compinit
-    fi
+  if [ -n "$BASH" ] ; then
+    . "$HOME/.asdf/completions/asdf.bash"
+  else
+    # zsh -- append completions to fpath
+    fpath=("${ASDF_DIR}"/completions $fpath)
+    # initialise completions with ZSH's compinit
+    autoload -Uz compinit && compinit
   fi
 fi
+###
 
 # grab smug for tmux
 if ! command_exists smug  ; then
@@ -118,16 +122,11 @@ alias lla="ls -la"
 alias l.="ls -d .*"
 alias mxlookup="nslookup -q=mx"
 alias tmux="tmux -2" # assume 256 color
-alias psmem="ps auxf | sort -nr -k 4 | head -10" #top 10 process eating memory
-alias pscpu="ps auxf | sort -nr -k 3 | head -10" #top 10 processes eating cpu
 alias weather="curl wttr.in"
 alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose stop && docker-compose build --no-cache && docker-compose up -d'"
 
 #From alias.sh
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-alias memhog="ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6 | tail -15"
-alias aperr="sudo tail -f /var/log/apache2/error.log"
-alias apacc="sudo tail -f /var/log/apache2/access.log"
 
 # SO 5828324 - git submodule recursive updates
 alias gitsup="git submodule foreach git pull origin master"
