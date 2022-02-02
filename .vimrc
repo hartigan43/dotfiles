@@ -202,7 +202,7 @@ let g:ale_fixers = {
 \ 'css': ['prettier'],
 \ 'go': ['gofmt'],
 \ 'javascript': ['prettier'],
-\ 'python': ['autopep8', 'isort'],
+\ 'python': ['black'],
 \}
 
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
