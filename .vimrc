@@ -32,6 +32,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'codota/tabnine-vim'
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
+Plug 'editorconfig/editorconfig-vim'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries', 'for': 'go' }
 Plug 'honza/vim-snippets'
 Plug 'iamcco/markdown-preview.nvim',    { 'do': 'cd app & yarn install', 'for': ['md', 'markdown'] }
