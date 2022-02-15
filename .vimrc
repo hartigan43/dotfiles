@@ -195,7 +195,7 @@ let g:ale_linters = {
 \ 'cpp': ['clang'],
 \ 'go': ['gofmt', 'golint'],
 \ 'javascript': ['prettier'],
-\ 'python': ['flake8', 'pylint'],
+\ 'python': ['flake8'],
 \}
 
 let g:ale_fixers = {
@@ -203,12 +203,13 @@ let g:ale_fixers = {
 \ 'css': ['prettier'],
 \ 'go': ['gofmt'],
 \ 'javascript': ['prettier'],
-\ 'python': ['autopep8', 'isort'],
+\ 'python': ['black'],
 \}
 
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
 let g:ale_cpp_clang_executable = 'clang++'
 let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
+let g:ale_python_flake8_options = '--max-line-length=88 --extend-ignore=E203'
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1
