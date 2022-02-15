@@ -41,6 +41,9 @@ function add_to_path() {
 ###
 
 ### path updates for specific tools
+if command_exists go ; then
+  export GOPATH="$WORKSPACE/go"
+fi
 
 add_to_path "$GOPATH/bin"
 add_to_path "$HOME/.cargo/bin"
