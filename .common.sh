@@ -41,6 +41,9 @@ function add_to_path() {
 ###
 
 ### path updates for specific tools
+if command_exists go ; then
+  export GOPATH="$WORKSPACE/go"
+fi
 
 add_to_path "$GOPATH/bin"
 add_to_path "$HOME/.cargo/bin"
@@ -48,7 +51,7 @@ add_to_path "$HOME/.cargo/bin"
 prepend_to_path "$HOME/.yarn/bin"
 prepend_to_path "$HOME/.local/bin"
 
-export PATH
+#export PATH
 
 if command_exists fuck ; then
   eval "$(thefuck --alias)"
@@ -180,3 +183,9 @@ function rainymood() {
   URL="https://rainymood.com/audio1110/${FILE}.ogg"
   mpv ${URL} && rainymood
 }
+
+# if tmux is executable and not inside a tmux session, then try to attach.
+# if attachment fails, start a new session
+[ -x "$(command -v tmux)" ] \
+  && [ -z "${TMUX}" ] \
+  && { tmux attach || tmux; } >/dev/null 2>&1
