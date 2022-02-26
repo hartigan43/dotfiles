@@ -62,10 +62,9 @@ Plug 'tpope/vim-surround'
 " all the JS things
 Plug 'yuezk/vim-js' | Plug 'HerringtonDarkholme/yats.vim' | Plug 'posva/vim-vue' | Plug 'maxmellon/vim-jsx-pretty'
 
-"TODO TEST greyscale life
-"Plug 'Lokaltog/vim-monotone'
-"Plug 'fxn/vim-monochrome'
-"ENDTEST
+if $EDITOR_MONOTONE == "true"
+  Plug 'Lokaltog/vim-monotone'
+endif
 
 " note taking and writing
 Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
@@ -94,7 +93,6 @@ call plug#end()
 
 " Basic options ------------------------------------------------------------ {{{
 set number                                        "show line numbers
-"set background=light                              "nvim 0.3.3 got weird and required this with dark gruvbox term settings, fixed with dim colorscheme?
 set ts=2                                          "tabs width as two spaces
 set shiftwidth=2
 set autoindent                                    "keep indentation of current line
@@ -128,7 +126,19 @@ set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode character
 set showbreak=↪
 set modeline
 set modelines=2                                   "use modelines at end of file for specifc settings
-colorscheme dim
+set tgc
+
+if $EDITOR_MONOTONE == "true"
+  set background=light                            "nvim 0.3.3 got weird and required this with dark gruvbox term settings, fixed with dim colorscheme?
+  let base16colorspace=256
+  let g:monotone_color = [170, 0,25]
+  let g:monotone_contrast_factor = -0.75
+  colorscheme monotone
+  highlight Comment cterm=italic gui=italic
+else
+  colorscheme dim
+endif
+
 
 " set leader key -- originally \ -- now localleader
 let mapleader = ","
@@ -245,8 +255,8 @@ let g:gundo_preview_height = 40
 " }}}
 
 " lightline.vim settings  ------------------------------------------------------- {{{
-"  \  'colorscheme': 'gruvbox',
 let g:lightline = {
+  \  'colorscheme': 'seoul256',
   \  'active': {
   \    'left':[ [ 'mode', 'paste' ],
   \             [ 'gitbranch', 'readonly', 'filename' ]

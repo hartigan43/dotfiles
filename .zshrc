@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 # todo shell [ vs [[ cleanup
+# # TODO setup colorless env flag for vim and aliases
 
 #################
 # zcomet config #
@@ -47,10 +48,9 @@ zstyle ':vcs_info:*' unstagedstr ' *'
 zstyle ':vcs_info:*' stagedstr ' +'
 # Set the format of the Git information for vcs_info
 zstyle ':vcs_info:git:*' formats       '(%b%u%c)'
-#zstyle ':vcs_info:git*' formats "%s  %r/%S %b (%a) %m%u%c "
 zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
 
-PROMPT='%n:%B%F{75}%1~/%f%b %F{228}${vcs_info_msg_0_}%f $ '
+PROMPT='%n:%B%F{4}%1~/%f%b %F{11}${vcs_info_msg_0_}%f $ '
 RPROMPT='[%*]'
 
 # LS colors, made with https://geoff.greer.fm/lscolors/
