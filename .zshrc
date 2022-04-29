@@ -100,19 +100,18 @@ setopt EXTENDED_HISTORY
 
 #TERM value and tmux auto start/attach, only if installed, https://wiki.archlinux.org/index.php/Tmux
 export TERM="screen-256color" #now uses true color, use tmux-256color if issues
-# letting smug start it for now
-#if which smug >/dev/null 2>&1; then
-#  test -z ${TMUX} && smug start ru-main
-#
-#elif which tmux >/dev/null 2>&1; then
-#    # if no session is started, start a new session
-#    test -z ${TMUX} && tmux
-#
-#    # when quitting tmux, try to attach
-#    while test -z ${TMUX}; do
-#        tmux attach || break
-#    done
-#fi
+if which tmuxp >/dev/null 2>&1; then
+  test -z ${TMUX} && tmuxp load "$HOME/.config/tmuxp/main.json"
+
+elif which tmux >/dev/null 2>&1; then
+    # if no session is started, start a new session
+    test -z ${TMUX} && tmux
+
+    # when quitting tmux, try to attach
+    while test -z ${TMUX}; do
+        tmux attach || break
+    done
+fi
 
 # vi mode with backspace
 bindkey -v

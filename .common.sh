@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # create Workspace dir
 if [ ! -d "$HOME/Workspace" ]; then
@@ -13,7 +13,7 @@ function command_exists() {
   command -v "$1" >/dev/null 2>&1;
 }
 
-# prepend to path
+# prepend to path, thanks tommyvyo
 function prepend_to_path() {
   if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
       PATH="$1:${PATH:+"$PATH:"}"
@@ -51,8 +51,6 @@ add_to_path "$HOME/.cargo/bin"
 prepend_to_path "$HOME/.yarn/bin"
 prepend_to_path "$HOME/.local/bin"
 
-#export PATH
-
 if command_exists fuck ; then
   eval "$(thefuck --alias)"
 fi
@@ -70,16 +68,21 @@ if [ -d "$HOME/.asdf" ] ; then
     autoload -Uz compinit && compinit
   fi
 fi
-###
 
-# grab smug for tmux
-if ! command_exists smug  ; then
-  mkdir -p "$WORKSPACE/misc"
-  cd "$WORKSPACE/misc" || exit
-  git clone https://github.com/ivaaaan/smug.git
-  cd smug || exit
-  go install
+# poetry
+if ! command_exists poetry; then
+  curl -sSL https://install.python-poetry.org | python3 -
 fi
+
+if [ -n "$BASH" ] ; then
+  mkdir -p /etc/bash_completion.d
+  poetry completions bash > /etc/bash_completion.d/poetry
+else
+  mkdir -p $HOME/.zfunc
+  poetry completions zsh > ~/.zfunc/_poetry
+  fpath+=~/.zfunc
+fi
+###
 
 if command_exists nvim ; then
   alias vim='nvim'
@@ -126,7 +129,8 @@ alias l.="ls -d .*"
 alias mxlookup="nslookup -q=mx"
 alias tmux="tmux -2" # assume 256 color
 alias weather="curl wttr.in"
-alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose stop && docker-compose build --no-cache && docker-compose up -d'"
+alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d'"
+alias dcu="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose up -d'"
 
 #From alias.sh
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"

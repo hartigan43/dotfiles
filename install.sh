@@ -9,7 +9,7 @@ fi
 # make workspace and misc
 mkdir -p "$HOME/Workspace/misc"
 
-###### PLATFORM AND PACKAGES
+#### PLATFORM AND PACKAGES ####
 
 PLATFORM=$(uname)
 if [ "$PLATFORM" = "linux" ] || [ "$PLATFORM" = "Linux" ]; then
@@ -94,30 +94,6 @@ fzfInstall() {
   fi
 }
 
-# intall pyenv and pyenv-virtualenv
-pyenvInstall() {
-  if [ ! -d "$HOME/.pyenv" ]; then
-    echo -e "Instally pyenv...\n"
-    git clone https://github.com/pyenv/pyenv.git "$HOME/.pyenv"
-  fi
-  if [ ! -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]; then
-    echo -e "Instally pyenv-virualenv...\n"
-    git clone https://github.com/pyenv/pyenv-virtualenv.git "$HOME/.pyenv/plugins/pyenv-virtualenv"
-  fi
-}
-
-# Install rbenv and ruby-build
-rbenvInstall() {
-  if [ ! -d "$HOME/.rbenv" ]; then
-    echo -e "Installing rbenv and ruby-build...\n"
-    git clone https://github.com/rbenv/rbenv.git "$HOME/.rbenv"
-    cd ~/.rbenv && src/configure && make -C src
-  fi
-  if [ ! -d "$HOME/.rbenv/plugins/ruby-build" ]; then
-    git clone https://github.com/rbenv/ruby-build.git "$HOME/.rbenv/plugins/ruby-build"
-  fi
-}
-
 # Set real username
 setRealName() {
   read -pr "Please enter you real name, for your user account. ex: John Doe:\n" realName
@@ -146,31 +122,29 @@ installBasics() {
   mv "$HOME/.bashrc" "$HOME/.bashrc.bak"
   mv "$HOME/.bash_profile" "$HOME/.bash_profile.bak"
 
-
-  # vim/nvim directories
+  # vim/nvim, config directories
   mkdir -p "$HOME/.config/vim"
   mkdir -p "$HOME/.vim"
   mkdir -p "$HOME/.config/nvim"
   mkdir -p "$HOME/.config/alacritty"
+  mkdir -p "$HOME/.config/tmuxp"
 
   # symlinks to $HOME
+  ln -s "$HOME/.dotfiles/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
   ln -s "$HOME/.dotfiles/.bash_profile" "$HOME/.bash_profile"
   ln -s "$HOME/.dotfiles/.bashrc" "$HOME/.bashrc"
   ln -s "$HOME/.dotfiles/.common.sh" "$HOME/.common.sh"
-  ln -s "$HOME/.dotfiles/.zshrc" "$HOME/.zshrc"
   ln -s "$HOME/.dotfiles/.tmux.conf" "$HOME/.tmux.conf"
   ln -s "$HOME/.dotfiles/.tmux" "$HOME/.tmux"
+  ln -s "$HOME/.dotfiles/tmuxp" "$HOME/.config/tmuxp"
   ln -s "$HOME/.dotfiles/.vimrc" "$HOME/.vimrc"
   ln -s "$HOME/.dotfiles/.vimrc" "$HOME/.config/nvim/init.vim"
-  ln -s "$HOME/.dotfiles/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
+  ln -s "$HOME/.dotfiles/.zshrc" "$HOME/.zshrc"
 }
 
-####END FUNCTIONS####
-
+#### Run it ####
 installBasics
 gitConfig
 fzfInstall
-#pyenvInstall
-#rbenvInstall
 setRealName
 installNERDFonts
