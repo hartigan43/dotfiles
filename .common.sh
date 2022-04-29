@@ -27,19 +27,6 @@ function add_to_path() {
   fi
 }
 
-# somewhat janky mosh + ssh failover, requires two connections
-#function ssh() {
-#    if ! [ -x "$(command -v mosh)" ]; then
-#        echo "mosh client not found, using ssh."
-#        command ssh "$@"
-#    else
-#        echo "Trying mosh login."
-#        command mosh "$@"
-#        [[ $? -ne 0 ]] && (echo "mosh server not found" ; command ssh "$@")
-#    fi
-#}
-###
-
 ### path updates for specific tools
 if command_exists go ; then
   export GOPATH="$WORKSPACE/go"
@@ -121,16 +108,17 @@ if command_exists cmatrix; then
 fi
 
 # aliases, functions
-alias ls="ls --color=auto"
-alias ll="ls -l"
-alias la="ls -a"
-alias lla="ls -la"
+alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d'"
+alias dcu="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose up -d'"
 alias l.="ls -d .*"
+alias la="ls -a"
+alias ll="ls -l"
+alias lla="ls -la"
+alias ls="ls --color=auto"
+alias me="mullvad-exclude"
 alias mxlookup="nslookup -q=mx"
 alias tmux="tmux -2" # assume 256 color
 alias weather="curl wttr.in"
-alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d'"
-alias dcu="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose up -d'"
 
 #From alias.sh
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
@@ -187,6 +175,19 @@ function rainymood() {
   URL="https://rainymood.com/audio1110/${FILE}.ogg"
   mpv ${URL} && rainymood
 }
+
+# somewhat janky mosh + ssh failover, requires two connections
+#function ssh() {
+#    if ! [ -x "$(command -v mosh)" ]; then
+#        echo "mosh client not found, using ssh."
+#        command ssh "$@"
+#    else
+#        echo "Trying mosh login."
+#        command mosh "$@"
+#        [[ $? -ne 0 ]] && (echo "mosh server not found" ; command ssh "$@")
+#    fi
+#}
+###
 
 # if tmux is executable and not inside a tmux session, then try to attach.
 # if attachment fails, start a new session
