@@ -266,7 +266,7 @@ let g:lightline = {
 	\    'lineinfo': ' %3l:%-2v',
 	\  },
   \  'component_function': {
-  \    'gitbranch': 'fugitive#head',
+  \    'gitbranch': 'fugitive#Head',
   \    'filename': 'LightlineFilename',
   \  },
   \ 'component_expand': {
