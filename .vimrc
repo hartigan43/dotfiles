@@ -170,7 +170,8 @@ endif
 autocmd Filetype if &ft!="txt,md" match ErrorMsg '\%>120v.\+' endif
 
 "hacky python autocmd
-autocmd Filetype python setlocal ts=4 softtabstop=4 shiftwidth=4
+" using editorconfig instead for now
+" autocmd Filetype python setlocal ts=4 softtabstop=4 shiftwidth=4
 
 " }}}
 " Folding ------------------------------------------------------------------ {{{
@@ -227,6 +228,11 @@ let g:ale_fix_on_save = 1
 
 " deoplete settings ------------------------------------------------------- {{{
 let g:deoplete#enable_at_startup = 1
+" }}}
+"
+" EditorConfig settings ------------------------------------------------------- {{{
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+au FileType gitcommit let b:EditorConfig_disable = 1
 " }}}
 
 " fzf settings  ---------------------------------------------------------- {{{

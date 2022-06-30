@@ -1,0 +1,53 @@
+# https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Use 2 spaces for HTML files
+[*.html]
+indent_size = 2
+
+# JavaScript and variants
+[*.{js,json,ts,tsx}]
+indent_size = 2
+indent_style = space
+
+# python specific settings
+[*.py]
+indent_style = space
+indent_size = 4
+max_line_length = 88
+
+# JSON files contain newlines inconsistently
+[*.json]
+insert_final_newline = ignore
+
+# Makefiles use tabs for indent
+[Makefile]
+indent_style = tab
+
+# Minified JavaScript files shouldn't be changed
+[**.min.js]
+indent_style = ignore
+insert_final_newline = ignore
+
+# Indentation override for all JS under lib directory
+[lib/**.js]
+indent_style = space
+indent_size = 2
+
+# Matches the exact files either package.json or .travis.yml
+[{package.json,.travis.yml}]
+indent_style = space
+indent_size = 2
+
+[*.{md,markdown}]
+trim_trailing_whitespace = false

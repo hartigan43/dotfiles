@@ -84,6 +84,7 @@ fi
 DEFAULT_USER="hartigan"
 export EDITOR=$(command -v vim)
 export VISUAL=$(command -v vim)
+export DIFFPROG=vimdiff
 export HISTFILE="$HOME/.zsh_history"
 if [[ -f $HISTFILE ]]; then
   touch $HISTFILE

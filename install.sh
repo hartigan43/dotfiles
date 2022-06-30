@@ -134,6 +134,7 @@ installBasics() {
   ln -s "$HOME/.dotfiles/.bash_profile" "$HOME/.bash_profile"
   ln -s "$HOME/.dotfiles/.bashrc" "$HOME/.bashrc"
   ln -s "$HOME/.dotfiles/.common.sh" "$HOME/.common.sh"
+  ln -s "$HOME/.dotfiles/.editorconfig" "$HOME/.editorconfig"
   ln -s "$HOME/.dotfiles/.tmux.conf" "$HOME/.tmux.conf"
   ln -s "$HOME/.dotfiles/.tmux" "$HOME/.tmux"
   ln -s "$HOME/.dotfiles/tmuxp" "$HOME/.config/tmuxp"
