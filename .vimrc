@@ -27,25 +27,16 @@ endif
 call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
-<<<<<<< HEAD
 "Plug 'airblade/vim-rooter'
-"Plug 'amadeus/vim-mjml',                { 'for': 'mljl' }
-=======
 Plug 'amadeus/vim-mjml',                { 'for': 'mjml' }
->>>>>>> fa49b754901cfac0acc51eb1c9bae9a26a6b4178
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'codota/tabnine-vim'
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
-<<<<<<< HEAD
-"Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
+Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
 "Plug 'honza/vim-snippets'
-"Plug 'iamcco/markdown-preview.vim',     {'for': ['md', 'markdown'] }
-=======
-Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries', 'for': 'go' }
-Plug 'honza/vim-snippets'
-Plug 'iamcco/markdown-preview.nvim',    { 'do': 'cd app & yarn install', 'for': ['md', 'markdown'] }
->>>>>>> fa49b754901cfac0acc51eb1c9bae9a26a6b4178
+"Plug 'iamcco/markdown-preview.nvim',    { 'do': 'cd app & yarn install', 'for': ['md', 'markdown'] }
+Plug 'editorconfig/editorconfig-vim'
 Plug 'itchyny/lightline.vim'
 Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'jparise/vim-graphql',             { 'for': ['graphql', 'graphqls', 'gql'] }
@@ -66,39 +57,23 @@ Plug 'takac/vim-commandcaps'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
 "Plug 'tpope/vim-rails',                 { 'for': 'rb' }
-"Plug 'tpope/vim-haml',                  { 'for': 'haml' }
+Plug 'tpope/vim-haml',                  { 'for': 'haml' }
 Plug 'tpope/vim-surround'
 
 " all the JS things
 Plug 'yuezk/vim-js' | Plug 'HerringtonDarkholme/yats.vim' | Plug 'posva/vim-vue' | Plug 'maxmellon/vim-jsx-pretty'
 
-"TODO TEST greyscale life
-"Plug 'Lokaltog/vim-monotone'
-"Plug 'fxn/vim-monochrome'
-"ENDTEST
+if $EDITOR_MONOTONE == "true"
+  Plug 'Lokaltog/vim-monotone'
+endif
 
-<<<<<<< HEAD
-" https://github.com/junegunn/dotfiles/blob/master/vimrc
-function! BuildYCM(info)
-  " info is a dictionary with 3 fields
-  " - name:   name of the plugin
-  " - status: 'installed', 'updated', or 'unchanged'
-  " - force:  set on PlugInstall! or PlugUpdate!
-  if a:info.status == 'installed' || a:info.force
-    !python3 ./install.py --clang-completer --go-completer --ts-completer --rust-completer
-  endif
-endfunction
-
-"Plug 'ycm-core/YouCompleteMe',          { 'do': function('BuildYCM') }
-
-=======
->>>>>>> fa49b754901cfac0acc51eb1c9bae9a26a6b4178
 " note taking and writing
-" Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
-" Plug 'beloglazov/vim-online-thesaurus', { 'for': ['text', 'markdown'] }
+Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
+Plug 'beloglazov/vim-online-thesaurus', { 'for': ['text', 'markdown'] }
 
 " deoplete and tabnine
 if has('nvim')
+  Plug 'nvim-lua/plenary.nvim' | Plug 'NTBBloodbath/rest.nvim'
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
   Plug 'Shougo/deoplete.nvim'
@@ -119,7 +94,6 @@ call plug#end()
 
 " Basic options ------------------------------------------------------------ {{{
 set number                                        "show line numbers
-"set background=light                              "nvim 0.3.3 got weird and required this with dark gruvbox term settings, fixed with dim colorscheme?
 set ts=2                                          "tabs width as two spaces
 set shiftwidth=2
 set autoindent                                    "keep indentation of current line
@@ -153,7 +127,19 @@ set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode character
 set showbreak=↪
 set modeline
 set modelines=2                                   "use modelines at end of file for specifc settings
-colorscheme dim
+set tgc
+
+if $EDITOR_MONOTONE == "true"
+  set background=light                            "nvim 0.3.3 got weird and required this with dark gruvbox term settings, fixed with dim colorscheme?
+  let base16colorspace=256
+  let g:monotone_color = [170, 0,25]
+  let g:monotone_contrast_factor = -0.75
+  colorscheme monotone
+  highlight Comment cterm=italic gui=italic
+else
+  colorscheme dim
+endif
+
 
 " set leader key -- originally \ -- now localleader
 let mapleader = ","
@@ -219,21 +205,22 @@ let g:ale_lint_delay = 550                                          "delay befor
 let g:ale_linters = {
 \ 'cpp': ['clang'],
 \ 'go': ['gofmt', 'golint'],
-\ 'javascript': ['prettier', 'eslint'],
-\ 'python': ['flake8', 'pylint'],
+\ 'javascript': ['prettier'],
+\ 'python': ['flake8'],
 \}
 
 let g:ale_fixers = {
 \  '*': ['remove_trailing_lines', 'trim_whitespace'],
 \ 'css': ['prettier'],
 \ 'go': ['gofmt'],
-\ 'javascript': ['prettier', 'eslint'],
-\ 'python': ['autopep8', 'isort'],
+\ 'javascript': ['prettier'],
+\ 'python': ['black'],
 \}
 
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
 let g:ale_cpp_clang_executable = 'clang++'
 let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
+let g:ale_python_flake8_options = '--max-line-length=88 --extend-ignore=E203'
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1
@@ -269,8 +256,8 @@ let g:gundo_preview_height = 40
 " }}}
 
 " lightline.vim settings  ------------------------------------------------------- {{{
-"  \  'colorscheme': 'gruvbox',
 let g:lightline = {
+  \  'colorscheme': 'seoul256',
   \  'active': {
   \    'left':[ [ 'mode', 'paste' ],
   \             [ 'gitbranch', 'readonly', 'filename' ]
@@ -280,7 +267,7 @@ let g:lightline = {
 	\    'lineinfo': '%3l:%-2v',
 	\  },
   \  'component_function': {
-  \    'gitbranch': 'fugitive#head',
+  \    'gitbranch': 'fugitive#Head',
   \    'filename': 'LightlineFilename',
   \  },
   \ 'component_expand': {
@@ -294,11 +281,7 @@ let g:lightline.separator = {
 	\   'left': ' ', 'right': ' '
   \}
 let g:lightline.subseparator = {
-<<<<<<< HEAD
 	\   'left': ' ', 'right': ' ' 
-=======
-	\   'left': '', 'right': ''
->>>>>>> fa49b754901cfac0acc51eb1c9bae9a26a6b4178
   \}
 let g:lightline.tabline = {
   \   'left': [ ['buffers'] ],
@@ -377,7 +360,6 @@ nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 noremap <F4> :NERDTreeToggle<CR>
 
 " show/hide tagbar/vista
-"nmap <F3> :TagbarToggle<CR>
 nmap <F3> :Vista!!<CR>
 
 " hide search highlighting
@@ -405,13 +387,13 @@ cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space><C-R><C-W>
 
 "use leader e or leader s to open or vsplit with filename in current directory
-"leade E,S uses parent directory
+"leader E,S uses parent directory
 nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>E :e <C-R>=expand("%:p:h:h") . "/" <CR>
 nnoremap <leader>s :vsplit <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>S :vsplit <C-R>=expand("%:p:h:h") . "/" <CR>
 
-"underlinethe current line - mostly for taking notes until I start using
+"underline the current line - mostly for taking notes until I start using
 "something with cloud support
 nnoremap <leader><F5> yyp<c-v>$r-
 

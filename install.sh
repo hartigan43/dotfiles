@@ -7,9 +7,9 @@ if [ "$EUID" -eq 0 ]; then
 fi
 
 # make workspace and misc
-mkdir -p $HOME/Workspace/misc
+mkdir -p "$HOME/Workspace/misc"
 
-###### PLATFORM AND PACKAGES
+#### PLATFORM AND PACKAGES ####
 
 PLATFORM=$(uname)
 if [ "$PLATFORM" = "linux" ] || [ "$PLATFORM" = "Linux" ]; then
@@ -22,6 +22,7 @@ if [ "$PLATFORM" = "linux" ] || [ "$PLATFORM" = "Linux" ]; then
 fi
 
 PACKAGES="zsh ruby git curl wget neovim tmux openssh go docker"
+EDITOR="vim"
 
 if [ "$PLATFORM" = "centos" ]; then
   PACKAGER="sudo yum -y"
@@ -47,7 +48,7 @@ elif [ "$PLATFORM" = "arch" ]; then
   PACKAGER_INSTALL="-S"
   PACKAGER_UPDATE="-Syu"
   PACKAGER_UPGRADE="-Syu"
-  PACKAGES="$PACKAGES base-devel python python-pip cmake"
+  PACKAGES="$PACKAGES base-devel python python-pip cmake vim neovim python-pynvim"
 elif [ "$PLATFORM" = "Darwin" ]; then
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   PACKAGER="brew"
@@ -65,20 +66,20 @@ fi
 # configure the global get settings for name, email, and editor
 gitConfig() {
   echo -e "Running basic git configuration...\n"
-  read -p "Enter your name (full name) for git: " name
-  read -p "Enter your git email address: " email
+  read -pr "Enter your name (full name) for git: " name
+  read -pr "Enter your git email address: " email
   git config --global user.name "$name"
   git config --global user.email "$email"
-  git config --global core.editor vim
+  git config --global core.editor $EDITOR
 }
 
 # clone and install patched nerdfonts to work with airline and powerline symbols locally
 installNERDFonts() {
   echo -e "Installing Powerline compatible Nerd Fonts..."
-  mkdir -p $HOME/.local/share/fonts
+  mkdir -p "$HOME/.local/share/fonts"
 
-  git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git $HOME/Workspace/misc/nerd-fonts
-  cd $HOME/Workspace/misc/nerd-fonts
+  git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git "$HOME/Workspace/misc/nerd-fonts"
+  cd "$HOME/Workspace/misc/nerd-fonts" || return
   ./install.sh Inconsolata
   ./install.sh InconsolataGo
   ./install.sh Iosevka
@@ -93,46 +94,22 @@ fzfInstall() {
   fi
 }
 
-# intall pyenv and pyenv-virtualenv
-pyenvInstall() {
-  if [ ! -d "$HOME/.pyenv" ]; then
-    echo -e "Instally pyenv...\n"
-    git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv
-  fi
-  if [ ! -d "$HOME/.pyenv/plugins/pyenv-virtualenv" ]; then
-    echo -e "Instally pyenv-virualenv...\n"
-    git clone https://github.com/pyenv/pyenv-virtualenv.git $HOME/.pyenv/plugins/pyenv-virtualenv
-  fi
-}
-
-# Install rbenv and ruby-build
-rbenvInstall() {
-  if [ ! -d "$HOME/.rbenv" ]; then
-    echo -e "Installing rbenv and ruby-build...\n"
-    git clone https://github.com/rbenv/rbenv.git $HOME/.rbenv
-    cd ~/.rbenv && src/configure && make -C src
-  fi
-  if [ ! -d "$HOME/.rbenv/plugins/ruby-build" ]; then
-    git clone https://github.com/rbenv/ruby-build.git $HOME/.rbenv/plugins/ruby-build
-  fi
-}
-
 # Set real username
 setRealName() {
-  read -p "Please enter you real name, for your user account. ex: John Doe:\n" realName
+  read -pr "Please enter you real name, for your user account. ex: John Doe:\n" realName
   currentUser=whoami
   sudo usermod -c "'$realName'" $currentUser
 }
 
 installBasics() {
-  mkdir -p $HOME/.bin
-  mkdir -p $HOME/.local/bin
+  #mkdir -p "$HOME/.bin"
+  mkdir -p "$HOME/.local/bin"
 
   # first update and install of packages
   echo -e "Updating then installing zsh wget curl git tmux...\n"
   $PACKAGER $PACKAGER_UPDATE
   $PACKAGER $PACKAGER_UPGRADE
-  $PACKAGER $PACKAGER_INSTALL ${PACKAGES}
+  $PACKAGER $PACKAGER_INSTALL "${PACKAGES}"
 
   # install zgen
   echo -e "Cloning zgen into ~/.zgen ...\n"
@@ -140,33 +117,35 @@ installBasics() {
 
   # Symlink vimrc, zshrc and aliases/functions
   echo -e "Symlinks for vimrc, zshrc, tmux.conf, etc to HOME...\n"
-  touch $HOME/.zshrc
-  mv $HOME/.zshrc $HOME/.zshrc.bak #remove original zshrc
-  mv $HOME/.bashrc $HOME/.bashrc.bak
-  mv $HOME/.bash_profile $HOME/.bash_profile.bak
+  touch "$HOME/.zshrc"
+  mv "$HOME/.zshrc" "$HOME/.zshrc.bak" #backup any original config files
+  mv "$HOME/.bashrc" "$HOME/.bashrc.bak"
+  mv "$HOME/.bash_profile" "$HOME/.bash_profile.bak"
 
+  # vim/nvim, config directories
+  mkdir -p "$HOME/.config/vim"
+  mkdir -p "$HOME/.vim"
+  mkdir -p "$HOME/.config/nvim"
+  mkdir -p "$HOME/.config/alacritty"
+  mkdir -p "$HOME/.config/tmuxp"
 
-  # vim/nvim directories
-  mkdir -p $HOME/.config/vim
-  mkdir -p $HOME/.vim
-  mkdir -p $HOME/.config/nvim
-  
-  ln -s $HOME/.dotfiles/.bash_profile $HOME/.bash_profile
-  ln -s $HOME/.dotfiles/.bashrc $HOME/.bashrc
-  ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc
-  ln -s $HOME/.dotfiles/.aliases.sh $HOME/.aliases.sh
-  ln -s $HOME/.dotfiles/.tmux.conf $HOME/.tmux.conf
-  ln -s $HOME/.dotfiles/.tmux $HOME/.tmux
-  ln -s $HOME/.dotfiles/.vimrc $HOME/.vimrc
-  ln -s $HOME/.dotfiles/.vimrc $HOME/.config/nvim/init.vim
+  # symlinks to $HOME
+  ln -s "$HOME/.dotfiles/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
+  ln -s "$HOME/.dotfiles/.bash_profile" "$HOME/.bash_profile"
+  ln -s "$HOME/.dotfiles/.bashrc" "$HOME/.bashrc"
+  ln -s "$HOME/.dotfiles/.common.sh" "$HOME/.common.sh"
+  ln -s "$HOME/.dotfiles/.editorconfig" "$HOME/.editorconfig"
+  ln -s "$HOME/.dotfiles/.tmux.conf" "$HOME/.tmux.conf"
+  ln -s "$HOME/.dotfiles/.tmux" "$HOME/.tmux"
+  ln -s "$HOME/.dotfiles/tmuxp" "$HOME/.config/tmuxp"
+  ln -s "$HOME/.dotfiles/.vimrc" "$HOME/.vimrc"
+  ln -s "$HOME/.dotfiles/.vimrc" "$HOME/.config/nvim/init.vim"
+  ln -s "$HOME/.dotfiles/.zshrc" "$HOME/.zshrc"
 }
 
-####END FUNCTIONS####
-
+#### Run it ####
 installBasics
 gitConfig
 fzfInstall
-pyenvInstall
-rbenvInstall
 setRealName
 installNERDFonts

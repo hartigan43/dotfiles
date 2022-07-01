@@ -1,42 +1,67 @@
 #!/usr/bin/env zsh
-
 # todo shell [ vs [[ cleanup
-# zplug - https://github.com/zplug/zplug
-export ZPLUG_HOME="$HOME/.zplug"
+# # TODO setup colorless env flag for vim and aliases
 
-if [[ ! -d ~/.zplug ]]; then
-  git clone https://github.com/zplug/zplug $ZPLUG_HOME
+#################
+# zcomet config #
+#################
+# clone zcomet if doesnt exist
+if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
+  command git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.zcomet/bin
 fi
 
-source ~/.zplug/init.zsh
+source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
+zcomet load agkozak/zsh-z
 
-zplug "plugins/command-not-found", from:oh-my-zsh
-zplug "plugins/colored-man-pages", from:oh-my-zsh
-zplug "plugins/docker", from:oh-my-zsh
-zplug "plugins/docker-compose", from:oh-my-zsh
-zplug "plugins/git", from:oh-my-zsh
-#zplug "plugins/pyenv", from:oh-my-zsh
-zplug "plugins/pip", from:oh-my-zsh
-#zplug "plugins/rbenv", from:oh-my-zsh
-zplug "plugins/safe-paste", from:oh-my-zsh
-zplug "plugins/systemd", from:oh-my-zsh
-zplug "plugins/themes", from:oh-my-zsh
-zplug "plugins/z", from:oh-my-zsh
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-syntax-highlighting"
-zplug "zsh-users/zsh-history-substring-search"
-zplug 'zplug/zplug', hook-build:'zplug --self-manage' #self managed zplug sometimes slow/hangs?
+zcomet load ohmyzsh plugins/command-not-found
+zcomet load ohmyzsh plugins/docker
+zcomet load ohmyzsh plugins/docker-compose
+zcomet load ohmyzsh plugins/gitfast
+zcomet load ohmyzsh plugins/safe-paste
+zcomet load ohmyzsh plugins/systemd
 
-zplug "themes/clean", from:oh-my-zsh, as:theme
+# lazy load the archive from prezto without full library
+zcomet trigger --no-submodules archive unarchive lsarchive \
+    sorin-ionescu/prezto modules/archive
 
-if ! zplug check; then
-  zplug install
-fi
+# It is good to load these popular plugins last, and in this order:
+zcomet load zsh-users/zsh-completions
+zcomet load zsh-users/zsh-syntax-highlighting
+zcomet load zsh-users/zsh-autosuggestions
 
-zplug load --verbose #end zplug
+zcomet load zsh-users/zsh-history-substring-search
+#zcomet compinit
+#################
 
-# platform detection
-# TODO move platform and defaults to separate include for bash/zsh
+#################
+# prompt config #
+#################
+if [ $UID -eq 0 ]; then NCOLOR="red"; else NCOLOR="white"; fi
+
+autoload -Uz add-zsh-hook vcs_info
+setopt prompt_subst
+add-zsh-hook precmd vcs_info
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*' check-for-changes true
+# Set custom strings for an unstaged vcs repo changes (*) and staged changes (+)
+zstyle ':vcs_info:*' unstagedstr ' *'
+zstyle ':vcs_info:*' stagedstr ' +'
+# Set the format of the Git information for vcs_info
+zstyle ':vcs_info:git:*' formats       '(%b%u%c)'
+zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
+
+PROMPT='%n:%B%F{4}%1~/%f%b %F{11}${vcs_info_msg_0_}%f $ '
+RPROMPT='[%*]'
+
+# LS colors, made with https://geoff.greer.fm/lscolors/
+# taken from old ohmyzsh theme clean
+export LSCOLORS="Gxfxcxdxbxegedabagacad"
+export LS_COLORS='no=00:fi=00:di=01;34:ln=00;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=41;33;01:ex=00;32:*.cmd=00;32:*.exe=01;32:*.com=01;32:*.bat=01;32:*.btm=01;32:*.dll=01;32:*.tar=00;31:*.tbz=00;31:*.tgz=00;31:*.rpm=00;31:*.deb=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.lzma=00;31:*.zip=00;31:*.zoo=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.tb2=00;31:*.tz2=00;31:*.tbz2=00;31:*.avi=01;35:*.bmp=01;35:*.fli=01;35:*.gif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mng=01;35:*.mov=01;35:*.mpg=01;35:*.pcx=01;35:*.pbm=01;35:*.pgm=01;35:*.png=01;35:*.ppm=01;35:*.tga=01;35:*.tif=01;35:*.xbm=01;35:*.xpm=01;35:*.dl=01;35:*.gl=01;35:*.wmv=01;35:*.aiff=00;32:*.au=00;32:*.mid=00;32:*.mp3=00;32:*.ogg=00;32:*.voc=00;32:*.wav=00;32:'
+#################
+
+######################
+# platform detection #
+######################
 unamestr=$(uname)
 
 if [[ $unamestr == 'Linux' ]]; then
@@ -74,24 +99,24 @@ setopt EXTENDED_HISTORY
 
 #TERM value and tmux auto start/attach, only if installed, https://wiki.archlinux.org/index.php/Tmux
 export TERM="screen-256color" #now uses true color, use tmux-256color if issues
-# letting smug start it for now
-#if which smug >/dev/null 2>&1; then
-#  test -z ${TMUX} && smug start ru-main
-#
-#elif which tmux >/dev/null 2>&1; then
-#    # if no session is started, start a new session
-#    test -z ${TMUX} && tmux
-#
-#    # when quitting tmux, try to attach
-#    while test -z ${TMUX}; do
-#        tmux attach || break
-#    done
-#fi
+if which tmuxp >/dev/null 2>&1; then
+  test -z ${TMUX} && tmuxp load "$HOME/.config/tmuxp/main.json"
+
+elif which tmux >/dev/null 2>&1; then
+    # if no session is started, start a new session
+    test -z ${TMUX} && tmux
+
+    # when quitting tmux, try to attach
+    while test -z ${TMUX}; do
+        tmux attach || break
+    done
+fi
 
 # vi mode with backspace
 bindkey -v
 bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
 bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using vim mode in zsh
+bindkey '^R' history-incremental-search-backward # reverse histroy search
 
 # ssh-agent
 # TODO figure out why its borked
@@ -99,11 +124,15 @@ bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using
 #eval $(keychain --eval --quiet id_rsa ~/.ssh/id_rsa)
 #eval $(keychain --eval --quiet id_rsa ~/.ssh/hartigan)
 
+alias sudo="nocorrect sudo"
+
 # load fzf if it exists
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
 # source common
 [ -f ~/.common.sh ] && source ~/.common.sh
 
 # allow local machine overrides
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
+zcomet compinit

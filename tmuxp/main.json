@@ -1,0 +1,45 @@
+{
+  "session_name": "0",
+  "windows": [
+    {
+      "options": {},
+      "window_name": "zsh",
+      "layout": "bf3d,320x64,0,0,0",
+      "panes": [
+        "pane"
+      ],
+      "focus": "true",
+      "start_directory": "/home/hartigan"
+    },
+    {
+      "options": {
+        "automatic-rename": "off"
+      },
+      "window_name": "foss",
+      "layout": "1bc8,320x64,0,0[320x54,0,0,1,320x9,0,55{160x9,0,55,4,159x9,161,55,5}]",
+      "panes": [
+        "zsh",
+        "zsh",
+        {
+          "shell_command": "zsh",
+          "focus": "true"
+        }
+      ],
+      "start_directory": "/mnt/arboghast/Workspace/opensource"
+    },
+    {
+      "options": {
+        "automatic-rename": "off"
+      },
+      "window_name": "remote",
+      "layout": "bf40,320x64,0,0,3",
+      "panes": [
+        {
+          "shell_command": "zsh",
+          "focus": "true"
+        }
+      ],
+      "start_directory": "/home/hartigan"
+    }
+  ]
+}

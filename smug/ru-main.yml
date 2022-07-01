@@ -1,0 +1,39 @@
+session: dev
+
+root: ~
+
+#before_start:
+#
+#stop:
+
+windows:
+  - name: notes
+    root: Documents/Notes
+    manual: false
+    layout: main-vertical
+    commands:
+      - vim todo.md
+#    panes:
+#      - type:
+#        root: .
+#        commands:
+        
+  - name: local
+    root: Workspace
+    manual: false
+    layout: main-horizontal
+    panes:
+      - type: horizontal
+        root: .
+      - type: vertical
+        root: .
+  - name: k8s
+    root: Workspace
+    manual: false
+    layout: main-vertical
+    panes:
+       - type: vertical
+         root: .
+         commands:
+           - ssh hartigan@linuxjump01
+           - tmux resize-pane -L 60
