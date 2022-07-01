@@ -9,7 +9,7 @@
 # All imports must either be absolute paths starting with `/`, or paths relative
 # to the user's home directory starting with `~/`.
 import:
-  - ~/.config/alacritty/alacritty.local.yml
+  - ~/.config/alacritty/local.yml
 
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
@@ -109,7 +109,7 @@ scrolling:
   #multiplier: 3
 
 # Font configuration
-#font:
+font:
   # Normal (roman) font face
   normal:
     # Font family
@@ -161,7 +161,7 @@ scrolling:
     style: Bold Italic
 
   # Point size
-  size: 10
+  # size: 10
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
