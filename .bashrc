@@ -104,4 +104,7 @@ function getNvim() {
 # allow local machine overrides
 [ -f "$HOME/.bashrc.local" ] && source "$HOME/.bashrc.local"
 
+# allow alliases
+alias sudo="sudo "
+
 complete -C /usr/bin/terraform terraform

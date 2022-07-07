@@ -126,7 +126,7 @@ bindkey '^R' history-incremental-search-backward # reverse histroy search
 #eval $(keychain --eval --quiet id_rsa ~/.ssh/id_rsa)
 #eval $(keychain --eval --quiet id_rsa ~/.ssh/hartigan)
 
-alias sudo="nocorrect sudo"
+alias sudo="nocorrect sudo "
 
 # load fzf if it exists
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
