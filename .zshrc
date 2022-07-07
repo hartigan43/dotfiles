@@ -138,3 +138,6 @@ alias sudo="nocorrect sudo"
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
 zcomet compinit
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform

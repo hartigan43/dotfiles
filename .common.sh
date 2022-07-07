@@ -117,6 +117,7 @@ alias lla="ls -la"
 alias ls="ls --color=auto"
 alias me="mullvad-exclude"
 alias mxlookup="nslookup -q=mx"
+alias tf="terraform"
 alias tmux="tmux -2" # assume 256 color
 alias weather="curl wttr.in"
 

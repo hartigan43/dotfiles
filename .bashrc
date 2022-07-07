@@ -103,3 +103,5 @@ function getNvim() {
 
 # allow local machine overrides
 [ -f "$HOME/.bashrc.local" ] && source "$HOME/.bashrc.local"
+
+complete -C /usr/bin/terraform terraform
