@@ -70,17 +70,31 @@ endif
 Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
 Plug 'beloglazov/vim-online-thesaurus', { 'for': ['text', 'markdown'] }
 
-" deoplete and tabnine
-if has('nvim')
-  Plug 'nvim-lua/plenary.nvim' | Plug 'NTBBloodbath/rest.nvim'
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+if executable('deno')
+  " ddc and tabnine
+  Plug 'Shougo/ddc.vim'
+  Plug 'vim-denops/denops.vim'
+
+  " ddc sources
+  "Plug 'Shougo/ddc-around' "built by shougo
+  Plug 'LumaKernel/ddc-tabnine'
+
+  " ddc filters
+  "Plug 'Shougo/ddc-matcher_head'
+  "Plug 'Shougo/ddc-sorter_rank'
 else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
+  if has('nvim')
+    " deoplete and tabnine
+    Plug 'nvim-lua/plenary.nvim' | Plug 'NTBBloodbath/rest.nvim'
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+  endif
+  Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 endif
 
-Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 
 " gvim specific plugins
 if has('gui_running')
@@ -224,6 +238,16 @@ let g:ale_python_flake8_options = '--max-line-length=88 --extend-ignore=E203'
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1
+" }}}
+
+" ddc.vim settings ------------------------------------------------------- {{{
+call ddc#custom#patch_global('sources', ['tabnine'])
+call ddc#custom#patch_global('sourceOptions', {
+    \ 'tabnine': {
+    \   'mark': 'TN',
+    \   'maxCandidates': 5,
+    \   'isVolatile': v:true,
+    \ }})
 " }}}
 
 " deoplete settings ------------------------------------------------------- {{{
