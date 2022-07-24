@@ -29,7 +29,7 @@ call plug#begin('~/.vim/plugged') "load vim-plug
 Plug 'airblade/vim-gitgutter'
 Plug 'amadeus/vim-mjml',                { 'for': 'mjml' }
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'codota/tabnine-vim'
+Plug 'codota/tabnine-vim',              {'branch': 'python3' }
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'editorconfig/editorconfig-vim'
