@@ -29,7 +29,7 @@ call plug#begin('~/.vim/plugged') "load vim-plug
 Plug 'airblade/vim-gitgutter'
 Plug 'amadeus/vim-mjml',                { 'for': 'mjml' }
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'codota/tabnine-vim',              {'branch': 'python3' }
+"Plug 'codota/tabnine-vim',              {'branch': 'python3' }
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'editorconfig/editorconfig-vim'
@@ -76,7 +76,7 @@ if executable('deno')
   Plug 'vim-denops/denops.vim'
 
   " ddc sources
-  "Plug 'Shougo/ddc-around' "built by shougo
+  Plug 'Shougo/ddc-around' "built by shougo
   Plug 'LumaKernel/ddc-tabnine'
 
   " ddc filters
@@ -94,7 +94,6 @@ else
   endif
   Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 endif
-
 
 " gvim specific plugins
 if has('gui_running')
@@ -248,6 +247,25 @@ call ddc#custom#patch_global('sourceOptions', {
     \   'maxCandidates': 5,
     \   'isVolatile': v:true,
     \ }})
+
+"call ddc#custom#patch_global('sources', ['around'])
+"call ddc#custom#patch_global('sourceOptions', {
+"      \ '_': {
+"      \   'matchers': ['matcher_head'],
+"      \   'sorters': ['sorter_rank']},
+"      \ })
+
+
+" <TAB>: completion.
+inoremap <silent><expr> <TAB>
+\ ddc#map#pum_visible() ? '<C-n>' :
+\ (col('.') <= 1 <Bar><Bar> getline('.')[col('.') - 2] =~# '\s') ?
+\ '<TAB>' : ddc#map#manual_complete()
+
+" <S-TAB>: completion back.
+inoremap <expr><S-TAB>  ddc#map#pum_visible() ? '<C-p>' : '<C-h>'
+
+call ddc#enable()
 " }}}
 
 " deoplete settings ------------------------------------------------------- {{{
