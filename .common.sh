@@ -54,6 +54,11 @@ if [ -d "$HOME/.asdf" ] ; then
     # initialise completions with ZSH's compinit
     autoload -Uz compinit && compinit
   fi
+
+  # have yay ignore asdf shims for building packages
+  if command_exists yay ; then
+    alias yay="PATH=$(getconf PATH) yay"
+  fi
 fi
 
 # poetry
