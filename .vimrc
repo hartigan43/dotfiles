@@ -75,6 +75,9 @@ if executable('deno')
   Plug 'Shougo/ddc.vim'
   Plug 'vim-denops/denops.vim'
 
+  " Install your UIs
+  Plug 'Shougo/ddc-ui-native'
+
   " ddc sources
   Plug 'Shougo/ddc-around' "built by shougo
   Plug 'LumaKernel/ddc-tabnine'
@@ -240,6 +243,12 @@ let g:ale_fix_on_save = 1
 " }}}
 
 " ddc.vim settings ------------------------------------------------------- {{{
+
+" You must set the default ui.
+" Note: native ui
+" https://github.com/Shougo/ddc-ui-native
+call ddc#custom#patch_global('ui', 'native')
+
 call ddc#custom#patch_global('sources', ['tabnine'])
 call ddc#custom#patch_global('sourceOptions', {
     \ 'tabnine': {
