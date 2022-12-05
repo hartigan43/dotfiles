@@ -211,7 +211,7 @@ endif
 " ALE settings ------------------------------------------------------- {{{
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%][%severity%] %s'             "define the format of the messages
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'            "define the format of the messages
 let g:ale_completion_delay = 250                                    "delay before ale completion, def 100
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
 
