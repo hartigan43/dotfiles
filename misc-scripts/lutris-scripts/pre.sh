@@ -2,4 +2,4 @@
 
 killall ulauncher
 
-exit
+exit 1
