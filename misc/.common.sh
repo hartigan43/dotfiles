@@ -61,19 +61,20 @@ if [ -d "$HOME/.asdf" ] ; then
   fi
 fi
 
-# poetry
-if ! command_exists poetry; then
-  curl -sSL https://install.python-poetry.org | python3 -
-fi
-
-if [ -n "$BASH" ] ; then
-  mkdir -p /etc/bash_completion.d
-  poetry completions bash > /etc/bash_completion.d/poetry
-else
-  mkdir -p $HOME/.zfunc
-  poetry completions zsh > ~/.zfunc/_poetry
-  fpath+=~/.zfunc
-fi
+### poetry
+# TODO re-eval poetry
+# if ! command_exists poetry; then
+#   curl -sSL https://install.python-poetry.org | python3 -
+# fi
+#
+# if [ -n "$BASH" ] ; then
+#   mkdir -p /etc/bash_completion.d
+#   poetry completions bash > /etc/bash_completion.d/poetry
+# else
+#   mkdir -p $HOME/.zfunc
+#   poetry completions zsh > ~/.zfunc/_poetry
+#   fpath+=~/.zfunc
+# fi
 ###
 
 if command_exists nvim ; then
@@ -197,6 +198,6 @@ function rainymood() {
 
 # if tmux is executable and not inside a tmux session, then try to attach.
 # if attachment fails, start a new session
-[ -x "$(command -v tmux)" ] \
-  && [ -z "${TMUX}" ] \
-  && { tmux attach || tmux; } >/dev/null 2>&1
+#[ -x "$(command -v tmux)" ] \
+#  && [ -z "${TMUX}" ] \
+#  && { tmux attach || tmux; } >/dev/null 2>&1

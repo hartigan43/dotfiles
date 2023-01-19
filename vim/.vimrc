@@ -42,19 +42,19 @@ Plug 'jparise/vim-graphql',             { 'for': ['graphql', 'graphqls', 'gql'] 
 Plug 'junegunn/fzf',                    { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
-Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'liuchengxu/vista.vim'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
 "Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
-Plug 'scrooloose/nerdcommenter'
+"Plug 'scrooloose/nerdcommenter'
 Plug 'SirVer/ultisnips'
 Plug 'simnalamburt/vim-mundo',          { 'on': 'MundoToggle' }
 Plug 'takac/vim-commandcaps'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rails',                 { 'for': 'rb' }
 Plug 'tpope/vim-haml',                  { 'for': 'haml' }
 Plug 'tpope/vim-surround'
@@ -63,7 +63,8 @@ Plug 'tpope/vim-surround'
 Plug 'yuezk/vim-js' | Plug 'HerringtonDarkholme/yats.vim' | Plug 'posva/vim-vue' | Plug 'maxmellon/vim-jsx-pretty'
 
 if $EDITOR_MONOTONE == "true"
-  Plug 'Lokaltog/vim-monotone'
+  "Plug 'Lokaltog/vim-monotone'
+  "Plug 'ntk148v/komau.vim'
 endif
 
 " note taking and writing
@@ -145,11 +146,14 @@ set modelines=2                                   "use modelines at end of file 
 set tgc
 
 if $EDITOR_MONOTONE == "true"
-  set background=light                            "nvim 0.3.3 got weird and required this with dark gruvbox term settings, fixed with dim colorscheme?
-  let base16colorspace=256
-  let g:monotone_color = [170, 0,25]
-  let g:monotone_contrast_factor = -0.75
-  colorscheme monotone
+  "let base16colorspace=256
+  set background=light
+  colorscheme komau-mod
+  "colorscheme grim
+  "let g:monotone_color = [170, 0,25]
+  "let g:monotone_contrast_factor = -0.75
+  "let g:monotone_emphasize_comments = 0 " Emphasize comments
+  "colorscheme monotone
   highlight Comment cterm=italic gui=italic
 else
   colorscheme dim
@@ -280,7 +284,8 @@ call ddc#enable()
 " deoplete settings ------------------------------------------------------- {{{
 let g:deoplete#enable_at_startup = 1
 " }}}
-"
+
+"TODO EditorConfig Native Support
 " EditorConfig settings ------------------------------------------------------- {{{
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 au FileType gitcommit let b:EditorConfig_disable = 1
@@ -385,9 +390,9 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " }}}
 
 " NERDCommenter settings --------------------------------------------------- {{{
-let g:NERDDefaultAlign = 'left'
-let g:NERDCommentEmptyLines = 1
-let g:NERDTrimTrailingWhiteSpace = 1
+"let g:NERDDefaultAlign = 'left'
+"let g:NERDCommentEmptyLines = 1
+"let g:NERDTrimTrailingWhiteSpace = 1
 " }}}
 
 " UltiSnips settings ------------------------------------------------------- {{{
