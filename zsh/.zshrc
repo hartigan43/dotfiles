@@ -99,21 +99,7 @@ setopt INC_APPEND_HISTORY
 setopt EXTENDED_HISTORY
 ##setopt SHARE_HISTORY
 
-#TERM value and tmux auto start/attach, only if installed, https://wiki.archlinux.org/index.php/Tmux
-if which tmuxp >/dev/null 2>&1; then
-  test -z ${TMUX} && tmuxp load "$HOME/.config/tmuxp/main.json"
-  export TERM="xterm-256color" #now uses true color, use tmux-256color if issues
-
-elif which tmux >/dev/null 2>&1; then
-    # if no session is started, start a new session
-    test -z ${TMUX} && tmux
-    export TERM="xterm-256color" #now uses true color, use tmux-256color if issues
-
-    # when quitting tmux, try to attach
-    while test -z ${TMUX}; do
-        tmux attach || break
-    done
-fi
+export TERM="xterm-256color"
 
 # vi mode with backspace
 bindkey -v
