@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 # TODO shell [ vs [[ cleanup
 # TODO setup colorless env flag for vim and aliases
+# TODO move .bashrc.local and .zshrc.local into sh.local
 
 #################
 # zcomet config #
