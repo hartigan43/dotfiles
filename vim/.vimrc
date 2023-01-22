@@ -30,7 +30,7 @@ Plug 'airblade/vim-gitgutter'
 "Plug 'airblade/vim-rooter'
 Plug 'amadeus/vim-mjml',                { 'for': 'mjml' }
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'codota/tabnine-vim'
+"Plug 'codota/tabnine-vim',              {'branch': 'python3' }
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries' }
@@ -42,21 +42,19 @@ Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'jparise/vim-graphql',             { 'for': ['graphql', 'graphqls', 'gql'] }
 Plug 'junegunn/fzf',                    { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-"Plug 'junegunn/vim-peekaboo'
-"Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'junegunn/vim-peekaboo'
 Plug 'liuchengxu/vista.vim'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
 "Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
-Plug 'scrooloose/nerdcommenter'
-"Plug 'SirVer/ultisnips'
 Plug 'simnalamburt/vim-mundo',          { 'on': 'MundoToggle' }
 Plug 'takac/vim-commandcaps'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
-"Plug 'tpope/vim-rails',                 { 'for': 'rb' }
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-rails',                 { 'for': 'rb' }
 Plug 'tpope/vim-haml',                  { 'for': 'haml' }
 Plug 'tpope/vim-surround'
 
@@ -64,24 +62,41 @@ Plug 'tpope/vim-surround'
 Plug 'yuezk/vim-js' | Plug 'HerringtonDarkholme/yats.vim' | Plug 'posva/vim-vue' | Plug 'maxmellon/vim-jsx-pretty'
 
 if $EDITOR_MONOTONE == "true"
-  Plug 'Lokaltog/vim-monotone'
+  "Plug 'Lokaltog/vim-monotone'
+  "Plug 'ntk148v/komau.vim'
 endif
 
 " note taking and writing
 Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
 Plug 'beloglazov/vim-online-thesaurus', { 'for': ['text', 'markdown'] }
 
-" deoplete and tabnine
-if has('nvim')
-  Plug 'nvim-lua/plenary.nvim' | Plug 'NTBBloodbath/rest.nvim'
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+if executable('deno')
+  " ddc and tabnine
+  Plug 'Shougo/ddc.vim'
+  Plug 'vim-denops/denops.vim'
 
-Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+  " Install your UIs
+  Plug 'Shougo/ddc-ui-native'
+
+  " ddc sources
+  Plug 'Shougo/ddc-around' "built by shougo
+  Plug 'LumaKernel/ddc-tabnine'
+
+  " ddc filters
+  "Plug 'Shougo/ddc-matcher_head'
+  "Plug 'Shougo/ddc-sorter_rank'
+else
+  if has('nvim')
+    " deoplete and tabnine
+    Plug 'nvim-lua/plenary.nvim' | Plug 'NTBBloodbath/rest.nvim'
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+  endif
+  Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+endif
 
 " gvim specific plugins
 if has('gui_running')
@@ -130,11 +145,14 @@ set modelines=2                                   "use modelines at end of file 
 set tgc
 
 if $EDITOR_MONOTONE == "true"
-  set background=light                            "nvim 0.3.3 got weird and required this with dark gruvbox term settings, fixed with dim colorscheme?
-  let base16colorspace=256
-  let g:monotone_color = [170, 0,25]
-  let g:monotone_contrast_factor = -0.75
-  colorscheme monotone
+  "let base16colorspace=256
+  set background=light
+  colorscheme komau-mod
+  "colorscheme grim
+  "let g:monotone_color = [170, 0,25]
+  "let g:monotone_contrast_factor = -0.75
+  "let g:monotone_emphasize_comments = 0 " Emphasize comments
+  "colorscheme monotone
   highlight Comment cterm=italic gui=italic
 else
   colorscheme dim
@@ -171,7 +189,8 @@ endif
 autocmd Filetype if &ft!="txt,md" match ErrorMsg '\%>120v.\+' endif
 
 "hacky python autocmd
-autocmd Filetype python setlocal ts=4 softtabstop=4 shiftwidth=4
+" using editorconfig instead for now
+" autocmd Filetype python setlocal ts=4 softtabstop=4 shiftwidth=4
 
 " }}}
 " Folding ------------------------------------------------------------------ {{{
@@ -198,7 +217,7 @@ endif
 " ALE settings ------------------------------------------------------- {{{
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%][%severity%] %s'             "define the format of the messages
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'            "define the format of the messages
 let g:ale_completion_delay = 250                                    "delay before ale completion, def 100
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
 
@@ -226,8 +245,49 @@ let g:ale_python_flake8_options = '--max-line-length=88 --extend-ignore=E203'
 let g:ale_fix_on_save = 1
 " }}}
 
+" ddc.vim settings ------------------------------------------------------- {{{
+
+" You must set the default ui.
+" Note: native ui
+" https://github.com/Shougo/ddc-ui-native
+call ddc#custom#patch_global('ui', 'native')
+
+call ddc#custom#patch_global('sources', ['tabnine'])
+call ddc#custom#patch_global('sourceOptions', {
+    \ 'tabnine': {
+    \   'mark': 'TN',
+    \   'maxCandidates': 5,
+    \   'isVolatile': v:true,
+    \ }})
+
+"call ddc#custom#patch_global('sources', ['around'])
+"call ddc#custom#patch_global('sourceOptions', {
+"      \ '_': {
+"      \   'matchers': ['matcher_head'],
+"      \   'sorters': ['sorter_rank']},
+"      \ })
+
+
+" <TAB>: completion.
+inoremap <silent><expr> <TAB>
+\ ddc#map#pum_visible() ? '<C-n>' :
+\ (col('.') <= 1 <Bar><Bar> getline('.')[col('.') - 2] =~# '\s') ?
+\ '<TAB>' : ddc#map#manual_complete()
+
+" <S-TAB>: completion back.
+inoremap <expr><S-TAB>  ddc#map#pum_visible() ? '<C-p>' : '<C-h>'
+
+call ddc#enable()
+" }}}
+
 " deoplete settings ------------------------------------------------------- {{{
 let g:deoplete#enable_at_startup = 1
+" }}}
+
+"TODO EditorConfig Native Support
+" EditorConfig settings ------------------------------------------------------- {{{
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+au FileType gitcommit let b:EditorConfig_disable = 1
 " }}}
 
 " fzf settings  ---------------------------------------------------------- {{{
@@ -281,7 +341,7 @@ let g:lightline.separator = {
 	\   'left': ' ', 'right': ' '
   \}
 let g:lightline.subseparator = {
-	\   'left': ' ', 'right': ' ' 
+	\   'left': ' ', 'right': ' '
   \}
 let g:lightline.tabline = {
   \   'left': [ ['buffers'] ],
@@ -329,9 +389,9 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " }}}
 
 " NERDCommenter settings --------------------------------------------------- {{{
-let g:NERDDefaultAlign = 'left'
-let g:NERDCommentEmptyLines = 1
-let g:NERDTrimTrailingWhiteSpace = 1
+"let g:NERDDefaultAlign = 'left'
+"let g:NERDCommentEmptyLines = 1
+"let g:NERDTrimTrailingWhiteSpace = 1
 " }}}
 
 " UltiSnips settings ------------------------------------------------------- {{{

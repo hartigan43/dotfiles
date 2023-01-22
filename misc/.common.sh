@@ -1,16 +1,69 @@
 #!/usr/bin/env sh
-
-# create Workspace dir
+#
+# create Workspace dir and export
 if [ ! -d "$HOME/Workspace" ]; then
   mkdir "$HOME/Workspace"
 fi
 
 export WORKSPACE="$HOME/Workspace"
 
-### helper funcs
+### fynctions
+# add to path
+function add_to_path() {
+  if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+      PATH="${PATH:+"$PATH:"}$1"
+  fi
+}
+
+# tmux auto start/attach, only if installed and set to start by env
+# variable, https://wiki.archlinux.org/index.php/Tmux
+function check_tmux() {
+  if [ "$TMUX_AUTO_START" = "true" ] ; then
+    if which tmuxp >/dev/null 2>&1; then
+      test -z ${TMUX} && tmuxp load "$HOME/.config/tmuxp/main.json"
+
+    elif which tmux >/dev/null 2>&1; then
+        # if no session is started, start a new session
+        test -z ${TMUX} && tmux
+
+        # when quitting tmux, try to attach
+        while test -z ${TMUX}; do
+            tmux attach || break
+        done
+    fi
+  fi
+}
+
 # check for a command within your path
 function command_exists() {
   command -v "$1" >/dev/null 2>&1;
+}
+
+# alias.sh
+function extract () {
+    if [ -f "$1" ] ; then
+      case $1 in
+        *.tar.bz2)   tar xjf "$1"     ;;
+        *.tar.gz)    tar xzf "$1"     ;;
+        *.bz2)       bunzip2 "$1"     ;;
+        *.rar)       unrar e "$1"     ;;
+        *.gz)        gunzip "$1"      ;;
+        *.tar)       tar xf "$1"      ;;
+        *.tbz2)      tar xjf "$1"     ;;
+        *.tgz)       tar xzf "$1"     ;;
+        *.zip)       unzip "$1"       ;;
+        *.Z)         uncompress "$1"  ;;
+        *.7z)        7z x "$1"        ;;
+        *)     echo "'$1' cannot be extracted via extract()" ;;
+         esac
+     else
+         echo "'$1' is not a valid file"
+     fi
+}
+
+# mkdir/path and cd to it
+function mcd() {
+  mkdir -p "$1" && cd "$1" || exit;
 }
 
 # prepend to path, thanks tommyvyo
@@ -20,14 +73,40 @@ function prepend_to_path() {
   fi
 }
 
-# add to path
-function add_to_path() {
-  if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-      PATH="${PATH:+"$PATH:"}$1"
+# jam out
+function rainymood() {
+  if command_exists mpv ; then
+    FILE=$((RANDOM%4))
+    URL="https://rainymood.com/audio1110/${FILE}.ogg"
+    mpv ${URL} && rainymood
+  else
+    echo "Please install mpv to use rainymood function"
   fi
 }
 
-### path updates for specific tools
+function randocommissian() {
+  git commit -m "$(curl -s http://whatthecommit.com/index.txt)"
+}
+
+# somewhat janky mosh + ssh failover, requires two connections
+#function ssh() {
+#    if ! [ -x "$(command -v mosh)" ]; then
+#        echo "mosh client not found, using ssh."
+#        command ssh "$@"
+#    else
+#        echo "Trying mosh login."
+#        command mosh "$@"
+#        [[ $? -ne 0 ]] && (echo "mosh server not found" ; command ssh "$@")
+#    fi
+#}
+
+function undozip(){
+  unzip -l "$1" |  awk 'BEGIN { OFS="" ; ORS="" } ; { for ( i=4; i<NF; i++ ) print $i " "; print $NF "\n" }' | xargs -I{} rm -r {}
+}
+
+### end functions
+
+### path updates and tooling
 if command_exists go ; then
   export GOPATH="$WORKSPACE/go"
 fi
@@ -54,21 +133,27 @@ if [ -d "$HOME/.asdf" ] ; then
     # initialise completions with ZSH's compinit
     autoload -Uz compinit && compinit
   fi
+
+  # have yay ignore asdf shims for building packages
+  if command_exists yay ; then
+    alias yay="PATH=$(getconf PATH) yay"
+  fi
 fi
 
-# poetry
-if ! command_exists poetry; then
-  curl -sSL https://install.python-poetry.org | python3 -
-fi
-
-if [ -n "$BASH" ] ; then
-  mkdir -p /etc/bash_completion.d
-  poetry completions bash > /etc/bash_completion.d/poetry
-else
-  mkdir -p $HOME/.zfunc
-  poetry completions zsh > ~/.zfunc/_poetry
-  fpath+=~/.zfunc
-fi
+### poetry
+# TODO re-eval poetry
+# if ! command_exists poetry; then
+#   curl -sSL https://install.python-poetry.org | python3 -
+# fi
+#
+# if [ -n "$BASH" ] ; then
+#   mkdir -p /etc/bash_completion.d
+#   poetry completions bash > /etc/bash_completion.d/poetry
+# else
+#   mkdir -p $HOME/.zfunc
+#   poetry completions zsh > ~/.zfunc/_poetry
+#   fpath+=~/.zfunc
+# fi
 ###
 
 if command_exists nvim ; then
@@ -101,13 +186,14 @@ fi
 if command_exists markdown-pdf ; then
   alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/modified-gfm.css'
 fi
+### end tooling
 
 # have some fun
 if command_exists cmatrix; then
   alias clear='[ $[$RANDOM % 10] = 0 ] && timeout 3 cmatrix; clear || clear'
 fi
 
-# aliases, functions
+### aliases
 alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d'"
 alias dcu="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose up -d'"
 alias l.="ls -d .*"
@@ -117,6 +203,7 @@ alias lla="ls -la"
 alias ls="ls --color=auto"
 alias me="mullvad-exclude"
 alias mxlookup="nslookup -q=mx"
+alias tf="terraform"
 alias tmux="tmux -2" # assume 256 color
 alias weather="curl wttr.in"
 
@@ -135,62 +222,4 @@ alias pbpaste='xsel --clipboard --output'
 alias rarcleanup='find ./ -regextype posix-egrep -iregex ".*\.r(ar|[0-9]*)$" -exec rm {} \;'
 # unzip rars into their respective directories ignoring overwrites
 alias batchunrar='find ./ -name "*.rar" -execdir unrar e -o- {} \;'
-
-function randocommissian() {
-  git commit -m"$(curl -s http://whatthecommit.com/index.txt)"
-}
-
-function mcd() {
-  mkdir -p "$1" && cd "$1" || exit;
-}
-
-#alias.sh
-function extract () {
-    if [ -f "$1" ] ; then
-      case $1 in
-        *.tar.bz2)   tar xjf "$1"     ;;
-        *.tar.gz)    tar xzf "$1"     ;;
-        *.bz2)       bunzip2 "$1"     ;;
-        *.rar)       unrar e "$1"     ;;
-        *.gz)        gunzip "$1"      ;;
-        *.tar)       tar xf "$1"      ;;
-        *.tbz2)      tar xjf "$1"     ;;
-        *.tgz)       tar xzf "$1"     ;;
-        *.zip)       unzip "$1"       ;;
-        *.Z)         uncompress "$1"  ;;
-        *.7z)        7z x "$1"        ;;
-        *)     echo "'$1' cannot be extracted via extract()" ;;
-         esac
-     else
-         echo "'$1' is not a valid file"
-     fi
-}
-
-function undozip(){
-  unzip -l "$1" |  awk 'BEGIN { OFS="" ; ORS="" } ; { for ( i=4; i<NF; i++ ) print $i " "; print $NF "\n" }' | xargs -I{} rm -r {}
-}
-
-function rainymood() {
-  FILE=$((RANDOM%4))
-  URL="https://rainymood.com/audio1110/${FILE}.ogg"
-  mpv ${URL} && rainymood
-}
-
-# somewhat janky mosh + ssh failover, requires two connections
-#function ssh() {
-#    if ! [ -x "$(command -v mosh)" ]; then
-#        echo "mosh client not found, using ssh."
-#        command ssh "$@"
-#    else
-#        echo "Trying mosh login."
-#        command mosh "$@"
-#        [[ $? -ne 0 ]] && (echo "mosh server not found" ; command ssh "$@")
-#    fi
-#}
-###
-
-# if tmux is executable and not inside a tmux session, then try to attach.
-# if attachment fails, start a new session
-[ -x "$(command -v tmux)" ] \
-  && [ -z "${TMUX}" ] \
-  && { tmux attach || tmux; } >/dev/null 2>&1
+### end aliases

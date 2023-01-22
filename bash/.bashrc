@@ -70,6 +70,7 @@ export LS_COLORS='ln=38;5;199:fi=38;5;222:di=38;5;4'
 export PS1="\u:\[\e[34m\]\W\[\e[m\]\[\e[34m\]/\[\e[m\] \[\e[33m\]\`parse_git_branch\`\[\e[m\] \\$ "
 export VISUAL=vim
 export EDITOR=vim
+export DIFFPROG=vimdiff
 export TERM="screen-256color"
 if [ "$VIM" ]; then
     export PS1='\h:\w› '
@@ -102,3 +103,8 @@ function getNvim() {
 
 # allow local machine overrides
 [ -f "$HOME/.bashrc.local" ] && source "$HOME/.bashrc.local"
+
+# allow alliases
+alias sudo="sudo "
+
+complete -C /usr/bin/terraform terraform
