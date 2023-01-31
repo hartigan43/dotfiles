@@ -88,17 +88,25 @@ function randocommissian() {
   git commit -m "$(curl -s http://whatthecommit.com/index.txt)"
 }
 
-# somewhat janky mosh + ssh failover, requires two connections
-#function ssh() {
-#    if ! [ -x "$(command -v mosh)" ]; then
-#        echo "mosh client not found, using ssh."
-#        command ssh "$@"
-#    else
-#        echo "Trying mosh login."
-#        command mosh "$@"
-#        [[ $? -ne 0 ]] && (echo "mosh server not found" ; command ssh "$@")
-#    fi
-#}
+#https://github.com/mrusme/dotfiles/blob/dbb63bc1401f9752209296b019f8b362b42c1012/.zshrc#L358
+function ssh {
+  if [ "$2" = "" ]; then
+    conn="$1"
+    sshhost=$(printf "%s" "$conn" | cut -d '@' -f2)
+    if rg -U -i "^#.*Features:.*mosh.*\nHost $sshhost" "$HOME/.ssh/config" > /dev/null; then
+      if command_exists mosh ; then
+        printf "connecting with mosh ...\n"
+        command mosh $conn
+      fi
+    else
+      printf "connecting with ssh ...\n"
+      command ssh $conn
+    fi
+  else
+    printf "connecting with ssh ...\n"
+    command ssh $@
+  fi
+}
 
 function undozip(){
   unzip -l "$1" |  awk 'BEGIN { OFS="" ; ORS="" } ; { for ( i=4; i<NF; i++ ) print $i " "; print $NF "\n" }' | xargs -I{} rm -r {}
