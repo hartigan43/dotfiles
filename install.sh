@@ -102,7 +102,6 @@ setRealName() {
 }
 
 installBasics() {
-  #mkdir -p "$HOME/.bin"
   mkdir -p "$HOME/.local/bin"
 
   # first update and install of packages
@@ -111,36 +110,39 @@ installBasics() {
   $PACKAGER $PACKAGER_UPGRADE
   $PACKAGER $PACKAGER_INSTALL "${PACKAGES}"
 
-  # install zgen
-  echo -e "Cloning zgen into ~/.zgen ...\n"
-  git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
+  # install zcomet
+  echo -e "Cloning zcomet into ~/.zcomet ...\n"
+  git clone https://github.com/agkozak/zcomet.git "${HOME}/.zcomet"
 
   # Symlink vimrc, zshrc and aliases/functions
   echo -e "Symlinks for vimrc, zshrc, tmux.conf, etc to HOME...\n"
-  touch "$HOME/.zshrc"
-  mv "$HOME/.zshrc" "$HOME/.zshrc.bak" #backup any original config files
+  #backup any original config files
+  mv "$HOME/.zshrc" "$HOME/.zshrc.bak"
   mv "$HOME/.bashrc" "$HOME/.bashrc.bak"
   mv "$HOME/.bash_profile" "$HOME/.bash_profile.bak"
 
   # vim/nvim, config directories
   mkdir -p "$HOME/.config/vim"
-  mkdir -p "$HOME/.vim"
-  mkdir -p "$HOME/.config/nvim"
+  mkdir -p "$HOME/.vim/colors"
+  mkdir -p "$HOME/.config/nvim/colors"
   mkdir -p "$HOME/.config/alacritty"
-  mkdir -p "$HOME/.config/tmuxp"
 
   # symlinks to $HOME
-  ln -s "$HOME/.dotfiles/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
-  ln -s "$HOME/.dotfiles/.bash_profile" "$HOME/.bash_profile"
-  ln -s "$HOME/.dotfiles/.bashrc" "$HOME/.bashrc"
-  ln -s "$HOME/.dotfiles/.common.sh" "$HOME/.common.sh"
-  ln -s "$HOME/.dotfiles/.editorconfig" "$HOME/.editorconfig"
-  ln -s "$HOME/.dotfiles/.tmux.conf" "$HOME/.tmux.conf"
-  ln -s "$HOME/.dotfiles/.tmux" "$HOME/.tmux"
-  ln -s "$HOME/.dotfiles/tmuxp" "$HOME/.config/tmuxp"
-  ln -s "$HOME/.dotfiles/.vimrc" "$HOME/.vimrc"
-  ln -s "$HOME/.dotfiles/.vimrc" "$HOME/.config/nvim/init.vim"
-  ln -s "$HOME/.dotfiles/.zshrc" "$HOME/.zshrc"
+  ln -s "$HOME/.dotfiles/bash/.bash_profile" "$HOME/.bash_profile"
+  ln -s "$HOME/.dotfiles/bash/.bashrc" "$HOME/.bashrc"
+  ln -s "$HOME/.dotfiles/misc/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
+  ln -s "$HOME/.dotfiles/misc/.common.sh" "$HOME/.common.sh"
+  ln -s "$HOME/.dotfiles/misc/.editorconfig" "$HOME/.editorconfig"
+  ln -s "$HOME/.dotfiles/tmux/.tmux.conf" "$HOME/.tmux.conf"
+  ln -s "$HOME/.dotfiles/tmux" "$HOME/.tmux"
+  # ln -s "$HOME/.dotfiles/tmuxp" "$HOME/.config/tmuxp"
+  ln -s "$HOME/.dotfiles/vim/.vimrc" "$HOME/.vimrc"
+  ln -s "$HOME/.dotfiles/vim/.vimrc" "$HOME/.config/nvim/init.vim"
+  # TODO fix the symlinks for colors
+  ln -s "$HOME/.dotfiles/vim/colors/*.vim" "$HOME/.vim/colors/"
+  ln -s "$HOME/.dotfiles/vim/colors/*.vim" "$HOME/.config/nvim/colors/"
+  # TODO END
+  ln -s "$HOME/.dotfiles/zsh/.zshrc" "$HOME/.zshrc"
 }
 
 #### Run it ####

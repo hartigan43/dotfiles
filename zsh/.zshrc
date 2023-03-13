@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
-# todo shell [ vs [[ cleanup
-# # TODO setup colorless env flag for vim and aliases
+# TODO shell [ vs [[ cleanup
+# TODO setup colorless env flag for vim and aliases
+# TODO move .bashrc.local and .zshrc.local into sh.local
 
 #################
 # zcomet config #
@@ -91,7 +92,7 @@ if [[ -f $HISTFILE ]]; then
 fi
 export HISTSIZE=10000
 export SAVEHIST=10000
-#stopped working for some reason
+# TODO investigate why below stopped working
 #export HISTORY_CONTROL="HIST_IGNORE_DUPS:HIST_EXPIRE_DUPS_FIRST:INC_APPEND_HISTORY:EXTENDED_HISTORY:SHARE_HISTORY"
 setopt HIST_IGNORE_DUPS
 setopt HIST_EXPIRE_DUPS_FIRST
@@ -99,20 +100,7 @@ setopt INC_APPEND_HISTORY
 setopt EXTENDED_HISTORY
 ##setopt SHARE_HISTORY
 
-#TERM value and tmux auto start/attach, only if installed, https://wiki.archlinux.org/index.php/Tmux
-export TERM="xterm-256color" #now uses true color, use tmux-256color if issues
-if which tmuxp >/dev/null 2>&1; then
-  test -z ${TMUX} && tmuxp load "$HOME/.config/tmuxp/main.json"
-
-elif which tmux >/dev/null 2>&1; then
-    # if no session is started, start a new session
-    test -z ${TMUX} && tmux
-
-    # when quitting tmux, try to attach
-    while test -z ${TMUX}; do
-        tmux attach || break
-    done
-fi
+export TERM="xterm-256color"
 
 # vi mode with backspace
 bindkey -v
@@ -137,7 +125,7 @@ alias sudo="nocorrect sudo "
 # allow local machine overrides
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
+# completions
 zcomet compinit
-
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/bin/terraform terraform
