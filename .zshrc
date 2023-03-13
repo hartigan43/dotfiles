@@ -100,7 +100,7 @@ setopt EXTENDED_HISTORY
 ##setopt SHARE_HISTORY
 
 #TERM value and tmux auto start/attach, only if installed, https://wiki.archlinux.org/index.php/Tmux
-export TERM="screen-256color" #now uses true color, use tmux-256color if issues
+export TERM="xterm-256color" #now uses true color, use tmux-256color if issues
 if which tmuxp >/dev/null 2>&1; then
   test -z ${TMUX} && tmuxp load "$HOME/.config/tmuxp/main.json"
 
