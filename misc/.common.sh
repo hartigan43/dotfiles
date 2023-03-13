@@ -7,9 +7,9 @@ fi
 
 export WORKSPACE="$HOME/Workspace"
 
-### fynctions
+### functions
 # add to path
-function add_to_path() {
+add_to_path () {
   if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
       PATH="${PATH:+"$PATH:"}$1"
   fi
@@ -17,7 +17,7 @@ function add_to_path() {
 
 # tmux auto start/attach, only if installed and set to start by env
 # variable, https://wiki.archlinux.org/index.php/Tmux
-function check_tmux() {
+check_tmux () {
   if [ "$TMUX_AUTO_START" = "true" ] ; then
     if which tmuxp >/dev/null 2>&1; then
       test -z ${TMUX} && tmuxp load "$HOME/.config/tmuxp/main.json"
@@ -35,12 +35,12 @@ function check_tmux() {
 }
 
 # check for a command within your path
-function command_exists() {
+command_exists () {
   command -v "$1" >/dev/null 2>&1;
 }
 
 # alias.sh
-function extract () {
+extract () {
     if [ -f "$1" ] ; then
       case $1 in
         *.tar.bz2)   tar xjf "$1"     ;;
@@ -62,19 +62,19 @@ function extract () {
 }
 
 # mkdir/path and cd to it
-function mcd() {
+mcd () {
   mkdir -p "$1" && cd "$1" || exit;
 }
 
 # prepend to path, thanks tommyvyo
-function prepend_to_path() {
+prepend_to_path () {
   if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
       PATH="$1:${PATH:+"$PATH:"}"
   fi
 }
 
 # jam out
-function rainymood() {
+rainymood () {
   if command_exists mpv ; then
     FILE=$((RANDOM%4))
     URL="https://rainymood.com/audio1110/${FILE}.ogg"
@@ -84,12 +84,12 @@ function rainymood() {
   fi
 }
 
-function randocommissian() {
+randocommissian () {
   git commit -m "$(curl -s http://whatthecommit.com/index.txt)"
 }
 
 #https://github.com/mrusme/dotfiles/blob/dbb63bc1401f9752209296b019f8b362b42c1012/.zshrc#L358
-function ssh {
+ssh () {
   if [ "$2" = "" ]; then
     conn="$1"
     sshhost=$(printf "%s" "$conn" | cut -d '@' -f2)
@@ -108,7 +108,7 @@ function ssh {
   fi
 }
 
-function undozip(){
+undozip (){
   unzip -l "$1" |  awk 'BEGIN { OFS="" ; ORS="" } ; { for ( i=4; i<NF; i++ ) print $i " "; print $NF "\n" }' | xargs -I{} rm -r {}
 }
 

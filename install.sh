@@ -138,8 +138,10 @@ installBasics() {
   # ln -s "$HOME/.dotfiles/tmuxp" "$HOME/.config/tmuxp"
   ln -s "$HOME/.dotfiles/vim/.vimrc" "$HOME/.vimrc"
   ln -s "$HOME/.dotfiles/vim/.vimrc" "$HOME/.config/nvim/init.vim"
+  # TODO fix the symlinks for colors
   ln -s "$HOME/.dotfiles/vim/colors/*.vim" "$HOME/.vim/colors/"
   ln -s "$HOME/.dotfiles/vim/colors/*.vim" "$HOME/.config/nvim/colors/"
+  # TODO END
   ln -s "$HOME/.dotfiles/zsh/.zshrc" "$HOME/.zshrc"
 }
 

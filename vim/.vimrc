@@ -258,7 +258,6 @@ call ddc#custom#patch_global('sources', ['tabnine'])
 call ddc#custom#patch_global('sourceOptions', {
     \ 'tabnine': {
     \   'mark': 'TN',
-    \   'maxCandidates': 5,
     \   'isVolatile': v:true,
     \ }})
 
