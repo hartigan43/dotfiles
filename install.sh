@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env sh
 
 # do not allow run as root - thanks @freekingdean
 if [ "$EUID" -eq 0 ]; then
@@ -138,10 +138,9 @@ installBasics() {
   # ln -s "$HOME/.dotfiles/tmuxp" "$HOME/.config/tmuxp"
   ln -s "$HOME/.dotfiles/vim/.vimrc" "$HOME/.vimrc"
   ln -s "$HOME/.dotfiles/vim/.vimrc" "$HOME/.config/nvim/init.vim"
-  # TODO fix the symlinks for colors
-  ln -s "$HOME/.dotfiles/vim/colors/*.vim" "$HOME/.vim/colors/"
-  ln -s "$HOME/.dotfiles/vim/colors/*.vim" "$HOME/.config/nvim/colors/"
-  # TODO END
+  # use find and cp -s to add symlink for any .vim colors files
+  find "$HOME/.dotfiles/vim/colors/" -type f -name "*.vim" -exec cp -s {} "$HOME/.vim/colors/" \;
+  find "$HOME/.dotfiles/vim/colors/" -type f -name "*.vim" -exec cp -s {} "$HOME/.config/nvim/colors/" \;
   ln -s "$HOME/.dotfiles/zsh/.zshrc" "$HOME/.zshrc"
 }
 
