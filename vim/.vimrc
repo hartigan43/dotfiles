@@ -32,8 +32,8 @@ Plug 'christoomey/vim-tmux-navigator'
 "Plug 'codota/tabnine-vim',              {'branch': 'python3' }
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
-Plug 'editorconfig/editorconfig-vim'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries', 'for': 'go' }
+Plug 'hashivim/vim-terraform',          { 'for': 'tf' }
 Plug 'honza/vim-snippets'
 Plug 'iamcco/markdown-preview.nvim',    { 'do': 'cd app & yarn install', 'for': ['md', 'markdown'] }
 Plug 'itchyny/lightline.vim'
@@ -93,6 +93,7 @@ else
     Plug 'nvim-lua/plenary.nvim' | Plug 'NTBBloodbath/rest.nvim'
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   else
+    Plug 'editorconfig/editorconfig-vim'
     Plug 'Shougo/deoplete.nvim'
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
