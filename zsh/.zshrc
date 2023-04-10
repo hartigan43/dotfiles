@@ -2,6 +2,7 @@
 # TODO shell [ vs [[ cleanup
 # TODO setup colorless env flag for vim and aliases
 # TODO move .bashrc.local and .zshrc.local into sh.local
+# TODO source common.sh earlier?
 
 #################
 # zcomet config #
@@ -35,6 +36,21 @@ zcomet load zsh-users/zsh-history-substring-search
 #################
 
 #################
+# check session #
+#################
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  SESSION_TYPE=remote/ssh
+else
+  # TODO why was */sshd included
+  case $(ps -o comm= -p "$PPID") in
+    sshd||mosh-server|mosh)
+      SESSION_TYPE=remote/ssh
+      ;;
+  esac
+fi
+
+
+#################
 # prompt config #
 #################
 if [ $UID -eq 0 ]; then NCOLOR="red"; else NCOLOR="white"; fi
@@ -51,7 +67,11 @@ zstyle ':vcs_info:*' stagedstr ' +'
 zstyle ':vcs_info:git:*' formats       '(%b%u%c)'
 zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
 
-PROMPT='%n:%B%F{4}%1~/%f%b %F{11}${vcs_info_msg_0_}%f $ '
+if [ "$SESSION_TYPE" = "remote/ssh" ]; then
+  PROMPT='%n%F{5}@%m:%B%F{4}%1~/%f%b %F{11}${vcs_info_msg_0_}%f $ '
+else
+  PROMPT='%n:%B%F{4}%1~/%f%b %F{11}${vcs_info_msg_0_}%f $ '
+fi
 RPROMPT='[%*]'
 
 # LS colors, made with https://geoff.greer.fm/lscolors/

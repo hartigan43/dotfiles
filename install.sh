@@ -43,7 +43,7 @@ elif [ "$PLATFORM" = "fedora" ]; then
   PACKAGER_UPDATE="update"
   PACKAGER_UPGRADE="upgrade"
   PACKAGES="$PACKAGES python3 python3-pip openssl-devel readline-devel zlib-devel"
-elif [ "$PLATFORM" = "arch" ]; then
+elif [[ "$PLATFORM" = "arch" || "$PLATFORM" = "archarm" ]]; then
   PACKAGER="sudo pacman --noconfirm"
   PACKAGER_INSTALL="-S"
   PACKAGER_UPDATE="-Syu"
@@ -63,11 +63,25 @@ fi
 
 #### FUNCTIONS ####
 
+# confirmation prompt wrapper for read use in zsh and bash
+confirm() {
+  echo "Do you want to $1? [y/N] "
+  read response
+  response=$(echo $response  | tr '[:upper:]' '[:lower:]')
+
+  if [[ "$response" =~ ^(yes|y)$ ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+
 # configure the global get settings for name, email, and editor
 gitConfig() {
   echo -e "Running basic git configuration...\n"
-  read -pr "Enter your name (full name) for git: " name
-  read -pr "Enter your git email address: " email
+  echo -e "Enter your name (full name) for git: "; read name
+  echo -e "Enter your git email address: "; read email
   git config --global user.name "$name"
   git config --global user.email "$email"
   git config --global core.editor $EDITOR
@@ -96,7 +110,7 @@ fzfInstall() {
 
 # Set real username
 setRealName() {
-  read -pr "Please enter you real name, for your user account. ex: John Doe:\n" realName
+  echo -e "Please enter you real name, for your user account. ex: John Doe:\n"; read realName
   currentUser=whoami
   sudo usermod -c "'$realName'" $currentUser
 }
@@ -146,7 +160,13 @@ installBasics() {
 
 #### Run it ####
 installBasics
-gitConfig
-fzfInstall
+if confirm "configure git"; then
+  gitConfig
+fi
+if confirm "install fzf"; then
+  fzfInstall
+fi
 setRealName
-installNERDFonts
+if confirm "install NERDFonts"; then
+  installNERDFonts
+fi
