@@ -286,6 +286,12 @@ au FileType gitcommit let b:EditorConfig_disable = 1
 " }}}
 
 " fern settings  ---------------------------------------------------------- {{{
+let g:fern#renderer#default#leading = "│"
+let g:fern#renderer#default#root_symbol = "┬ "
+let g:fern#renderer#default#leaf_symbol = "├─ "
+let g:fern#renderer#default#collapsed_symbol = "├─ "
+let g:fern#renderer#default#expanded_symbol = "├┬ "
+
 function! s:fern_init() abort
   " Find and enter project root
   nnoremap <buffer><silent>
@@ -300,7 +306,6 @@ function! s:fern_init() abort
         \   }
         \ )
 endfunction
-
 
 function! s:map_enter_project_root(helper) abort
   " NOTE: require 'file' scheme
