@@ -227,15 +227,15 @@ let g:ale_lint_delay = 550                                          "delay befor
 let g:ale_linters = {
 \ 'cpp': ['clang'],
 \ 'go': ['gofmt', 'golint'],
-\ 'javascript': ['prettier'],
-\ 'python': ['flake8'],
+\ 'javascript': ['eslint'],
+\ 'python': ['ruff', 'flake8'],
 \}
 
 let g:ale_fixers = {
 \  '*': ['remove_trailing_lines', 'trim_whitespace'],
 \ 'css': ['prettier'],
 \ 'go': ['gofmt'],
-\ 'javascript': ['prettier'],
+\ 'javascript': ['eslint'],
 \ 'python': ['black'],
 \}
 
@@ -282,7 +282,14 @@ call ddc#enable()
 " }}}
 
 " deoplete settings ------------------------------------------------------- {{{
-let g:deoplete#enable_at_startup = 1
+if 'g:loaded_deoplete'->exists()
+  echo "hi"
+  let g:deoplete#enable_at_startup = 1
+  " Use ALE and also some plugin 'foobar' as completion sources for all code.
+  call deoplete#custom#option('sources', {
+  \ '_': ['ale'],
+  \})
+endif
 " }}}
 
 "TODO EditorConfig Native Support
