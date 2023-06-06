@@ -35,6 +35,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries', 'for': 'go' }
 Plug 'hashivim/vim-terraform',          { 'for': 'tf' }
 Plug 'honza/vim-snippets'
+Plug 'lambdalisue/fern.vim',            { 'on': 'Fern' }
 Plug 'iamcco/markdown-preview.nvim',    { 'do': 'cd app & yarn install', 'for': ['md', 'markdown'] }
 Plug 'itchyny/lightline.vim'
 Plug 'jeffkreeftmeijer/vim-dim'
@@ -48,8 +49,6 @@ Plug 'mileszs/ack.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'puremourning/vimspector'
 "Plug 'ryanoasis/vim-devicons'
-Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
-"Plug 'scrooloose/nerdcommenter'
 Plug 'SirVer/ultisnips'
 Plug 'simnalamburt/vim-mundo',          { 'on': 'MundoToggle' }
 Plug 'takac/vim-commandcaps'
@@ -62,11 +61,6 @@ Plug 'tpope/vim-surround'
 
 " all the JS things
 Plug 'yuezk/vim-js' | Plug 'HerringtonDarkholme/yats.vim' | Plug 'posva/vim-vue' | Plug 'maxmellon/vim-jsx-pretty'
-
-if $EDITOR_MONOTONE == "true"
-  "Plug 'Lokaltog/vim-monotone'
-  "Plug 'ntk148v/komau.vim'
-endif
 
 " note taking and writing
 Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
@@ -298,6 +292,38 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 au FileType gitcommit let b:EditorConfig_disable = 1
 " }}}
 
+" fern settings  ---------------------------------------------------------- {{{
+let g:fern#renderer#default#leading = "│"
+let g:fern#renderer#default#root_symbol = "┬ "
+let g:fern#renderer#default#leaf_symbol = "├─ "
+let g:fern#renderer#default#collapsed_symbol = "├─ "
+let g:fern#renderer#default#expanded_symbol = "├┬ "
+
+function! s:fern_init() abort
+  " Find and enter project root
+  nnoremap <buffer><silent>
+        \ <Plug>(fern-my-enter-project-root)
+        \ :<C-u>call fern#helper#call(funcref('<SID>map_enter_project_root'))<CR>
+  nmap <buffer><expr><silent>
+        \ ^
+        \ fern#smart#scheme(
+        \   "^",
+        \   {
+        \     'file': "\<Plug>(fern-my-enter-project-root)",
+        \   }
+        \ )
+endfunction
+
+function! s:map_enter_project_root(helper) abort
+  " NOTE: require 'file' scheme
+  let root = a:helper.get_root_node()
+  let path = root._path
+  let path = finddir('.git/..', path . ';')
+  execute printf('Fern %s', fnameescape(path))
+endfunction
+" }}}
+
+
 " fzf settings  ---------------------------------------------------------- {{{
 if has('nvim')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
@@ -391,15 +417,12 @@ let g:mkdp_browser = "/usr/bin/firefox"
 let g:mkdp_port = "8522"
 " }}}
 
-" NERDTree settings --------------------------------------------------- {{{
-" close vim if NERDTree is the only thing open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" }}}
-
-" NERDCommenter settings --------------------------------------------------- {{{
-"let g:NERDDefaultAlign = 'left'
-"let g:NERDCommentEmptyLines = 1
-"let g:NERDTrimTrailingWhiteSpace = 1
+"  netrw settings --------------------------------------------------- {{{
+let g:netrw_altv = 1
+let g:netrw_banner = 0
+let g:netrw_browse_split = 4
+let g:netrw_liststyle = 0
+let g:netrw_winsize = 12
 " }}}
 
 " UltiSnips settings ------------------------------------------------------- {{{
@@ -425,7 +448,8 @@ autocmd bufenter * if (winnr("$") == 1 && vista#sidebar#IsOpen()) | q | endif
 nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
 " toggle nerdtree display
-noremap <F4> :NERDTreeToggle<CR>
+"noremap <F4> :Vex<CR>
+noremap <F4> :Fern . -reveal=% -drawer -stay<CR>
 
 " show/hide tagbar/vista
 nmap <F3> :Vista!!<CR>
