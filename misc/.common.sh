@@ -129,7 +129,7 @@ if command_exists fuck ; then
   eval "$(thefuck --alias)"
 fi
 
-# asdf-vm
+### asdf-vm
 if [ -d "$HOME/.asdf" ] ; then
   . "$HOME/.asdf/asdf.sh"
 
@@ -147,6 +147,7 @@ if [ -d "$HOME/.asdf" ] ; then
     alias yay="PATH=$(getconf PATH) yay"
   fi
 fi
+###
 
 ### poetry
 # TODO re-eval poetry
@@ -177,23 +178,56 @@ elif command_exists pygmentize ; then
   alias cat='pygmentize -g'
 fi
 
+# fzf
 if command_exists fzf ; then
   alias fvim='vim $(fzf --height 40%)'
   alias fzf="fzf --preview 'head -100 {}'"
 
+  export FZF_CTRL_R_OPTS="
+    --preview 'echo {}' --preview-window up:3:hidden:wrap
+    --bind 'ctrl-/:toggle-preview'
+    --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+    --color header:italic
+    --header 'Press CTRL-Y to copy command into clipboard'
+  "
+
   if [ "$BAT" = "true" ] ; then
-    export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always {}'"
+    export FZF_CTRL_T_OPTS="
+      --preview 'bat -n --color=always {}'
+      --bind 'ctrl-/:change-preview-window(down|hidden|)'
+    "
     alias fzf="fzf --height 40% --border --preview 'bat --style=numbers --color=always {} | head -500'"
   fi
 
   if command_exists tree ; then
     export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 	fi
-fi
+
+  if command_exists fd ; then
+    export FZF_DEFAULT_COMMAND="fd --type f"
+    export FZF_ALT_C_COMMAND="fd --type d --follow"
+  fi
+
+  # fkill - kill processes - list only the ones you can kill. Modified the earlier script.
+  fkill() {
+      local pid
+      if [ "$UID" != "0" ]; then
+          pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+      else
+          pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+      fi
+
+      if [ "x$pid" != "x" ]
+      then
+          echo $pid | xargs kill -${1:-9}
+      fi
+  }
+  fi
 
 if command_exists markdown-pdf ; then
   alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/modified-gfm.css'
 fi
+
 ### end tooling
 
 # have some fun
