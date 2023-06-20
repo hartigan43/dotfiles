@@ -324,6 +324,7 @@ endif
 
 nnoremap <C-P> :Files <CR>
 nnoremap <leader>p :Rg <CR>
+nnoremap <leader>[ :Snippets <CR>
 
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
@@ -527,3 +528,4 @@ endif
 " }}}
 
 "vim:foldmethod=marker:foldlevel=0:
+"

@@ -139,7 +139,7 @@ installBasics() {
   mkdir -p "$HOME/.config/vim"
   mkdir -p "$HOME/.vim/colors"
   mkdir -p "$HOME/.config/nvim/colors"
-  mkdir -p "$HOME/.config/alacritty"
+  mkdir -p "$HOME/.config/alacritty/themes"
 
   # symlinks to $HOME
   ln -s "$HOME/.dotfiles/bash/.bash_profile" "$HOME/.bash_profile"
@@ -149,13 +149,15 @@ installBasics() {
   ln -s "$HOME/.dotfiles/misc/.editorconfig" "$HOME/.editorconfig"
   ln -s "$HOME/.dotfiles/tmux/.tmux.conf" "$HOME/.tmux.conf"
   ln -s "$HOME/.dotfiles/tmux" "$HOME/.tmux"
-  # ln -s "$HOME/.dotfiles/tmuxp" "$HOME/.config/tmuxp"
   ln -s "$HOME/.dotfiles/vim/.vimrc" "$HOME/.vimrc"
   ln -s "$HOME/.dotfiles/vim/.vimrc" "$HOME/.config/nvim/init.vim"
+  ln -s "$HOME/.dotfiles/zsh/.zshrc" "$HOME/.zshrc"
+
   # use find and cp -s to add symlink for any .vim colors files
   find "$HOME/.dotfiles/vim/colors/" -type f -name "*.vim" -exec cp -s {} "$HOME/.vim/colors/" \;
   find "$HOME/.dotfiles/vim/colors/" -type f -name "*.vim" -exec cp -s {} "$HOME/.config/nvim/colors/" \;
-  ln -s "$HOME/.dotfiles/zsh/.zshrc" "$HOME/.zshrc"
+  # do the same for alacritty themes
+  find "$HOME/.dotfiles/alacritty/themes" -type f -name "*.yml" -exec cp -s {} "$HOME/.config/alacritty/themes/themes" \;
 }
 
 #### Run it ####
