@@ -88,7 +88,7 @@ randocommissian () {
   git commit -m "$(curl -s http://whatthecommit.com/index.txt)"
 }
 
-#https://github.com/mrusme/dotfiles/blob/dbb63bc1401f9752209296b019f8b362b42c1012/.zshrc#L358
+# https://github.com/mrusme/dotfiles/blob/dbb63bc1401f9752209296b019f8b362b42c1012/.zshrc#L358
 ssh () {
   if [ "$2" = "" ]; then
     conn="$1"
@@ -106,6 +106,16 @@ ssh () {
     printf "connecting with ssh ...\n"
     command ssh $@
   fi
+}
+
+# update tooling - vim plugins, zcomet, fzf, and asdf. etc. bbq
+tup () {
+  CURRDIR=$(pwd)
+  vim +PlugUpdate +qall && vim +PlugUpgrade +qall
+  zcomet update && zcomet self-update
+  asdf update
+  cd ~/.fzf && git pull && ./install
+  cd $CURRDIR
 }
 
 undozip (){
@@ -129,7 +139,7 @@ if command_exists fuck ; then
   eval "$(thefuck --alias)"
 fi
 
-# asdf-vm
+### asdf-vm
 if [ -d "$HOME/.asdf" ] ; then
   . "$HOME/.asdf/asdf.sh"
 
@@ -147,6 +157,7 @@ if [ -d "$HOME/.asdf" ] ; then
     alias yay="PATH=$(getconf PATH) yay"
   fi
 fi
+###
 
 ### poetry
 # TODO re-eval poetry
@@ -177,23 +188,56 @@ elif command_exists pygmentize ; then
   alias cat='pygmentize -g'
 fi
 
+# fzf
 if command_exists fzf ; then
   alias fvim='vim $(fzf --height 40%)'
   alias fzf="fzf --preview 'head -100 {}'"
 
+  export FZF_CTRL_R_OPTS="
+    --preview 'echo {}' --preview-window up:3:hidden:wrap
+    --bind 'ctrl-/:toggle-preview'
+    --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+    --color header:italic
+    --header 'Press CTRL-Y to copy command into clipboard'
+  "
+
   if [ "$BAT" = "true" ] ; then
-    export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always {}'"
+    export FZF_CTRL_T_OPTS="
+      --preview 'bat -n --color=always {}'
+      --bind 'ctrl-/:change-preview-window(down|hidden|)'
+    "
     alias fzf="fzf --height 40% --border --preview 'bat --style=numbers --color=always {} | head -500'"
   fi
 
   if command_exists tree ; then
     export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 	fi
-fi
+
+  if command_exists fd ; then
+    export FZF_DEFAULT_COMMAND="fd --type f"
+    export FZF_ALT_C_COMMAND="fd --type d --follow"
+  fi
+
+  # fkill - kill processes - list only the ones you can kill. Modified the earlier script.
+  fkill() {
+      local pid
+      if [ "$UID" != "0" ]; then
+          pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+      else
+          pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+      fi
+
+      if [ "x$pid" != "x" ]
+      then
+          echo $pid | xargs kill -${1:-9}
+      fi
+  }
+  fi
 
 if command_exists markdown-pdf ; then
   alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/modified-gfm.css'
 fi
+
 ### end tooling
 
 # have some fun
@@ -209,6 +253,7 @@ alias la="ls -a"
 alias ll="ls -l"
 alias lla="ls -la"
 alias ls="ls --color=auto"
+alias lsn="ls --color=never"
 alias me="mullvad-exclude"
 alias mxlookup="nslookup -q=mx"
 alias tf="terraform"
@@ -230,4 +275,5 @@ alias pbpaste='xsel --clipboard --output'
 alias rarcleanup='find ./ -regextype posix-egrep -iregex ".*\.r(ar|[0-9]*)$" -exec rm {} \;'
 # unzip rars into their respective directories ignoring overwrites
 alias batchunrar='find ./ -name "*.rar" -execdir unrar e -o- {} \;'
+
 ### end aliases

@@ -13,9 +13,15 @@ bind k focus up
 bind l focus right
 bind h focus left
 
+# start numbering at 1
+bind c screen 1
+bind ^c screen 1
+bind 0 select 10
+screen 1
+
 #basic status line
 hardstatus alwayslastline "%w+ --  Host: %H Date: %D-%M-%Y: Load: %l "
-# Untested statusline String 
+# Untested statusline String
 # hardstatus alwayslastline "%{= kb}[ %1` ]%= %{= kw}%?%-w%?%{r}(%{g} %n %t%?(%u)%?%{r} )%{w}%?%+w%?%?%= [%{Y} %d/%m %{Y}%c %{W}]"
 
 # in the event there are issues with Esc in Vim add timeout

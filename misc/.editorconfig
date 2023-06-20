@@ -20,12 +20,13 @@ indent_size = 2
 [*.{js,json,ts,tsx}]
 indent_size = 2
 indent_style = space
+max_line_length = 90
 
 # python specific settings
 [*.py]
 indent_style = space
 indent_size = 4
-max_line_length = 88
+max_line_length = 80
 
 # JSON files contain newlines inconsistently
 [*.json]
