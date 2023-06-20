@@ -88,7 +88,7 @@ randocommissian () {
   git commit -m "$(curl -s http://whatthecommit.com/index.txt)"
 }
 
-#https://github.com/mrusme/dotfiles/blob/dbb63bc1401f9752209296b019f8b362b42c1012/.zshrc#L358
+# https://github.com/mrusme/dotfiles/blob/dbb63bc1401f9752209296b019f8b362b42c1012/.zshrc#L358
 ssh () {
   if [ "$2" = "" ]; then
     conn="$1"
@@ -106,6 +106,16 @@ ssh () {
     printf "connecting with ssh ...\n"
     command ssh $@
   fi
+}
+
+# update tooling - vim plugins, zcomet, fzf, and asdf. etc. bbq
+tup () {
+  CURRDIR=$(pwd)
+  vim +PlugUpdate +qall && vim +PlugUpgrade +qall
+  zcomet update && zcomet self-update
+  asdf update
+  cd ~/.fzf && git pull && ./install
+  cd $CURRDIR
 }
 
 undozip (){
@@ -265,4 +275,5 @@ alias pbpaste='xsel --clipboard --output'
 alias rarcleanup='find ./ -regextype posix-egrep -iregex ".*\.r(ar|[0-9]*)$" -exec rm {} \;'
 # unzip rars into their respective directories ignoring overwrites
 alias batchunrar='find ./ -name "*.rar" -execdir unrar e -o- {} \;'
+
 ### end aliases
