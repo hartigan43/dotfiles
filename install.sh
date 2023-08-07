@@ -85,6 +85,7 @@ gitConfig() {
   git config --global user.name "$name"
   git config --global user.email "$email"
   git config --global core.editor $EDITOR
+  git config --global init.defaultBranch "main"
 }
 
 # clone and install patched nerdfonts to work with airline and powerline symbols locally
