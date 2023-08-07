@@ -114,7 +114,12 @@ tup () {
   vim +PlugUpdate +qall && vim +PlugUpgrade +qall
   zcomet update && zcomet self-update
   asdf update
-  cd ~/.fzf && git pull && ./install
+  cd ~/.fzf && git pull &&
+  {
+    echo y # enable completion
+    echo y # enable keybindings
+    echo n #update config files
+  } | ./install
   cd $CURRDIR
 }
 
