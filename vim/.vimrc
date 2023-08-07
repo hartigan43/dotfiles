@@ -44,6 +44,7 @@ Plug 'junegunn/fzf',                    { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'liuchengxu/vista.vim'
+Plug 'maximbaz/lightline-ale'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
@@ -155,7 +156,6 @@ else
   colorscheme dim
 endif
 
-
 " set leader key -- originally \ -- now localleader
 let mapleader = ","
 let maplocalleader = "\\"
@@ -184,11 +184,6 @@ endif
 "hide ugly code past 120 characters on a line
 "from https://kinbiko.com/vim/my-shiniest-vim-gems/
 autocmd Filetype if &ft!="txt,md" match ErrorMsg '\%>120v.\+' endif
-
-"hacky python autocmd
-" using editorconfig instead for now
-" autocmd Filetype python setlocal ts=4 softtabstop=4 shiftwidth=4
-
 " }}}
 " Folding ------------------------------------------------------------------ {{{
 
@@ -236,10 +231,30 @@ let g:ale_fixers = {
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
 let g:ale_cpp_clang_executable = 'clang++'
 let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
+let g:ale_c_parse_makefile = 1
 let g:ale_python_flake8_options = '--max-line-length=88 --extend-ignore=E203'
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1
+
+" checks for an open preview window - SO14300101
+function! CheckPreviewWindow()
+  for nr in range(1, winnr('$'))
+    if getwinvar(nr, "&pvw") == 1
+            " found a preview
+            return 1
+        endif
+    endfor
+    return 0
+endfunction
+
+function! ToggleALEPreview()
+  if CheckPreviewWindow()
+    :pclose
+  else
+    :ALEDetail
+  endif
+endfunction
 " }}}
 
 " ddc.vim settings ------------------------------------------------------- {{{
@@ -351,22 +366,41 @@ let g:gundo_preview_height = 40
 " }}}
 
 " lightline.vim settings  ------------------------------------------------------- {{{
+
+function LightlineFugitiveHead()
+  let head = FugitiveHead()
+  if head != ""
+    let head = "\uf126 " .. head
+  endif
+  return head
+endfunction
+
 let g:lightline = {
   \  'colorscheme': 'seoul256',
   \  'active': {
   \    'left':[ [ 'mode', 'paste' ],
   \             [ 'gitbranch', 'readonly', 'filename' ]
-  \    ]
+  \    ],
+  \    'right':[ [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
+  \              [ 'lineinfo' ],
+	\              [ 'percent' ],
+	\              [ 'fileformat', 'fileencoding', 'filetype']
+  \   ]
   \  },
 	\  'component': {
 	\    'lineinfo': ' %3l:%-2v',
 	\  },
   \  'component_function': {
-  \    'gitbranch': 'fugitive#Head',
+  \    'gitbranch': 'LightlineFugitiveHead',
   \    'filename': 'LightlineFilename',
   \  },
   \ 'component_expand': {
   \   'buffers': 'lightline#bufferline#buffers',
+  \   'linter_checking': 'lightline#ale#checking',
+  \   'linter_infos': 'lightline#ale#infos',
+  \   'linter_warnings': 'lightline#ale#warnings',
+  \   'linter_errors': 'lightline#ale#errors',
+  \   'linter_ok': 'lightline#ale#ok',
   \ },
   \ 'component_type': {
   \   'buffers': 'tabsel',
@@ -397,7 +431,7 @@ endif
 let s:palette.tabline.middle = s:palette.normal.middle
 unlet s:palette
 
-"remove the divider between filename and modified which is added by default lightline
+" remove the divider between filename and modified which is added by default lightline
 function! LightlineFilename()
   let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
   let modified = &modified ? ' +' : ''
@@ -407,6 +441,13 @@ endfunction
 " lightline-bufferline settings
 let g:lightline#bufferline#min_buffer_count = 2
 let g:lightline#bufferline#enable_devicons = 1
+
+" unicode icons for lightline-ale
+let g:lightline#ale#indicator_checking = "\uf110"
+let g:lightline#ale#indicator_infos = "\uf129"
+let g:lightline#ale#indicator_warnings = "\uf071"
+let g:lightline#ale#indicator_errors = "\uf05e"
+let g:lightline#ale#indicator_ok = "\uf00c"
 
 "enable the bufferline with lightline+lightline-bufferline
 set showtabline=2  " Show tabline
@@ -454,6 +495,8 @@ noremap <F4> :Fern . -reveal=% -drawer -stay<CR>
 
 " show/hide tagbar/vista
 nmap <F3> :Vista!!<CR>
+
+nmap <F5> :call ToggleALEPreview()<CR>
 
 " hide search highlighting
 nnoremap <leader><space> :nohlsearch<CR>
