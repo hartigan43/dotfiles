@@ -7,3 +7,7 @@ find /mnt/user/media/ -type f -regextype posix-extended -regex ".*\.r([0-9]{1,}|
 #find sample mkv files under 500Mb and get total size
 find /mnt/user/media/ -type f -regextype posix-extended -regex ".*sample.*\.mkv$" -mtime +15 -size -500M -print0 | xargs -0 du -hc | grep total
 find /mnt/user/media/ -type f -regextype posix-extended -regex ".*sample.*\.mkv$" -mtime +15 -size -500M -exec rm {} \;
+
+#find directories with total contents smaller than given size
+find DIR -mindepth 1 -maxdepth 1 -type d -exec du -ks {} + | awk '$1 <= 50' | cut -f 2-
+#pipe into | xargs -d \\n rm -rf to remove

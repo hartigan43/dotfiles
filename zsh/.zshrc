@@ -15,12 +15,10 @@ fi
 source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 zcomet load agkozak/zsh-z
 
-zcomet load ohmyzsh plugins/command-not-found
-zcomet load ohmyzsh plugins/docker
-zcomet load ohmyzsh plugins/docker-compose
 zcomet load ohmyzsh plugins/gitfast
 zcomet load ohmyzsh plugins/safe-paste
-zcomet load ohmyzsh plugins/systemd
+
+zcomet fpath --no-submodules https://github.com/docker/cli contrib/completion/zsh
 
 # lazy load the archive from prezto without full library
 zcomet trigger --no-submodules archive unarchive lsarchive \
@@ -30,9 +28,8 @@ zcomet trigger --no-submodules archive unarchive lsarchive \
 zcomet load zsh-users/zsh-completions
 zcomet load zsh-users/zsh-syntax-highlighting
 zcomet load zsh-users/zsh-autosuggestions
-
 zcomet load zsh-users/zsh-history-substring-search
-#zcomet compinit
+
 #################
 
 #################
