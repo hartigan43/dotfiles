@@ -275,8 +275,8 @@ alias gitsup="git submodule foreach git pull origin master"
 
 #SO 113529 - emulate pbcopy
 # cat filename.ext | alias to copy files, etc
-alias pbcopy='xsel --clipboard --input'
-alias pbpaste='xsel --clipboard --output'
+#alias pbcopy='xsel --clipboard --input'
+#alias pbpaste='xsel --clipboard --output'
 
 # cleanup multipart rars
 alias rarcleanup='find ./ -regextype posix-egrep -iregex ".*\.r(ar|[0-9]*)$" -exec rm {} \;'

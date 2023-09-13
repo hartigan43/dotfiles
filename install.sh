@@ -21,7 +21,7 @@ if [ "$PLATFORM" = "linux" ] || [ "$PLATFORM" = "Linux" ]; then
   fi
 fi
 
-PACKAGES="zsh ruby git curl wget neovim tmux openssh go docker"
+PACKAGES="zsh ruby git curl wget neovim tmux openssh go docker tree"
 EDITOR="vim"
 
 if [ "$PLATFORM" = "centos" ]; then
@@ -50,12 +50,12 @@ elif [[ "$PLATFORM" = "arch" || "$PLATFORM" = "archarm" ]]; then
   PACKAGER_UPGRADE="-Syu"
   PACKAGES="$PACKAGES base-devel python python-pip cmake vim neovim python-pynvim"
 elif [ "$PLATFORM" = "Darwin" ]; then
-  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   PACKAGER="brew"
   PACKAGER_INSTALL="install"
   PACKAGER_UPDATE="update"
   PACKAGER_UPGRADE="upgrade"
-  PACKAGES="$PACKAGES python"
+  PACKAGES="$PACKAGES python telnet watch htop glances kubectx infracost pygments ccat"
 else
   echo "platform '$PLATFORM' is not supported"
   exit 1
@@ -145,7 +145,7 @@ installBasics() {
   # symlinks to $HOME
   ln -s "$HOME/.dotfiles/bash/.bash_profile" "$HOME/.bash_profile"
   ln -s "$HOME/.dotfiles/bash/.bashrc" "$HOME/.bashrc"
-  ln -s "$HOME/.dotfiles/misc/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
+  ln -s "$HOME/.dotfiles/alacritty/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
   ln -s "$HOME/.dotfiles/misc/.common.sh" "$HOME/.common.sh"
   ln -s "$HOME/.dotfiles/misc/.editorconfig" "$HOME/.editorconfig"
   ln -s "$HOME/.dotfiles/tmux/.tmux.conf" "$HOME/.tmux.conf"
