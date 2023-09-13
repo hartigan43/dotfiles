@@ -121,6 +121,8 @@ tup () {
     echo n #update config files
   } | ./install
   cd $CURRDIR
+  echo "Refreshing the shell with exec $SHELL"
+  exec $SHELL
 }
 
 undozip (){
