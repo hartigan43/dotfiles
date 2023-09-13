@@ -7,3 +7,5 @@ fi
 . ~/.bashrc
 
 export GPG_TTY=$(tty)
+
+complete -C $(which terraform) terraform

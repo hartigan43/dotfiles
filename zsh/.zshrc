@@ -29,23 +29,22 @@ zcomet load zsh-users/zsh-completions
 zcomet load zsh-users/zsh-syntax-highlighting
 zcomet load zsh-users/zsh-autosuggestions
 zcomet load zsh-users/zsh-history-substring-search
-
 #################
 
 #################
 # check session #
 #################
+
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-  SESSION_TYPE=remote/ssh
+  REMOTE_SESSION=true
 else
   # TODO why was */sshd included
   case $(ps -o comm= -p "$PPID") in
     sshd||mosh-server|mosh)
-      SESSION_TYPE=remote/ssh
+      REMOTE_SESSION=true
       ;;
   esac
 fi
-
 
 #################
 # prompt config #
@@ -64,11 +63,11 @@ zstyle ':vcs_info:*' stagedstr ' +'
 zstyle ':vcs_info:git:*' formats       '(%b%u%c)'
 zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
 
-if [ "$SESSION_TYPE" = "remote/ssh" ]; then
-  PROMPT='%n%F{5}@%m:%B%F{4}%1~/%f%b %F{11}${vcs_info_msg_0_}%f $ '
-else
-  PROMPT='%n:%B%F{4}%1~/%f%b %F{11}${vcs_info_msg_0_}%f $ '
-fi
+# use psvar for dynamic prompt generation
+# V will check the element of the psvar array to see it exists and non-empty
+# https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html#Conditional-Substrings-in-Prompts
+psvar=($REMOTE_SESSION)
+PROMPT='%1(V.%n%F{5}@%m:%B%F{4}%1~/%f%b.%n:%B%F{4}%1~/%f%b) %F{11}${vcs_info_msg_0_}%f $ '
 RPROMPT='[%*]'
 
 # LS colors, made with https://geoff.greer.fm/lscolors/
@@ -93,7 +92,15 @@ if [[ $unamestr == 'Linux' ]]; then
   fi
 
 elif [[ $unamestr == 'Darwin' ]]; then
-  #homebrew/nix here if I'm ever back on the mac train
+  if [[ $(uname -m) == 'arm64' ]]; then
+    # Apple Silicon Brew settings
+    export HOMEBREW_PREFIX="/opt/homebrew";
+    export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+    export HOMEBREW_REPOSITORY="/opt/homebrew";
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
+    export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
+    export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+  fi
 fi
 ######################
 
@@ -145,4 +152,6 @@ alias sudo="nocorrect sudo "
 # completions
 zcomet compinit
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/bin/terraform terraform
+# complete -o nospace -C /usr/bin/terraform terraform
+# complete -o nospace -C /usr/local/bin/terraform terraform
+complete -o nospace -C $(which terraform) terraform
