@@ -108,6 +108,14 @@ ssh () {
   fi
 }
 
+tf_prompt_info() {
+  [[ "$PWD" == ~ ]] && return
+  if [ -d .terraform ]; then
+    workspace=$(terraform workspace show 2> /dev/null) || return
+    echo "[(tf:${workspace}]"
+  fi
+}
+
 # update tooling - vim plugins, zcomet, fzf, and asdf. etc. bbq
 tup () {
   CURRDIR=$(pwd)
@@ -253,32 +261,34 @@ fi
 ### aliases
 alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d'"
 alias dcu="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose up -d'"
-alias l.="ls -d .*"
+alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gitsup="git submodule foreach git pull origin master" # SO 5828324 - git submodule recursive updates
+alias k=kubectl
+alias kcurr='kubectl config current-context'
+alias kctx=kubectx
+alias kdesc='kubectl describe'
+alias kedit='kubectl edit'
+alias kexec='kubectl exec'
+alias klogs='kubectl logs'
+alias kns=kubens
+alias knodes='kubectl get nodes'
 alias la="ls -a"
 alias ll="ls -l"
-alias lla="ls -la"
+alias lla="ls -lah"
 alias ls="ls --color=auto"
 alias lsn="ls --color=never"
 alias me="mullvad-exclude"
 alias mxlookup="nslookup -q=mx"
 alias tf="terraform"
+alias tfclean='rm -rf .terraform && terraform init'
+alias tfplan='terraform plan -lock=false'
 alias tmux="tmux -2" # assume 256 color
 alias weather="curl wttr.in"
 
-#From alias.sh
-alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-
-# SO 5828324 - git submodule recursive updates
-alias gitsup="git submodule foreach git pull origin master"
-
 #SO 113529 - emulate pbcopy
-# cat filename.ext | alias to copy files, etc
-#alias pbcopy='xsel --clipboard --input'
-#alias pbpaste='xsel --clipboard --output'
-
-# cleanup multipart rars
-alias rarcleanup='find ./ -regextype posix-egrep -iregex ".*\.r(ar|[0-9]*)$" -exec rm {} \;'
-# unzip rars into their respective directories ignoring overwrites
-alias batchunrar='find ./ -name "*.rar" -execdir unrar e -o- {} \;'
+if [[ $unamestr != 'Darwin' ]]; then
+  alias pbcopy='xsel --clipboard --input'
+  alias pbpaste='xsel --clipboard --output'
+fi
 
 ### end aliases
