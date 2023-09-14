@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+# TODO Variables from $varto "${var}"
 
 # do not allow run as root - thanks @freekingdean
 if [ "$EUID" -eq 0 ]; then
@@ -112,7 +113,7 @@ fzfInstall() {
 # Set real username
 setRealName() {
   echo -e "Please enter you real name, for your user account. ex: John Doe:\n"; read realName
-  currentUser=whoami
+  currentUser=$(whoami)
   sudo usermod -c "'$realName'" $currentUser
 }
 
@@ -157,8 +158,9 @@ installBasics() {
   # use find and cp -s to add symlink for any .vim colors files
   find "$HOME/.dotfiles/vim/colors/" -type f -name "*.vim" -exec cp -s {} "$HOME/.vim/colors/" \;
   find "$HOME/.dotfiles/vim/colors/" -type f -name "*.vim" -exec cp -s {} "$HOME/.config/nvim/colors/" \;
-  # do the same for alacritty themes
-  find "$HOME/.dotfiles/alacritty/themes" -type f -name "*.yml" -exec cp -s {} "$HOME/.config/alacritty/themes/themes" \;
+  # do the same for alacritty themes after cloning public themes repo
+  git clone https://github.com/alacritty/alacritty-theme $HOME/.config/alacritty/themes
+  find "$HOME/.dotfiles/alacritty/themes" -type f -name "*.yml" -exec cp -s {} "$HOME/.config/alacritty/themes/themes/" \;
 }
 
 #### Run it ####
