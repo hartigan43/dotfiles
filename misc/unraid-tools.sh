@@ -11,3 +11,5 @@ find /mnt/user/media/ -type f -regextype posix-extended -regex ".*sample.*\.mkv$
 #find directories with total contents smaller than given size
 find DIR -mindepth 1 -maxdepth 1 -type d -exec du -ks {} + | awk '$1 <= 50' | cut -f 2-
 #pipe into | xargs -d \\n rm -rf to remove
+# cleanup multipart rars
+alias rarcleanup='find ./ -regextype posix-egrep -iregex ".*\.r(ar|[0-9]*)$" -exec rm {} \;'
