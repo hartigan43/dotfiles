@@ -109,10 +109,11 @@ ssh () {
 }
 
 tf_prompt_info() {
+  psvar+=([2]="")
   [[ "$PWD" == ~ ]] && return
   if [ -d .terraform ]; then
     workspace=$(terraform workspace show 2> /dev/null) || return
-    echo "[(tf:${workspace}]"
+    psvar=([2]=$workspace)
   fi
 }
 
@@ -259,6 +260,7 @@ if command_exists cmatrix; then
 fi
 
 ### aliases
+alias d="docker"
 alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d'"
 alias dcu="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose up -d'"
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
@@ -292,3 +294,7 @@ if [[ $unamestr != 'Darwin' ]]; then
 fi
 
 ### end aliases
+
+# add terraform info to prompt
+precmd_functions+=(tf_prompt_info)
+PROMPT="${PROMPT:0:${#PROMPT}-5}%2(V.%F{13}[tf:%2v].)%f $ "
