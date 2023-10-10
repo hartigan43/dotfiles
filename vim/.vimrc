@@ -1,4 +1,6 @@
 "" .vimrc
+" TODO fix vim-lsp and get install check for treesitter for
+" go,cpp,javascript,yaml,json,bash,rust,ssh_config,python,regex,terraform
 " many things from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 
 if !has('nvim')                " vim specific vs neovim below
@@ -29,14 +31,12 @@ call plug#begin('~/.vim/plugged') "load vim-plug
 Plug 'airblade/vim-gitgutter'
 Plug 'amadeus/vim-mjml',                { 'for': 'mjml' }
 Plug 'christoomey/vim-tmux-navigator'
-"Plug 'codota/tabnine-vim',              {'branch': 'python3' }
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries', 'for': 'go' }
 Plug 'hashivim/vim-terraform',          { 'for': 'tf' }
 Plug 'honza/vim-snippets'
 Plug 'lambdalisue/fern.vim',            { 'on': 'Fern' }
-Plug 'iamcco/markdown-preview.nvim',    { 'do': 'cd app & yarn install', 'for': ['md', 'markdown'] }
 Plug 'itchyny/lightline.vim'
 Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'jparise/vim-graphql',             { 'for': ['graphql', 'graphqls', 'gql'] }
@@ -47,12 +47,12 @@ Plug 'liuchengxu/vista.vim'
 Plug 'maximbaz/lightline-ale'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
+"Plug 'neovim/nvim-lspconfig'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'puremourning/vimspector'
 "Plug 'ryanoasis/vim-devicons'
 Plug 'SirVer/ultisnips'
 Plug 'simnalamburt/vim-mundo',          { 'on': 'MundoToggle' }
-Plug 'takac/vim-commandcaps'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
@@ -67,8 +67,14 @@ Plug 'yuezk/vim-js' | Plug 'HerringtonDarkholme/yats.vim' | Plug 'posva/vim-vue'
 Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
 Plug 'beloglazov/vim-online-thesaurus', { 'for': ['text', 'markdown'] }
 
+" nvim specific
+if has('nvim')
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+endif
+
+" plugins that require deno
 if executable('deno')
-  " ddc and tabnine
+  """ ddc
   Plug 'Shougo/ddc.vim'
   Plug 'vim-denops/denops.vim'
 
@@ -76,30 +82,44 @@ if executable('deno')
   Plug 'Shougo/ddc-ui-native'
 
   " ddc sources
-  Plug 'Shougo/ddc-around' "built by shougo
-  Plug 'LumaKernel/ddc-tabnine'
+  Plug 'delphinus/ddc-tmux'
+  Plug 'delphinus/ddc-treesitter'
+  Plug 'LumaKernel/ddc-source-file'
+  Plug 'matsui54/ddc-buffer'
+  Plug 'Shougo/ddc-around'
+"  Plug 'Shougo/ddc-source-nvim-lsp'
+  Plug 'Shougo/ddc-source-rg'
+  Plug 'tani/ddc-path'
+  Plug 'statiolake/ddc-ale'
+"  Plug 'uga-rosa/ddc-nvim-lsp-setup'
 
-  " ddc filters
-  "Plug 'Shougo/ddc-matcher_head'
+  " ddc filters and matchers
+  Plug 'Shougo/ddc-filter-matcher_head'
+  Plug 'tani/ddc-fuzzy'
   "Plug 'Shougo/ddc-sorter_rank'
-else
+  """" end ddc
+
+  "deno and nvim
+  if has('nvim')
+    Plug 'toppair/peek.nvim',  { 'do': 'deno task --quiet build:fast', 'for': ['md', 'markdown'] }
+  endif
+else "alternatives when on a machine without deno
+  echo "deno not found in path, using fallback completion"
   if has('nvim')
     " deoplete and tabnine
     Plug 'nvim-lua/plenary.nvim' | Plug 'NTBBloodbath/rest.nvim'
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   else
-    Plug 'editorconfig/editorconfig-vim'
-    Plug 'Shougo/deoplete.nvim'
+    Plug 'editorconfig/editorconfig-vim' "editorconfig native in nvim
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
+    Plug 'Shougo/deoplete.nvim'
   endif
-  Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 endif
 
-" gvim specific plugins
+" gui specific plugins
 if has('gui_running')
-"  Plug 'junegunn/seoul256.vim'
-  Plug 'morhetz/gruvbox'
+  Plug 'morhetz/gruvbox' " 'junegunn/seoul256.vim'
 endif
 
 call plug#end()
@@ -218,6 +238,7 @@ let g:ale_linters = {
 \ 'go': ['gofmt', 'golint'],
 \ 'javascript': ['eslint'],
 \ 'python': ['ruff', 'flake8'],
+\ 'terraform': ['terraform'],
 \}
 
 let g:ale_fixers = {
@@ -226,13 +247,16 @@ let g:ale_fixers = {
 \ 'go': ['gofmt'],
 \ 'javascript': ['eslint'],
 \ 'python': ['black'],
+\ 'terraform': ['terraform'],
 \}
 
-let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
+let g:ale_c_parse_makefile = 1
 let g:ale_cpp_clang_executable = 'clang++'
 let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
-let g:ale_c_parse_makefile = 1
+let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
+let g:ale_python_black_options = ''
 let g:ale_python_flake8_options = '--max-line-length=88 --extend-ignore=E203'
+let g:ale_python_ruff_options = ''
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1
@@ -259,24 +283,99 @@ endfunction
 
 " ddc.vim settings ------------------------------------------------------- {{{
 
-" You must set the default ui.
-" Note: native ui
-" https://github.com/Shougo/ddc-ui-native
+"if denops#plugin#is_loaded('ddc')
+"  local capabilities = require("ddc_nvim_lsp").make_client_capabilities()
+"  require("lspconfig").denols.setup({
+"    capabilities = capabilities,
+"  })
+"endif
+"sourceOption
+"    \ 'nvim-lsp': {
+"    \     'mark': 'LSP',
+"    \     'forceCompletionPattern': '\.\w*|:\w*|->\w*',
+"    \   },
+"sourceParam
+"    \ 'nvim-lsp': {
+"    \   'snippetEngine': denops#callback#register({
+"    \         body -> vsnip#anonymous(body)
+"    \   }),
+"    \   'enableResolveItem': v:true,
+"    \   'enableAdditionalTextEdit': v:true,
+"    \ },
+
+" ui must be set -- native: https://github.com/Shougo/ddc-ui-native
 call ddc#custom#patch_global('ui', 'native')
-
-call ddc#custom#patch_global('sources', ['tabnine'])
+call ddc#custom#patch_global('sources', ['ale','around','buffer','file','path','rg','tmux','treesitter']) "nvim-lsp
 call ddc#custom#patch_global('sourceOptions', {
-    \ 'tabnine': {
-    \   'mark': 'TN',
+    \ '_': {
+    \   'matchers': ['matcher_fuzzy', 'matcher_head'],
+    \   'sorters': ['sorter_fuzzy'],
+    \   'converters': ['converter_fuzzy']
+    \ },
+    \ 'ale': {
+    \   'mark': 'ALE',
+    \   'maxItems': 3,
+    \ },
+    \ 'around': {
+    \   'mark': 'ARO',
+    \   'maxItems': 5,
+    \ },
+    \ 'buffer': {
+    \   'mark': 'BUF',
+    \   'maxItems': 3,
+    \ },
+    \ 'file': {
+    \   'mark': 'FILE',
     \   'isVolatile': v:true,
-    \ }})
+    \   'forceCompletionPattern': '\S/\S*',
+    \   'maxItems': 3,
+    \ },
+    \ 'path': {
+    \   'mark': 'PATH',
+    \   'maxItems': 3,
+    \ },
+    \ 'rg': {
+    \   'mark': 'RG',
+    \   'minAutoCompleteLength': 4,
+    \   'maxItems': 4,
+    \ },
+    \ 'tmux': {
+    \   'mark' : 'TMUX',
+    \   'maxItems': 2,
+    \ },
+    \ 'treesitter': {
+    \   'mark': 'TREE',
+    \   'maxItems': 5,
+    \ },
+    \})
 
-"call ddc#custom#patch_global('sources', ['around'])
-"call ddc#custom#patch_global('sourceOptions', {
-"      \ '_': {
-"      \   'matchers': ['matcher_head'],
-"      \   'sorters': ['sorter_rank']},
-"      \ })
+call ddc#custom#patch_global('sourceParams', {
+    \ 'ale': {
+    \   'cleanResultsWhitespace': v:false,
+    \ },
+    \ 'around': {
+    \   'maxCandidates': 3,
+    \ },
+    \ 'buffer': {
+    \   'requireSameFiletype': v:false,
+    \   'limitBytes': 5000000,
+    \   'fromAltBuf': v:true,
+    \   'forceCollect': v:true,
+    \ },
+    \})
+
+call ddc#custom#patch_filetype(
+    \ ['ps1', 'dosbatch', 'autohotkey', 'registry'], {
+    \ 'sourceOptions': {
+    \   'file': {
+    \     'forceCompletionPattern': '\S\\\S*',
+    \   },
+    \ },
+    \ 'sourceParams': {
+    \   'file': {
+    \     'mode': 'win32',
+    \   },
+    \ }})
 
 " <TAB>: completion.
 inoremap <silent><expr> <TAB>
@@ -301,10 +400,12 @@ if 'g:loaded_deoplete'->exists()
 endif
 " }}}
 
-"TODO EditorConfig Native Support
 " EditorConfig settings ------------------------------------------------------- {{{
-let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
-au FileType gitcommit let b:EditorConfig_disable = 1
+" only load if using the plugin for vim, neovim has native support
+if 'let g:loaded_EditorConfig = 1'
+  let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+  au FileType gitcommit let b:EditorConfig_disable = 1
+endif
 " }}}
 
 " fern settings  ---------------------------------------------------------- {{{
@@ -472,6 +573,7 @@ let g:UltiSnipsExpandTrigger="<c-;>"
 let g:UltiSnipsListSnippets="<c-e>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "custom-snips"]
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
@@ -520,7 +622,7 @@ nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 "do not have ack jump to first response
 cnoreabbrev Ack Ack!
 "ack for the current word under cursor
-nnoremap <Leader>a :Ack!<Space><C-R><C-W>
+nnoremap <leader>a :Ack!<Space><C-R><C-W>
 
 "use leader e or leader s to open or vsplit with filename in current directory
 "leader E,S uses parent directory
