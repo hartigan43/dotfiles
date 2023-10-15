@@ -66,8 +66,9 @@ zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
 # use psvar for dynamic prompt generation
 # V will check the element of the psvar array to see it exists and non-empty
 # https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html#Conditional-Substrings-in-Prompts
-psvar=($REMOTE_SESSION)
-PROMPT='%1(V.%n%F{5}@%m:%B%F{4}%1~/%f%b.%n:%B%F{4}%1~/%f%b) %F{11}${vcs_info_msg_0_}%f $ '
+# psvar[1]=REMOTE_SESSION, [2]=tf_prompt_info
+psvar+=([1]=$REMOTE_SESSION)
+PROMPT='%1(V.%n%F{5}@%m:%B%F{4}%1~/%f%b.%n:%B%F{4}%1~/%f%b) %F{11}${vcs_info_msg_0_}%f\$ '
 RPROMPT='[%*]'
 
 # LS colors, made with https://geoff.greer.fm/lscolors/
@@ -100,6 +101,12 @@ elif [[ $unamestr == 'Darwin' ]]; then
     export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
     export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
     export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+  fi
+
+# homebrew completions
+if type brew &>/dev/null
+  then
+    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
   fi
 fi
 ######################
@@ -152,6 +159,4 @@ alias sudo="nocorrect sudo "
 # completions
 zcomet compinit
 autoload -U +X bashcompinit && bashcompinit
-# complete -o nospace -C /usr/bin/terraform terraform
-# complete -o nospace -C /usr/local/bin/terraform terraform
 complete -o nospace -C $(which terraform) terraform
