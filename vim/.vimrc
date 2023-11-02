@@ -162,7 +162,7 @@ set modeline
 set modelines=2                                   "use modelines at end of file for specifc settings
 set tgc
 
-if $EDITOR_MONOTONE == "true"
+if !empty($EDITOR_MONOTONE)
   "let base16colorspace=256
   set background=light
   colorscheme komau-mod
