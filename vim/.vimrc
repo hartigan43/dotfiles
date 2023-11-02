@@ -245,7 +245,7 @@ let g:ale_fixers = {
 \  '*': ['trim_whitespace'],
 \ 'css': ['prettier'],
 \ 'go': ['gofmt'],
-\ 'javascript': ['eslint', 'remove_trailing_lines', 'trim_whitespace']
+\ 'javascript': ['eslint', 'remove_trailing_lines', 'trim_whitespace'],
 \ 'python': ['black', 'trim_whitespace'],
 \ 'terraform': ['terraform', 'trim_whitespace'],
 \}
