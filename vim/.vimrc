@@ -242,12 +242,12 @@ let g:ale_linters = {
 \}
 
 let g:ale_fixers = {
-\  '*': ['remove_trailing_lines', 'trim_whitespace'],
+\  '*': ['trim_whitespace'],
 \ 'css': ['prettier'],
 \ 'go': ['gofmt'],
-\ 'javascript': ['eslint'],
-\ 'python': ['black'],
-\ 'terraform': ['terraform'],
+\ 'javascript': ['eslint', 'remove_trailing_lines', 'trim_whitespace'],
+\ 'python': ['black', 'trim_whitespace'],
+\ 'terraform': ['terraform', 'trim_whitespace'],
 \}
 
 let g:ale_c_parse_makefile = 1
@@ -492,8 +492,10 @@ let g:lightline = {
 	\    'lineinfo': ' %3l:%-2v',
 	\  },
   \  'component_function': {
-  \    'gitbranch': 'LightlineFugitiveHead',
+  \    'fileformat': 'LightlineFileFormat',
+  \    'filetype': 'LightlineFiletype',
   \    'filename': 'LightlineFilename',
+  \    'gitbranch': 'LightlineFugitiveHead',
   \  },
   \ 'component_expand': {
   \   'buffers': 'lightline#bufferline#buffers',
@@ -506,6 +508,20 @@ let g:lightline = {
   \ 'component_type': {
   \   'buffers': 'tabsel',
   \ },
+  \ }
+" shorten the vim mode display
+let g:lightline.mode_map = {
+  \ 'n' : 'N',
+  \ 'i' : 'I',
+  \ 'R' : 'R',
+  \ 'v' : 'V',
+  \ 'V' : 'VL',
+  \ "\<C-v>": 'VB',
+  \ 'c' : 'C',
+  \ 's' : 'S',
+  \ 'S' : 'SL',
+  \ "\<C-s>": 'SB',
+  \ 't': 'T',
   \ }
 let g:lightline.separator = {
 	\   'left': '', 'right': ''
@@ -537,6 +553,26 @@ function! LightlineFilename()
   let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
   let modified = &modified ? ' +' : ''
   return filename . modified
+endfunction
+
+"show file path relative to git root using vim-fugitive
+"function! LightlineFilename()
+"  let root = fnamemodify(get(b:, 'git_dir'), ':h')
+"  let path = expand('%:p') TODO pathshorten(expand("%:p"), 2)
+"  if path[:len(root)-1] ==# root
+"    return path[len(root)+1:]
+"  endif
+"  return expand('%')
+"endfunction
+
+" show file format on larger window widths
+function! LightlineFileFormat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+" show file type information on larger window widths
+function! LightlineFiletype()
+  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
 endfunction
 
 " lightline-bufferline settings
@@ -573,6 +609,8 @@ let g:UltiSnipsExpandTrigger="<c-;>"
 let g:UltiSnipsListSnippets="<c-e>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" TODO setup a symlink / install script for custom snippets, no need for
+" second dir, just use UltiSnips or "nips in .vim and .config/nvim
 let g:UltiSnipsSnippetDirectories=["UltiSnips", "custom-snips"]
 
 " If you want :UltiSnipsEdit to split your window.
@@ -593,7 +631,7 @@ nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
 " toggle nerdtree display
 "noremap <F4> :Vex<CR>
-noremap <F4> :Fern . -reveal=% -drawer -stay<CR>
+noremap <F4> :Fern . -toggle -drawer -stay<CR>
 
 " show/hide tagbar/vista
 nmap <F3> :Vista!!<CR>
