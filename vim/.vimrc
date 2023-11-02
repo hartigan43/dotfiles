@@ -305,7 +305,7 @@ endfunction
 
 " ui must be set -- native: https://github.com/Shougo/ddc-ui-native
 call ddc#custom#patch_global('ui', 'native')
-call ddc#custom#patch_global('sources', ['ale','around','buffer','file','path','rg','tmux','treesitter']) "nvim-lsp
+call ddc#custom#patch_global('sources', ['ale','around','buffer','file','path','rg','tmux','treesitter']) "nvim-lsp, treesitter needs nvim
 call ddc#custom#patch_global('sourceOptions', {
     \ '_': {
     \   'matchers': ['matcher_fuzzy', 'matcher_head'],
