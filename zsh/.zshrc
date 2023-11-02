@@ -1,18 +1,18 @@
 #!/usr/bin/env zsh
-# TODO shell [ vs [[ cleanup
 # TODO setup colorless env flag for vim and aliases
 # TODO move .bashrc.local and .zshrc.local into sh.local
+#   TODO add template .local file as well
 # TODO source common.sh earlier?
 
 #################
 # zcomet config #
 #################
 # clone zcomet if doesnt exist
-if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
+if [[ ! -f "${ZDOTDIR:-${HOME}}"/.zcomet/bin/zcomet.zsh ]]; then
   command git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.zcomet/bin
 fi
 
-source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
+source "${ZDOTDIR:-${HOME}}"/.zcomet/bin/zcomet.zsh
 zcomet load agkozak/zsh-z
 
 zcomet load ohmyzsh plugins/gitfast
@@ -35,11 +35,11 @@ zcomet load zsh-users/zsh-history-substring-search
 # check session #
 #################
 
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+if [[ -n "${SSH_CLIENT}" ]] || [[ -n "${SSH_TTY}" ]]; then
   REMOTE_SESSION=true
 else
   # TODO why was */sshd included
-  case $(ps -o comm= -p "$PPID") in
+  case $(ps -o comm= -p "${PPID}") in
     sshd||mosh-server|mosh)
       REMOTE_SESSION=true
       ;;
@@ -49,7 +49,7 @@ fi
 #################
 # prompt config #
 #################
-if [ $UID -eq 0 ]; then NCOLOR="red"; else NCOLOR="white"; fi
+if [[ $UID == 0 ]]; then NCOLOR="red"; else NCOLOR="white"; fi
 
 autoload -Uz add-zsh-hook vcs_info
 setopt prompt_subst
@@ -58,7 +58,7 @@ zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' check-for-changes true
 # Set custom strings for an unstaged vcs repo changes (*) and staged changes (+)
 zstyle ':vcs_info:*' unstagedstr ' *'
-zstyle ':vcs_info:*' stagedstr ' +'
+zstyle ':vcs_info:*' stagedstr   ' +'
 # Set the format of the Git information for vcs_info
 zstyle ':vcs_info:git:*' formats       '(%b%u%c)'
 zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
@@ -67,7 +67,7 @@ zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
 # V will check the element of the psvar array to see it exists and non-empty
 # https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html#Conditional-Substrings-in-Prompts
 # psvar[1]=REMOTE_SESSION, [2]=tf_prompt_info
-psvar+=([1]=$REMOTE_SESSION)
+psvar+=([1]="${REMOTE_SESSION}")
 PROMPT='%1(V.%n%F{5}@%m:%B%F{4}%1~/%f%b.%n:%B%F{4}%1~/%f%b) %F{11}${vcs_info_msg_0_}%f\$ '
 RPROMPT='[%*]'
 
@@ -82,8 +82,7 @@ export LS_COLORS='no=00:fi=00:di=01;34:ln=00;36:pi=40;33:so=01;35:do=01;35:bd=40
 ######################
 unamestr=$(uname)
 
-if [[ $unamestr == 'Linux' ]]; then
-
+if [[ "${unamestr}" == 'Linux' ]]; then
   export XDG_CONFIG_HOME="$HOME/.config"
   export XDG_CACHE_HOME="$HOME/.cache"
   export XDG_DATA_HOME="$HOME/.local/share"
@@ -92,7 +91,7 @@ if [[ $unamestr == 'Linux' ]]; then
     export XDG_DATA_DIRS="$XDG_DATA_DIRS:/usr/local/bin"
   fi
 
-elif [[ $unamestr == 'Darwin' ]]; then
+elif [[ "${unamestr}" == 'Darwin' ]]; then
   if [[ $(uname -m) == 'arm64' ]]; then
     # Apple Silicon Brew settings
     export HOMEBREW_PREFIX="/opt/homebrew";
@@ -114,11 +113,12 @@ fi
 # user and default editor and history
 # override locally with .zsh.local
 DEFAULT_USER="hartigan"
-export EDITOR=$(command -v vim)
-export VISUAL=$(command -v vim)
-export DIFFPROG=vimdiff
-export HISTFILE="$HOME/.zsh_history"
-if [[ -f $HISTFILE ]]; then
+# check for nvim and default to vim
+export EDITOR="${$(command -v nvim):-$(command -v vim)}" # TODO move to common?
+export VISUAL=code
+export DIFFPROG="${EDITOR} -d" #vim and nvim use -d for diffmode
+export HISTFILE="${HOME}/.zsh_history"
+if [[ -f "${HISTFILE}" ]]; then
   touch $HISTFILE
 fi
 export HISTSIZE=10000
@@ -148,15 +148,15 @@ bindkey '^R' history-incremental-search-backward # reverse histroy search
 alias sudo="nocorrect sudo "
 
 # load fzf if it exists
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
 # source common
-[ -f ~/.common.sh ] && source ~/.common.sh
+[[ -f ~/.common.sh ]] && source ~/.common.sh
 
 # allow local machine overrides
-[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 # completions
 zcomet compinit
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C $(which terraform) terraform
+complete -o nospace -C "$(which terraform)" terraform

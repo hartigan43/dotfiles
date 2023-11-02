@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+# TODO symlink for vim snippets that work for both vim/nvim
 
 # do not allow run as root - thanks @freekingdean
 if [ "${EUID}" -eq 0 ]; then
