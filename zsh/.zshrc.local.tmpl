@@ -1,0 +1,20 @@
+export DEFAULT_USER=""
+export DOCKER_HOST="" #Docker/podman socket
+export EDITOR_MONOTONE="true"
+export HELM_EXPERIMENTAL_OCI=1
+export KUBECONFIG=""
+export TMUX_AUTO_START="true" #start tmux or not on this machine
+
+###########
+# secrets #
+###########
+
+# add exported secrets here
+
+###########
+# aliases #
+###########
+alias todo="vim $HOME/Workspace/notes/todo.md"
+alias totp="op item get --vault Private Okta --otp | pbcopy"
+
+check_tmux

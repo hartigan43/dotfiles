@@ -9,7 +9,7 @@
 #################
 # clone zcomet if doesnt exist
 if [[ ! -f "${ZDOTDIR:-${HOME}}"/.zcomet/bin/zcomet.zsh ]]; then
-  command git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.zcomet/bin
+  command git clone https://github.com/agkozak/zcomet.git "${ZDOTDIR:-${HOME}}"/.zcomet/bin
 fi
 
 source "${ZDOTDIR:-${HOME}}"/.zcomet/bin/zcomet.zsh
@@ -40,7 +40,7 @@ if [[ -n "${SSH_CLIENT}" ]] || [[ -n "${SSH_TTY}" ]]; then
 else
   # TODO why was */sshd included
   case $(ps -o comm= -p "${PPID}") in
-    sshd||mosh-server|mosh)
+    sshd|mosh-server|mosh)
       REMOTE_SESSION=true
       ;;
   esac
@@ -83,9 +83,9 @@ export LS_COLORS='no=00:fi=00:di=01;34:ln=00;36:pi=40;33:so=01;35:do=01;35:bd=40
 unamestr=$(uname)
 
 if [[ "${unamestr}" == 'Linux' ]]; then
-  export XDG_CONFIG_HOME="$HOME/.config"
-  export XDG_CACHE_HOME="$HOME/.cache"
-  export XDG_DATA_HOME="$HOME/.local/share"
+  export XDG_CONFIG_HOME="${HOME}/.config"
+  export XDG_CACHE_HOME="{$HOME}/.cache"
+  export XDG_DATA_HOME="${HOME}/.local/share"
   export XDG_DATA_DIRS="/usr/share:/usr/local/share"
   if [[ -d /usr/local/bin ]]; then
     export XDG_DATA_DIRS="$XDG_DATA_DIRS:/usr/local/bin"
@@ -119,7 +119,7 @@ export VISUAL=code
 export DIFFPROG="${EDITOR} -d" #vim and nvim use -d for diffmode
 export HISTFILE="${HOME}/.zsh_history"
 if [[ -f "${HISTFILE}" ]]; then
-  touch $HISTFILE
+  touch "$HISTFILE"
 fi
 export HISTSIZE=10000
 export SAVEHIST=10000
