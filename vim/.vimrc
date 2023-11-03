@@ -239,6 +239,7 @@ let g:ale_linters = {
 \ 'javascript': ['eslint'],
 \ 'python': ['ruff', 'flake8'],
 \ 'terraform': ['terraform'],
+\ 'yaml': ['yaml-language-server'],
 \}
 
 let g:ale_fixers = {
@@ -248,15 +249,29 @@ let g:ale_fixers = {
 \ 'javascript': ['eslint', 'remove_trailing_lines', 'trim_whitespace'],
 \ 'python': ['black', 'trim_whitespace'],
 \ 'terraform': ['terraform', 'trim_whitespace'],
+\ 'yaml': ['yaml-language-server'],
 \}
 
 let g:ale_c_parse_makefile = 1
 let g:ale_cpp_clang_executable = 'clang++'
 let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
-let g:ale_python_black_options = ''
+"let g:ale_python_black_options = ''
 let g:ale_python_flake8_options = '--max-line-length=88 --extend-ignore=E203'
-let g:ale_python_ruff_options = ''
+"let g:ale_python_ruff_options = ''
+let g:ale_yaml_ls_config = {
+\   'yaml': {
+\     'schemaStore': {
+\         'enable': v:true,
+\     },
+\    'customTags': [
+\      '!reference scalar',
+\      '!Reference scalar',
+\      '!ref scalar',
+\      '!Ref scalar',
+\    ]
+\  },
+\}
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1
