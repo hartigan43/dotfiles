@@ -283,6 +283,7 @@ alias ls="ls --color=auto"
 alias lsn="ls --color=never"
 alias me="mullvad-exclude"
 alias mxlookup="nslookup -q=mx"
+alias rgh="rg -."
 alias tf="terraform"
 alias tfclean='rm -rf .terraform && terraform init'
 alias tfplan='terraform plan -lock=false'
