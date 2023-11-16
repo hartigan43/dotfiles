@@ -1,6 +1,11 @@
 "" .vimrc
-" TODO fix vim-lsp and get install check for treesitter for
-" go,cpp,javascript,yaml,json,bash,rust,ssh_config,python,regex,terraform
+" TODO fix vim vs nvim checks -- too many? ensure near identical vim and nvim
+"      operation
+" TODO install check for treesitter for:
+"      go,cpp,javascript,yaml,json,bash,rust,ssh_config,python,regex,terraform
+" TODO vim-lsp and native nvim-lsp, consider mason for language
+"      servers/linters/formatters?
+"
 " many things from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 
 if !has('nvim')                " vim specific vs neovim below
@@ -47,7 +52,7 @@ Plug 'liuchengxu/vista.vim'
 Plug 'maximbaz/lightline-ale'
 Plug 'mgee/lightline-bufferline'
 Plug 'mileszs/ack.vim'
-"Plug 'neovim/nvim-lspconfig'
+Plug 'neovim/nvim-lspconfig'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'puremourning/vimspector'
 "Plug 'ryanoasis/vim-devicons'
@@ -82,14 +87,18 @@ if executable('deno')
   Plug 'Shougo/ddc-ui-native'
 
   " ddc sources
-  Plug 'delphinus/ddc-tmux'
-  Plug 'delphinus/ddc-treesitter'
+" TODO source is too old issue
+"      https://github.com/statiolake/ddc-ale/pull/9
+"      figure see if patching local plugins is feasible, after PRs -- tmux,
+"      treesitter, path
+"  Plug 'delphinus/ddc-tmux'
+"  Plug 'delphinus/ddc-treesitter'
   Plug 'LumaKernel/ddc-source-file'
   Plug 'matsui54/ddc-buffer'
   Plug 'Shougo/ddc-around'
-"  Plug 'Shougo/ddc-source-nvim-lsp'
+  Plug 'Shougo/ddc-source-nvim-lsp'
   Plug 'Shougo/ddc-source-rg'
-  Plug 'tani/ddc-path'
+"  Plug 'tani/ddc-path'
   Plug 'statiolake/ddc-ale'
 "  Plug 'uga-rosa/ddc-nvim-lsp-setup'
 
@@ -106,7 +115,7 @@ if executable('deno')
 else "alternatives when on a machine without deno
   echo "deno not found in path, using fallback completion"
   if has('nvim')
-    " deoplete and tabnine
+    " deoplete
     Plug 'nvim-lua/plenary.nvim' | Plug 'NTBBloodbath/rest.nvim'
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   else
@@ -249,7 +258,7 @@ let g:ale_fixers = {
 \ 'javascript': ['eslint', 'remove_trailing_lines', 'trim_whitespace'],
 \ 'python': ['black', 'trim_whitespace'],
 \ 'terraform': ['terraform', 'trim_whitespace'],
-\ 'yaml': ['yaml-language-server'],
+\ 'yaml': ['trim_whitespace'],
 \}
 
 let g:ale_c_parse_makefile = 1
@@ -320,7 +329,7 @@ endfunction
 
 " ui must be set -- native: https://github.com/Shougo/ddc-ui-native
 call ddc#custom#patch_global('ui', 'native')
-call ddc#custom#patch_global('sources', ['ale','around','buffer','file','path','rg','tmux','treesitter']) "nvim-lsp, treesitter needs nvim
+call ddc#custom#patch_global('sources', ['ale','around','buffer','file','nvim-lsp','rg']) "path, treesitter, tmux
 call ddc#custom#patch_global('sourceOptions', {
     \ '_': {
     \   'matchers': ['matcher_fuzzy', 'matcher_head'],
@@ -344,6 +353,10 @@ call ddc#custom#patch_global('sourceOptions', {
     \   'isVolatile': v:true,
     \   'forceCompletionPattern': '\S/\S*',
     \   'maxItems': 3,
+    \ },
+    \ 'nvim-lsp': {
+    \   'mark': 'LSP',
+    \   'forceCompletionPattern': '\.\w*|:\w*|->\w*',
     \ },
     \ 'path': {
     \   'mark': 'PATH',
@@ -430,7 +443,12 @@ let g:fern#renderer#default#leaf_symbol = "├─ "
 let g:fern#renderer#default#collapsed_symbol = "├─ "
 let g:fern#renderer#default#expanded_symbol = "├┬ "
 
-function! s:fern_init() abort
+function! s:init_fern() abort
+  nmap <buffer><nowait> <C-j> :<C-U>TmuxNavigateDown<cr>
+  nmap <buffer><nowait> <C-k> :<C-U>TmuxNavigateUp<cr>
+  nmap <buffer><nowait> <C-h> :<C-U>TmuxNavigateLeft<cr>
+  nmap <buffer><nowait> <C-l> :<C-U>TmuxNavigateRight<cr>
+
   " Find and enter project root
   nnoremap <buffer><silent>
         \ <Plug>(fern-my-enter-project-root)
@@ -452,13 +470,24 @@ function! s:map_enter_project_root(helper) abort
   let path = finddir('.git/..', path . ';')
   execute printf('Fern %s', fnameescape(path))
 endfunction
-" }}}
 
+augroup fern-custom
+  autocmd! *
+  autocmd FileType fern call s:init_fern()
+augroup END
+" }}}
 
 " fzf settings  ---------------------------------------------------------- {{{
 if has('nvim')
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
 endif
+
+" init config
+let g:fzf_vim = {}
+" preview window with 50% width or above if less than 70 columns
+let g:fzf_vim.preview_window = ['hidden,right,50%,<70(up,40%)', 'ctrl-/']
+" jump to existing window if possible
+let g:fzf_vim.buffers_jump = 1
 
 nnoremap <C-P> :Files <CR>
 nnoremap <leader>p :Rg <CR>
@@ -469,7 +498,7 @@ command! -bang -nargs=? -complete=dir Files
 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   'rg --hidden --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
@@ -482,7 +511,6 @@ let g:gundo_preview_height = 40
 " }}}
 
 " lightline.vim settings  ------------------------------------------------------- {{{
-
 function LightlineFugitiveHead()
   let head = FugitiveHead()
   if head != ""
@@ -606,11 +634,6 @@ set showtabline=2  " Show tabline
 set guioptions-=e  " Don't use GUI tabline
 " }}}
 
-" Markdown Preview settings --------------------------------------------------- {{{
-let g:mkdp_browser = "/usr/bin/firefox"
-let g:mkdp_port = "8522"
-" }}}
-
 "  netrw settings --------------------------------------------------- {{{
 let g:netrw_altv = 1
 let g:netrw_banner = 0
@@ -619,13 +642,73 @@ let g:netrw_liststyle = 0
 let g:netrw_winsize = 12
 " }}}
 
+"  nvim-lsp settings --------------------------------------------------- {{{
+"  utilizes nvim-lspconfig currently
+lua << EOF
+-- Setup language servers.
+local lspconfig = require('lspconfig')
+lspconfig.bashls.setup{}
+lspconfig.pyright.setup{}
+lspconfig.tsserver.setup{}
+lspconfig.terraformls.setup{}
+lspconfig.yamlls.setup {
+  settings = {
+    yaml = {
+      schemas = {
+        ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.k8s.yaml",
+      },
+    },
+  }
+}
+
+
+-- Global mappings.
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
+
+-- Use LspAttach autocommand to only map the following keys
+-- after the language server attaches to the current buffer
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(ev)
+    -- Enable completion triggered by <c-x><c-o>
+    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+    -- Buffer local mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    local opts = { buffer = ev.buf }
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
+    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
+    vim.keymap.set('n', '<space>wl', function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, opts)
+    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
+    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
+    vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    vim.keymap.set('n', '<space>f', function()
+      vim.lsp.buf.format { async = true }
+    end, opts)
+  end,
+})
+EOF
+" }}}
+
 " UltiSnips settings ------------------------------------------------------- {{{
 let g:UltiSnipsExpandTrigger="<c-;>"
 let g:UltiSnipsListSnippets="<c-e>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " TODO setup a symlink / install script for custom snippets, no need for
-" second dir, just use UltiSnips or "nips in .vim and .config/nvim
+"      second dir, just use UltiSnips or nips in .vim and .config/nvim
 let g:UltiSnipsSnippetDirectories=["UltiSnips", "custom-snips"]
 
 " If you want :UltiSnipsEdit to split your window.
@@ -684,10 +767,6 @@ nnoremap <leader>E :e <C-R>=expand("%:p:h:h") . "/" <CR>
 nnoremap <leader>s :vsplit <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>S :vsplit <C-R>=expand("%:p:h:h") . "/" <CR>
 
-"underline the current line - mostly for taking notes until I start using
-"something with cloud support
-nnoremap <leader><F5> yyp<c-v>$r-
-
 "yank the whole file to clipboard
 nmap <leader>y :%y+<cr>
 
@@ -726,10 +805,6 @@ if has('gui_running')
   set noerrorbells                                "stop flashing screen
   set novisualbell
 endif
-" }}}
-
-" Misc settings ------------------------------------------------------------ {{{
-" once contained powerline specific fix.. now barren
 " }}}
 
 "vim:foldmethod=marker:foldlevel=0:
