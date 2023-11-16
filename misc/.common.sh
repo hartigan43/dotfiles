@@ -249,10 +249,13 @@ if command_exists fzf ; then
       fi
   }
   fi
+###
 
-if command_exists markdown-pdf ; then
-  alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/modified-gfm.css'
+### ripgrep
+if command_exists rg ; then
+  export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/.ripgreprc
 fi
+
 
 ### end tooling
 
@@ -283,7 +286,7 @@ alias ls="ls --color=auto"
 alias lsn="ls --color=never"
 alias me="mullvad-exclude"
 alias mxlookup="nslookup -q=mx"
-alias rgh="rg -."
+#alias rgh="rg -."
 alias tf="terraform"
 alias tfclean='rm -rf .terraform && terraform init'
 alias tfplan='terraform plan -lock=false'
@@ -294,6 +297,10 @@ alias weather="curl wttr.in"
 if [[ $unamestr != 'Darwin' ]]; then
   alias pbcopy='xsel --clipboard --input'
   alias pbpaste='xsel --clipboard --output'
+fi
+
+if command_exists markdown-pdf ; then
+  alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/modified-gfm.css'
 fi
 
 ### end aliases
