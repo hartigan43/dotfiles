@@ -275,7 +275,7 @@ endfunction
 
 " ui must be set -- native: https://github.com/Shougo/ddc-ui-native
 call ddc#custom#patch_global('ui', 'native')
-call ddc#custom#patch_global('sources', ['ale','around','buffer','file','nvim-lsp','path','rg','treesitter','tmux']) "path, treesitter, tmux
+call ddc#custom#patch_global('sources', ['ale','around','buffer','file','lsp','path','rg','treesitter','tmux']) "path, treesitter, tmux
 call ddc#custom#patch_global('sourceOptions', {
     \ '_': {
     \   'matchers': ['matcher_fuzzy', 'matcher_head'],
@@ -300,7 +300,7 @@ call ddc#custom#patch_global('sourceOptions', {
     \   'forceCompletionPattern': '\S/\S*',
     \   'maxItems': 3,
     \ },
-    \ 'nvim-lsp': {
+    \ 'lsp': {
     \   'mark': 'LSP',
     \   'forceCompletionPattern': '\.\w*|:\w*|->\w*',
     \ },
