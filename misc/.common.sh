@@ -269,6 +269,7 @@ alias d="docker"
 alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d'"
 alias dcu="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose up -d'"
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gitroot='cd $(git rev-parse --show-toplevel)'
 alias gitsup="git submodule foreach git pull origin master" # SO 5828324 - git submodule recursive updates
 alias k=kubectl
 alias kcurr='kubectl config current-context'
