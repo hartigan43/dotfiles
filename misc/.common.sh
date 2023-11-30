@@ -265,6 +265,7 @@ fi
 alias d="docker"
 alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d'"
 alias dcu="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose up -d'"
+alias docker="podman"
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gitsup="git submodule foreach git pull origin master" # SO 5828324 - git submodule recursive updates
 alias k=kubectl
