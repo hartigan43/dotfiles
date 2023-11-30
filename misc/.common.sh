@@ -249,10 +249,13 @@ if command_exists fzf ; then
       fi
   }
   fi
+###
 
-if command_exists markdown-pdf ; then
-  alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/modified-gfm.css'
+### ripgrep
+if command_exists rg ; then
+  export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/.ripgreprc
 fi
+
 
 ### end tooling
 
@@ -267,6 +270,7 @@ alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-c
 alias dcu="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose up -d'"
 alias docker="podman"
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gitroot='cd $(git rev-parse --show-toplevel)'
 alias gitsup="git submodule foreach git pull origin master" # SO 5828324 - git submodule recursive updates
 alias k=kubectl
 alias kcurr='kubectl config current-context'
@@ -284,6 +288,7 @@ alias ls="ls --color=auto"
 alias lsn="ls --color=never"
 alias me="mullvad-exclude"
 alias mxlookup="nslookup -q=mx"
+#alias rgh="rg -."
 alias tf="terraform"
 alias tfclean='rm -rf .terraform && terraform init'
 alias tfplan='terraform plan -lock=false'
@@ -294,6 +299,10 @@ alias weather="curl wttr.in"
 if [[ $unamestr != 'Darwin' ]]; then
   alias pbcopy='xsel --clipboard --input'
   alias pbpaste='xsel --clipboard --output'
+fi
+
+if command_exists markdown-pdf ; then
+  alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/modified-gfm.css'
 fi
 
 ### end aliases

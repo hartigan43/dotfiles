@@ -87,7 +87,7 @@ gitConfig() {
   git config --global core.editor "${EDITOR}"
   git config --global init.defaultBranch "main"
   if confirm "add global git aliases"; then
-    git config --global alias.main '!git fetch && git checkout main && git pull origin main'
+    git config --global alias.main "! MAIN=$(git branch -l master main | sed -r 's/^[* ] //' | head -n 1) && git fetch && git checkout $MAIN && git pull origin $MAIN"
   fi
 }
 

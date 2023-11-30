@@ -1,7 +1,5 @@
 #!/usr/bin/env zsh
-# TODO setup colorless env flag for vim and aliases
 # TODO move .bashrc.local and .zshrc.local into sh.local
-#   TODO add template .local file as well
 # TODO source common.sh earlier?
 
 #################

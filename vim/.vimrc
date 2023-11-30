@@ -1,27 +1,16 @@
 "" .vimrc
-" TODO fix vim-lsp and get install check for treesitter for
-" go,cpp,javascript,yaml,json,bash,rust,ssh_config,python,regex,terraform
+" TODO consider mason for language servers/linters/formatters?
 " many things from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 
-if !has('nvim')                " vim specific vs neovim below
-  set nocompatible             " be iMproved
+set nocompatible             " be iMproved
 
-  " install Vim-plug if not installed
-  if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-  endif
-endif
+let is_neovim = has('nvim')
+let plugin_dir = is_neovim ? '~/.local/share/nvim/site/autoload/plug.vim' : '~/.vim/autoload/plug.vim'
 
-if has('nvim')
-  set mouse-=a                 " not ready for mouse use yet
-
-  if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
-    silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
-      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-  endif
+if empty(glob(plugin_dir))
+  silent !curl -fLo {plugin_dir} --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 " Vim-plug ----------------------------------------------------------------- {{{
@@ -29,7 +18,6 @@ endif
 call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
-Plug 'amadeus/vim-mjml',                { 'for': 'mjml' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
@@ -45,31 +33,27 @@ Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'liuchengxu/vista.vim'
 Plug 'maximbaz/lightline-ale'
+Plug 'mg979/vim-visual-multi'
 Plug 'mgee/lightline-bufferline'
-Plug 'mileszs/ack.vim'
-"Plug 'neovim/nvim-lspconfig'
-Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'puremourning/vimspector'
 "Plug 'ryanoasis/vim-devicons'
 Plug 'SirVer/ultisnips'
 Plug 'simnalamburt/vim-mundo',          { 'on': 'MundoToggle' }
-Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rails',                 { 'for': 'rb' }
-Plug 'tpope/vim-haml',                  { 'for': 'haml' }
 Plug 'tpope/vim-surround'
 
 " all the JS things
 Plug 'yuezk/vim-js' | Plug 'HerringtonDarkholme/yats.vim' | Plug 'posva/vim-vue' | Plug 'maxmellon/vim-jsx-pretty'
 
-" note taking and writing
-Plug 'rhysd/vim-grammarous',            { 'for': ['text', 'markdown'] }
-Plug 'beloglazov/vim-online-thesaurus', { 'for': ['text', 'markdown'] }
-
 " nvim specific
-if has('nvim')
+if is_neovim
+  Plug 'neovim/nvim-lspconfig'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+else
+  Plug 'prabirshrestha/vim-lsp'
+  Plug 'mattn/vim-lsp-settings', {'do': ':LspInstallServer'}
 endif
 
 " plugins that require deno
@@ -82,16 +66,17 @@ if executable('deno')
   Plug 'Shougo/ddc-ui-native'
 
   " ddc sources
+  " source is too old issue fix -https://github.com/statiolake/ddc-ale/pull/9
   Plug 'delphinus/ddc-tmux'
   Plug 'delphinus/ddc-treesitter'
   Plug 'LumaKernel/ddc-source-file'
   Plug 'matsui54/ddc-buffer'
   Plug 'Shougo/ddc-around'
-"  Plug 'Shougo/ddc-source-nvim-lsp'
+  Plug 'Shougo/ddc-source-nvim-lsp'
   Plug 'Shougo/ddc-source-rg'
+  "Plug 'shun/ddc-vim-lsp'
   Plug 'tani/ddc-path'
   Plug 'statiolake/ddc-ale'
-"  Plug 'uga-rosa/ddc-nvim-lsp-setup'
 
   " ddc filters and matchers
   Plug 'Shougo/ddc-filter-matcher_head'
@@ -99,14 +84,10 @@ if executable('deno')
   "Plug 'Shougo/ddc-sorter_rank'
   """" end ddc
 
-  "deno and nvim
-  if has('nvim')
-    Plug 'toppair/peek.nvim',  { 'do': 'deno task --quiet build:fast', 'for': ['md', 'markdown'] }
-  endif
 else "alternatives when on a machine without deno
-  echo "deno not found in path, using fallback completion"
-  if has('nvim')
-    " deoplete and tabnine
+  echo "deno not found in $PATH, using fallback plugins"
+  if is_neovim
+    " deoplete
     Plug 'nvim-lua/plenary.nvim' | Plug 'NTBBloodbath/rest.nvim'
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   else
@@ -126,51 +107,48 @@ call plug#end()
 " }}}
 
 " Basic options ------------------------------------------------------------ {{{
-set number                                        "show line numbers
-set ts=2                                          "tabs width as two spaces
-set shiftwidth=2
 set autoindent                                    "keep indentation of current line
-set smarttab
-set expandtab                                     "converts tabs to spaces
-set showmatch
-set history=1000
-set lazyredraw                                    "only redraw when necessary
 set encoding=utf-8
+set expandtab                                     "converts tabs to spaces
+set history=1000
+set hlsearch                                      "highlight matches
+set incsearch                                     "search as characters are entered
+set ignorecase                                    "ignore case while searching
 set laststatus=2                                  "always shows statusline / powerline
+set lazyredraw                                    "only redraw when necessary
+"set list!                                         "toggles list, default is off, enables whitespace characters
+set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode characters for tab,eol,and with wrap on
+set modeline
+set modelines=2                                   "use modelines at end of file for specifc settings
+set mouse=
+set mousehide                                     "hide mouse while editing
 set noshowmode                                    "hides the mode for default statusline as its unnecessary with powerline/airline/lightline
 set nowrap                                        "no word wrapping
+set number                                        "show line numbers
+set pastetoggle=<F2>                              "when in insert mode, allow easy external clipboard pasting
+set shiftwidth=2
+set showbreak=↪
+set showmatch
+set smartcase                                     "case insensitive search if capital letters are used
+set smarttab
+set timeoutlen=350                                "delay for accepting key combination
+set ts=2                                          "tabs width as two spaces
+set visualbell                                    "kill the noise
+set tgc                                           "set termguicolors on
+
+" backup and undo settings
+set backup                                        "file backups enabled
+set backupdir=~/.vim/tmp/backups//                "backup dir -- // saves full filepath with % as folder delimeter
+set directory=~/.vim/tmp/swap//                   "temporary dir for swap files
+set noswapfile                                    "disable swaps - were using backups
 set undofile                                      "allow per file undo persistance
 set undoreload=10000
 set undodir=~/.vim/tmp/undo//                     "undo dir
-set backupdir=~/.vim/tmp/backups//                "backup dir -- // saves full filepath with % as folder delimeter
-set directory=~/.vim/tmp/swap//                   "temporary dir for swap files
-set backup                                        "file backups enabled
 set writebackup                                   "enabling backups
-set noswapfile                                    "disable swaps - were using backups
-set visualbell                                    "kill the noise
-set timeoutlen=350                                "delay for accepting key combination
-set mousehide                                     "hide mouse while editing
-set pastetoggle=<F2>                              "when in insert mode, allow easy external clipboard pasting
-set incsearch                                     "search as characters are entered
-set ignorecase                                    "ignore case while searching
-set smartcase                                     "case insensitive search if capital letters are used
-set hlsearch                                      "highlight matches
-"set list!                                         "toggles list, default is off, enables whitespace characters
-set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮  "show unicode characters for tab,eol,and with wrap on
-set showbreak=↪
-set modeline
-set modelines=2                                   "use modelines at end of file for specifc settings
-set tgc
 
 if !empty($EDITOR_MONOTONE)
-  "let base16colorspace=256
   set background=light
   colorscheme komau-mod
-  "colorscheme grim
-  "let g:monotone_color = [170, 0,25]
-  "let g:monotone_contrast_factor = -0.75
-  "let g:monotone_emphasize_comments = 0 " Emphasize comments
-  "colorscheme monotone
   highlight Comment cterm=italic gui=italic
 else
   colorscheme dim
@@ -207,24 +185,21 @@ autocmd Filetype if &ft!="txt,md" match ErrorMsg '\%>120v.\+' endif
 " }}}
 " Folding ------------------------------------------------------------------ {{{
 
-set foldlevelstart=4
-set foldmethod=syntax
+if is_neovim
+  set foldmethod=expr
+  set foldexpr=nvim_treesitter#foldexpr()
+  set nofoldenable
+else
+  set foldmethod=expr
+  \ foldexpr=lsp#ui#vim#folding#foldexpr()
+  \ foldtext=lsp#ui#vim#folding#foldtext()
+endif
 
 " Make zO recursively open whatever fold we're in, even if it's partially open.
 nnoremap zO zczO
 
 " }}}
 " Plugin-settings ---------------------------------------------------------- {{{
-
-" Ack settings  ---------------------------------------------------------- {{{
-" TODO monitor usage, with fzf#vim#ag, unsure of total use of ack
-if executable('ag')
-  let &grepprg = 'ag --nogroup --nocolor --column'
-  let g:ackprg = 'ag --vimgrep'
-else
-  let &grepprg = 'grep -rn $* *'
-endif
-" }}}
 
 " ALE settings ------------------------------------------------------- {{{
 let g:ale_echo_msg_error_str = 'E'
@@ -239,6 +214,7 @@ let g:ale_linters = {
 \ 'javascript': ['eslint'],
 \ 'python': ['ruff', 'flake8'],
 \ 'terraform': ['terraform'],
+\ 'yaml': ['yaml-language-server'],
 \}
 
 let g:ale_fixers = {
@@ -248,15 +224,29 @@ let g:ale_fixers = {
 \ 'javascript': ['eslint', 'remove_trailing_lines', 'trim_whitespace'],
 \ 'python': ['black', 'trim_whitespace'],
 \ 'terraform': ['terraform', 'trim_whitespace'],
+\ 'yaml': ['trim_whitespace'],
 \}
 
 let g:ale_c_parse_makefile = 1
 let g:ale_cpp_clang_executable = 'clang++'
 let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
-let g:ale_python_black_options = ''
+"let g:ale_python_black_options = ''
 let g:ale_python_flake8_options = '--max-line-length=88 --extend-ignore=E203'
-let g:ale_python_ruff_options = ''
+"let g:ale_python_ruff_options = ''
+let g:ale_yaml_ls_config = {
+\   'yaml': {
+\     'schemaStore': {
+\         'enable': v:true,
+\     },
+\    'customTags': [
+\      '!reference scalar',
+\      '!Reference scalar',
+\      '!ref scalar',
+\      '!Ref scalar',
+\    ]
+\  },
+\}
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1
@@ -283,29 +273,9 @@ endfunction
 
 " ddc.vim settings ------------------------------------------------------- {{{
 
-"if denops#plugin#is_loaded('ddc')
-"  local capabilities = require("ddc_nvim_lsp").make_client_capabilities()
-"  require("lspconfig").denols.setup({
-"    capabilities = capabilities,
-"  })
-"endif
-"sourceOption
-"    \ 'nvim-lsp': {
-"    \     'mark': 'LSP',
-"    \     'forceCompletionPattern': '\.\w*|:\w*|->\w*',
-"    \   },
-"sourceParam
-"    \ 'nvim-lsp': {
-"    \   'snippetEngine': denops#callback#register({
-"    \         body -> vsnip#anonymous(body)
-"    \   }),
-"    \   'enableResolveItem': v:true,
-"    \   'enableAdditionalTextEdit': v:true,
-"    \ },
-
 " ui must be set -- native: https://github.com/Shougo/ddc-ui-native
 call ddc#custom#patch_global('ui', 'native')
-call ddc#custom#patch_global('sources', ['ale','around','buffer','file','path','rg','tmux','treesitter']) "nvim-lsp, treesitter needs nvim
+call ddc#custom#patch_global('sources', ['ale','around','buffer','file','lsp','path','rg','treesitter','tmux']) "path, treesitter, tmux
 call ddc#custom#patch_global('sourceOptions', {
     \ '_': {
     \   'matchers': ['matcher_fuzzy', 'matcher_head'],
@@ -329,6 +299,10 @@ call ddc#custom#patch_global('sourceOptions', {
     \   'isVolatile': v:true,
     \   'forceCompletionPattern': '\S/\S*',
     \   'maxItems': 3,
+    \ },
+    \ 'lsp': {
+    \   'mark': 'LSP',
+    \   'forceCompletionPattern': '\.\w*|:\w*|->\w*',
     \ },
     \ 'path': {
     \   'mark': 'PATH',
@@ -415,7 +389,14 @@ let g:fern#renderer#default#leaf_symbol = "├─ "
 let g:fern#renderer#default#collapsed_symbol = "├─ "
 let g:fern#renderer#default#expanded_symbol = "├┬ "
 
-function! s:fern_init() abort
+function! s:init_fern() abort
+  nmap <buffer><nowait> <C-j> :<C-U>TmuxNavigateDown<cr>
+  nmap <buffer><nowait> <C-k> :<C-U>TmuxNavigateUp<cr>
+  nmap <buffer><nowait> <C-h> :<C-U>TmuxNavigateLeft<cr>
+  nmap <buffer><nowait> <C-l> :<C-U>TmuxNavigateRight<cr>
+  nmap <buffer> B <Plug>(fern-action-open:below)
+  nmap <buffer> S <Plug>(fern-action-open:split)
+
   " Find and enter project root
   nnoremap <buffer><silent>
         \ <Plug>(fern-my-enter-project-root)
@@ -437,13 +418,24 @@ function! s:map_enter_project_root(helper) abort
   let path = finddir('.git/..', path . ';')
   execute printf('Fern %s', fnameescape(path))
 endfunction
+
+augroup fern-custom
+  autocmd! *
+  autocmd FileType fern call s:init_fern()
+augroup END
 " }}}
 
-
 " fzf settings  ---------------------------------------------------------- {{{
-if has('nvim')
+if is_neovim
   let $FZF_DEFAULT_OPTS .= ' --inline-info'
 endif
+
+" init config
+let g:fzf_vim = {}
+" preview window with 50% width or above if less than 70 columns
+let g:fzf_vim.preview_window = ['hidden,right,50%,<70(up,40%)', 'ctrl-/']
+" jump to existing window if possible
+let g:fzf_vim.buffers_jump = 1
 
 nnoremap <C-P> :Files <CR>
 nnoremap <leader>p :Rg <CR>
@@ -454,7 +446,7 @@ command! -bang -nargs=? -complete=dir Files
 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   'rg --hidden --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
@@ -467,7 +459,6 @@ let g:gundo_preview_height = 40
 " }}}
 
 " lightline.vim settings  ------------------------------------------------------- {{{
-
 function LightlineFugitiveHead()
   let head = FugitiveHead()
   if head != ""
@@ -542,7 +533,7 @@ let g:lightline.tabline_subseparator = {
 "
 let s:palette = g:lightline#colorscheme#default#palette
 "inactive text, inactive bg, active text, active background
-if has('nvim') "vim is very unhappy with color 236 at the moment, could nto find a quick fix for err 254
+if is_neovim "vim is very unhappy with color 236 at the moment, could nto find a quick fix for err 254
   let s:palette.tabline.tabsel = [ [ 3, 236, 253, 9 ] ]   "https://github.com/itchyny/lightline.vim/issues/207 might have clues to fix
 endif
 let s:palette.tabline.middle = s:palette.normal.middle
@@ -591,11 +582,6 @@ set showtabline=2  " Show tabline
 set guioptions-=e  " Don't use GUI tabline
 " }}}
 
-" Markdown Preview settings --------------------------------------------------- {{{
-let g:mkdp_browser = "/usr/bin/firefox"
-let g:mkdp_port = "8522"
-" }}}
-
 "  netrw settings --------------------------------------------------- {{{
 let g:netrw_altv = 1
 let g:netrw_banner = 0
@@ -604,13 +590,143 @@ let g:netrw_liststyle = 0
 let g:netrw_winsize = 12
 " }}}
 
+"  nvim-lsp settings --------------------------------------------------- {{{
+"  utilizes nvim-lspconfig currently
+if is_neovim
+
+lua << LSP_EOF
+-- Setup language servers.
+local lspconfig = require('lspconfig')
+lspconfig.bashls.setup{}
+lspconfig.pyright.setup{}
+lspconfig.tsserver.setup{}
+lspconfig.terraformls.setup{}
+lspconfig.yamlls.setup {
+  settings = {
+    yaml = {
+      schemas = {
+        ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.k8s.yaml",
+      },
+    },
+  }
+}
+
+-- set to debug if needed
+vim.lsp.set_log_level('off')
+
+-- Global mappings.
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
+
+-- Use LspAttach autocommand to only map the following keys
+-- after the language server attaches to the current buffer
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(ev)
+    -- Enable completion triggered by <c-x><c-o>
+    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+    -- Buffer local mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    local opts = { buffer = ev.buf }
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+    vim.keymap.set('n', '<C-i>', vim.lsp.buf.signature_help, opts)
+    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
+    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
+    vim.keymap.set('n', '<space>wl', function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, opts)
+    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
+    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
+    vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    vim.keymap.set('n', '<space>f', function()
+      vim.lsp.buf.format { async = true }
+    end, opts)
+  end,
+})
+LSP_EOF
+
+endif
+" }}}
+
+" nvim-treesitter settings --------------------------------------------------- {{{
+if is_neovim
+
+lua << TREE_EOF
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all"
+  ensure_installed = {'bash', 'cpp', 'go', 'javascript', 'json', 'lua', 'python', 'query', 'regex', 'rust', 'ssh_config', 'terraform', 'vim', 'vimdoc', 'yaml'},
+
+  -- Install parsers synchronously (only applied to `ensure_installed`)
+  sync_install = true,
+
+  -- Automatically install missing parsers when entering buffer
+  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+  auto_install = false,
+
+  -- List of parsers to ignore installing (or "all")
+  -- ignore_install = { "javascript" },
+
+  ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
+  -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+
+  highlight = {
+    enable = true,
+
+    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
+    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
+    -- the name of the parser)
+    -- list of language that will be disabled
+    -- disable = { "c", "rust" },
+    -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
+    disable = function(lang, buf)
+        local max_filesize = 100 * 1024 -- 100 KB
+        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+        if ok and stats and stats.size > max_filesize then
+            return true
+        end
+    end,
+
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+
+  query_linter = {
+      enable = true,
+      use_virtual_text = true,
+      lint_events = {"BufWrite", "CursorHold"},
+      custom_captures = {
+        -- Highlight TODO in red
+        ["todo"] = "TODO"
+      },
+      severity = {
+        todo = "error",
+      },
+    },
+}
+TREE_EOF
+
+endif
+
+" }}}
+
 " UltiSnips settings ------------------------------------------------------- {{{
 let g:UltiSnipsExpandTrigger="<c-;>"
 let g:UltiSnipsListSnippets="<c-e>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " TODO setup a symlink / install script for custom snippets, no need for
-" second dir, just use UltiSnips or "nips in .vim and .config/nvim
+"      second dir, just use UltiSnips or nips in .vim and .config/nvim
 let g:UltiSnipsSnippetDirectories=["UltiSnips", "custom-snips"]
 
 " If you want :UltiSnipsEdit to split your window.
@@ -657,10 +773,6 @@ inoremap <F1> <esc>:checktime<cr>
 " bind K to grep word under cursor
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
-"do not have ack jump to first response
-cnoreabbrev Ack Ack!
-"ack for the current word under cursor
-nnoremap <leader>a :Ack!<Space><C-R><C-W>
 
 "use leader e or leader s to open or vsplit with filename in current directory
 "leader E,S uses parent directory
@@ -668,10 +780,6 @@ nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>E :e <C-R>=expand("%:p:h:h") . "/" <CR>
 nnoremap <leader>s :vsplit <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>S :vsplit <C-R>=expand("%:p:h:h") . "/" <CR>
-
-"underline the current line - mostly for taking notes until I start using
-"something with cloud support
-nnoremap <leader><F5> yyp<c-v>$r-
 
 "yank the whole file to clipboard
 nmap <leader>y :%y+<cr>
@@ -713,9 +821,4 @@ if has('gui_running')
 endif
 " }}}
 
-" Misc settings ------------------------------------------------------------ {{{
-" once contained powerline specific fix.. now barren
-" }}}
-
 "vim:foldmethod=marker:foldlevel=0:
-"
