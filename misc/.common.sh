@@ -155,7 +155,7 @@ prepend_to_path "$HOME/.local/bin"
 # rust - rustup / cargo
 export RUSTUP_HOME="$DATA_HOME/rust/rustup"
 export CARGO_HOME="$DATA_HOME/rust/cargo"
-[[ -f "$CARGO_HOME/.cargo/env" ]] && source "$CARGO_HOME/.cargo/env"
+[[ -f "$CARGO_HOME/env" ]] && source "$CARGO_HOME/env"
 # add_to_path "$HOME/.cargo/bin"
 
 if command_exists fuck ; then
