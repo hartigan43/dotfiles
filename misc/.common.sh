@@ -6,6 +6,7 @@ if [ ! -d "$HOME/Workspace" ]; then
 fi
 
 export WORKSPACE="$HOME/Workspace"
+export DATA_HOME="${XDG_DATA_HOME:-$WORKSPACE}"
 
 ### functions
 # add to path
@@ -104,7 +105,7 @@ ssh () {
     fi
   else
     printf "connecting with ssh ...\n"
-    command ssh $@
+    command ssh "$@"
   fi
 }
 
@@ -141,15 +142,21 @@ undozip (){
 ### end functions
 
 ### path updates and tooling
+
+# go
 if command_exists go ; then
-  export GOPATH="$WORKSPACE/go"
+  export GOPATH="$DATA_HOME/go"
 fi
 
 add_to_path "$GOPATH/bin"
-add_to_path "$HOME/.cargo/bin"
-
 prepend_to_path "$HOME/.yarn/bin"
 prepend_to_path "$HOME/.local/bin"
+
+# rust - rustup / cargo
+export RUSTUP_HOME="$DATA_HOME/rust/rustup"
+export CARGO_HOME="$DATA_HOME/rust/cargo"
+[[ -f "$CARGO_HOME/.cargo/env" ]] && source "$CARGO_HOME/.cargo/env"
+# add_to_path "$HOME/.cargo/bin"
 
 if command_exists fuck ; then
   eval "$(thefuck --alias)"
