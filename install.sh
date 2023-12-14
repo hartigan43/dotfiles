@@ -63,6 +63,10 @@ else
 fi
 
 #### FUNCTIONS ####
+asdfInstall() {
+  BRANCH=$(curl -s https://api.github.com/repos/asdf-vm/asdf/releases/latest | sed -n 's/.*"tag_name": "\(.*\)".*/\1/p')
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "$BRANCH"
+}
 
 # confirmation prompt wrapper for read use in zsh and bash
 confirm() {
@@ -74,6 +78,14 @@ confirm() {
     return 0
   else
     return 1
+  fi
+}
+
+# install fzf
+fzfInstall() {
+  if [ ! -d "${HOME}/.fzf" ]; then
+    git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf"
+    cd "${HOME}/.fzf" && ./install
   fi
 }
 
@@ -102,14 +114,6 @@ installNERDFonts() {
   ./install.sh InconsolataGo
   ./install.sh Iosevka
   ./install.sh DroidSansMono
-}
-
-# install fzf
-fzfInstall() {
-  if [ ! -d "${HOME}/.fzf" ]; then
-    git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf"
-    cd "${HOME}/.fzf" && ./install
-  fi
 }
 
 # Set real username
@@ -150,6 +154,7 @@ installBasics() {
   ln -s "${HOME}/.dotfiles/bash/.bashrc" "${HOME}/.bashrc"
   ln -s "${HOME}/.dotfiles/alacritty/alacritty.yml" "${HOME}/.config/alacritty/alacritty.yml"
   ln -s "${HOME}/.dotfiles/misc/.common.sh" "${HOME}/.common.sh"
+  ln -s "${HOME}/.dotfiles/misc/.ripgreprc" "${HOME}/.config/ripgrep/.ripgreprc"
   ln -s "${HOME}/.dotfiles/misc/.editorconfig" "${HOME}/.editorconfig"
   ln -s "${HOME}/.dotfiles/tmux/.tmux.conf" "${HOME}/.tmux.conf"
   ln -s "${HOME}/.dotfiles/tmux" "${HOME}/.tmux"
@@ -170,8 +175,18 @@ installBasics
 if confirm "configure git"; then
   gitConfig
 fi
+if confirm "install asdf-vm"; then
+  asdfInstall
+fi
+if confirm "install deno"; then
+  # TODO use asdf? - https://docs.deno.com/runtime/manual/getting_started/installation
+  curl -fsSL https://deno.land/x/install/install.sh | sh
+fi
 if confirm "install fzf"; then
   fzfInstall
+fi
+if confirm "install rust via rustup"; then
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path
 fi
 setRealName
 if confirm "install NERDFonts"; then

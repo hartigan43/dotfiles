@@ -12,6 +12,7 @@ web:*.{html,css,js}*
 # Using glob patterns to include/exclude files or folders
 --glob=!.git/*
 --glob=!.terraform/*
+--glob=!.terraform.lock.hcl
 
 # Set the colors.
 #--colors=line:none

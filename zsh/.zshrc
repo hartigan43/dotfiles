@@ -88,7 +88,6 @@ if [[ "${unamestr}" == 'Linux' ]]; then
   if [[ -d /usr/local/bin ]]; then
     export XDG_DATA_DIRS="$XDG_DATA_DIRS:/usr/local/bin"
   fi
-
 elif [[ "${unamestr}" == 'Darwin' ]]; then
   if [[ $(uname -m) == 'arm64' ]]; then
     # Apple Silicon Brew settings
@@ -100,12 +99,13 @@ elif [[ "${unamestr}" == 'Darwin' ]]; then
     export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
   fi
 
-# homebrew completions
-if type brew &>/dev/null
-  then
-    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-  fi
+  # homebrew completions
+  if type brew &>/dev/null
+    then
+      FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+    fi
 fi
+
 ######################
 
 # user and default editor and history

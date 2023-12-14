@@ -107,4 +107,4 @@ function getNvim() {
 # allow alliases
 alias sudo="sudo "
 
-complete -C /usr/bin/terraform terraform
+complete -C $(which terraform) terraform
