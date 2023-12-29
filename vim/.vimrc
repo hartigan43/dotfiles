@@ -799,12 +799,13 @@ nmap <Leader>dj <Plug>VimspectorStepOver
 " }}}
 
 " File specific overrides -------------------------------------------------- {{{
-autocmd BufNewFile,BufRead *.html.twig   set syntax=html
+autocmd BufNewFile,BufRead *.html.twig set syntax=html
 augroup WrapLineForTextFiles
   autocmd!
   autocmd FileType md,markdown setlocal wrap spell spelllang=en_us
   autocmd FileType txt,text setlocal wrap spell spelllang=en_us
 augroup END
+autocmd FileType yaml,yml,toml setlocal list listchars+=lead:·
 " }}}
 
 " GUI-settings ------------------------------------------------------------- {{{
