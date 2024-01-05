@@ -5,11 +5,11 @@
 set nocompatible             " be iMproved
 
 let is_neovim = has('nvim')
-let plugin_dir = is_neovim ? '~/.local/share/nvim/site/autoload/plug.vim' : '~/.vim/autoload/plug.vim'
+let plugin_dir = is_neovim ? expand('~/.local/share/nvim/site/autoload/plug.vim') : expand('~/.vim/autoload/plug.vim')
 
 if empty(glob(plugin_dir))
-  silent !curl -fLo {plugin_dir} --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  let get_vim_plug = 'silent !curl -fLo ' . shellescape(plugin_dir) . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  execute get_vim_plug
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 

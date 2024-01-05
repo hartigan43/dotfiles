@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # TODO symlink for vim snippets that work for both vim/nvim
 
 # do not allow run as root - thanks @freekingdean
@@ -7,12 +7,16 @@ if [ "${EUID}" -eq 0 ]; then
   exit 1
 fi
 
+#current user
+#USER="$(whoami)"
+
 # make workspace and misc
 mkdir -p "${HOME}/Workspace/misc"
 
 #### PLATFORM AND PACKAGES ####
 
 PLATFORM="$(uname)"
+# TODO - no longer necessary?
 if [ "${PLATFORM}" = "linux" ] || [ "${PLATFORM}" = "Linux" ]; then
   PLATFORM="$(cat /etc/*-release | grep ^ID= | sed 's/^ID=\(.*\)$/\1/')"
   if [ "${PLATFORM}" = "" ]; then
@@ -22,34 +26,37 @@ if [ "${PLATFORM}" = "linux" ] || [ "${PLATFORM}" = "Linux" ]; then
   fi
 fi
 
-PACKAGES="zsh ruby git curl wget neovim tmux openssh go docker tree"
+PACKAGES="zsh ruby git curl wget neovim tmux openssh go podman tree"
 EDITOR="${EDITOR:-$(command -v vim)}"
 
+echo "$PLATFORM detected.  Proceeding in 5, hit CTRC-C to cancel"
+sleep 5
+
 if [ "${PLATFORM}" = "centos" ]; then
-  PACKAGER="sudo yum -y"
+  PACKAGER="yum -y"
   PACKAGER_INSTALL="install"
   PACKAGER_UPDATE="update"
   PACKAGER_UPGRADE="upgrade"
   PACKAGES="${PACKAGES} python3 python3-pip openssl-devel readline-devel zlib-devel"
 elif [ "${PLATFORM}" = "debian" ]; then
-  PACKAGER="sudo apt-get -y"
+  PACKAGER="apt-get -y"
   PACKAGER_INSTALL="install"
   PACKAGER_UPDATE="update"
   PACKAGER_UPGRADE="upgrade"
   PACKAGES="${PACKAGES} python3 python3-pip libssl-dev libreadline-dev zlib1g-dev"
   sudo cp /usr/bin/pip3 /usr/bin/pip
 elif [ "${PLATFORM}" = "fedora" ]; then
-  PACKAGER="sudo dnf -y"
+  PACKAGER="dnf -y"
   PACKAGER_INSTALL="install"
   PACKAGER_UPDATE="update"
   PACKAGER_UPGRADE="upgrade"
   PACKAGES="${PACKAGES} python3 python3-pip openssl-devel readline-devel zlib-devel"
 elif [[ "${PLATFORM}" = "arch" || "${PLATFORM}" = "archarm" ]]; then
-  PACKAGER="sudo pacman --noconfirm"
+  PACKAGER="pacman --noconfirm"
   PACKAGER_INSTALL="-S"
   PACKAGER_UPDATE="-Syu"
   PACKAGER_UPGRADE="-Syu"
-  PACKAGES="${PACKAGES} base-devel python python-pip cmake vim neovim python-pynvim"
+  PACKAGES="${PACKAGES} base-devel bat fd python python-pip cmake vim neovim python-pynvim"
 elif [ "${PLATFORM}" = "Darwin" ]; then
   # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   PACKAGER="brew"
@@ -72,7 +79,7 @@ asdfInstall() {
 confirm() {
   echo "Do you want to $1? [y/N] "
   read response
-  response="$(echo $response  | tr '[:upper:]' '[:lower:]')"
+  response="$(echo "$response"  | tr '[:upper:]' '[:lower:]')"
 
   if [[ "$response" =~ ^(yes|y)$ ]]; then
     return 0
@@ -92,8 +99,8 @@ fzfInstall() {
 # configure the global get settings for name, email, and editor
 gitConfig() {
   echo -e "Running basic git configuration...\n"
-  echo -e "Enter your full name for git: "; read name
-  echo -e "Enter your git email address: "; read email
+  echo "Enter your full name for git: "; read name
+  echo "Enter your git email address: "; read email
   git config --global user.name "${name}"
   git config --global user.email "${email}"
   git config --global core.editor "${EDITOR}"
@@ -105,7 +112,7 @@ gitConfig() {
 
 # clone and install patched nerdfonts to work with airline and powerline symbols locally
 installNERDFonts() {
-  echo -e "Installing Nerd Fonts..."
+  echo "Installing Nerd Fonts..."
   mkdir -p "${HOME}/.local/share/fonts"
 
   git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git "${HOME}/Workspace/misc/nerd-fonts"
@@ -119,18 +126,19 @@ installNERDFonts() {
 # Set real username
 setRealName() {
   echo -e "Please enter you real name, for your user account. ex: John Doe:\n"; read realName
-  currentUser="$(whoami)"
-  sudo usermod -c "'${realName}' ${currentUser}"
+  sudo usermod -c "'${realName}' ${USER}"
 }
 
 installBasics() {
   mkdir -p "${HOME}/.local/bin"
 
   # first update and install of packages
-  echo -e "Updating then installing ${PACKAGES}...\n"
-  "${PACKAGER}" "${PACKAGER_UPDATE}"
-  "${PACKAGER}" "${PACKAGER_UPGRADE}"
-  "${PACKAGER}" "${PACKAGER_INSTALL}" "${PACKAGES}"
+  echo "Running ${PACKAGER} ${PACKAGER_UPDATE}..."
+  sudo ${PACKAGER} ${PACKAGER_UPDATE}
+  echo "Running ${PACKAGER} ${PACKAGER_UPGRADE}..."
+  sudo ${PACKAGER} ${PACKAGER_UPGRADE}
+  echo "Running ${PACKAGER} ${PACKAGER_INSTALL} ${PACKAGES}..."
+  sudo ${PACKAGER} ${PACKAGER_INSTALL} ${PACKAGES}
 
   # install zcomet
   echo -e "Cloning zcomet into ~/.zcomet ...\n"
@@ -166,7 +174,7 @@ installBasics() {
   find "${HOME}/.dotfiles/vim/colors/" -type f -name "*.vim" -exec cp -s {} "${HOME}/.vim/colors/" \;
   find "${HOME}/.dotfiles/vim/colors/" -type f -name "*.vim" -exec cp -s {} "${HOME}/.config/nvim/colors/" \;
   # do the same for alacritty themes after cloning public themes repo
-  git clone https://github.com/alacritty/alacritty-theme ${HOME}/.config/alacritty/themes
+  git clone https://github.com/alacritty/alacritty-theme "${HOME}/.config/alacritty/themes"
   find "${HOME}/.dotfiles/alacritty/themes" -type f -name "*.toml" -exec cp -s {} "${HOME}/.config/alacritty/themes/themes/" \;
 }
 
