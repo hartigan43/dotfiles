@@ -604,8 +604,19 @@ lspconfig.terraformls.setup{}
 lspconfig.yamlls.setup {
   settings = {
     yaml = {
+      customTags = {
+        "!Ref scalar",
+        "!ref scalar",
+        "!Reference scalar",
+        "!reference scalar",
+      },
       schemas = {
         ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.k8s.yaml",
+        ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/edito/schema/ci.json"] = "/.gitlab-ci*.yml",
+        ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/edito/schema/ci.json"] = "/templates/.gitlab-ci*.yml",
+      },
+      schemaStore = {
+        enable = true,
       },
     },
   }
