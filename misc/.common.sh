@@ -62,6 +62,27 @@ extract () {
      fi
 }
 
+# flatten multiple kube configs into one yaml file, useful for go version of kubectx
+#   kube_dir - path to config directory
+#   prefix   - filename prefix for combining kubeconfigs
+#   ignored  - any files to ignore that match the prefix
+kflatten() {
+  local kube_dir="${1:-$HOME/.kube}"
+  local prefix="${2:-kube-}"
+  local ignored="${3:-}"
+
+  # Use find to get the list of files matching the pattern
+  local files=$(find "$kube_dir" -maxdepth 1 -type f -name "${prefix}*" ! -name "$ignored")
+
+  if [ -n "$files" ]; then
+    # Use tr to replace spaces with colons
+    local kubeconfig=$(echo "$files" | tr '\n' ':')
+    KUBECONFIG="$kubeconfig" kubectl config view --merge --flatten > "$kube_dir/all.yaml"
+  else
+    echo "No matching files found in $kube_dir with prefix '$prefix' (ignored: '$ignored')"
+  fi
+}
+
 # mkdir/path and cd to it
 mcd () {
   mkdir -p "$1" && cd "$1" || exit;

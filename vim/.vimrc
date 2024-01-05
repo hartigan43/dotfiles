@@ -604,8 +604,19 @@ lspconfig.terraformls.setup{}
 lspconfig.yamlls.setup {
   settings = {
     yaml = {
+      customTags = {
+        "!Ref scalar",
+        "!ref scalar",
+        "!Reference scalar",
+        "!reference scalar",
+      },
       schemas = {
         ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.k8s.yaml",
+        ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/edito/schema/ci.json"] = "/.gitlab-ci*.yml",
+        ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/edito/schema/ci.json"] = "/templates/.gitlab-ci*.yml",
+      },
+      schemaStore = {
+        enable = true,
       },
     },
   }
@@ -800,12 +811,13 @@ nmap <Leader>dj <Plug>VimspectorStepOver
 " }}}
 
 " File specific overrides -------------------------------------------------- {{{
-autocmd BufNewFile,BufRead *.html.twig   set syntax=html
+autocmd BufNewFile,BufRead *.html.twig set syntax=html
 augroup WrapLineForTextFiles
   autocmd!
   autocmd FileType md,markdown setlocal wrap spell spelllang=en_us
   autocmd FileType txt,text setlocal wrap spell spelllang=en_us
 augroup END
+autocmd FileType yaml,yml,toml setlocal list listchars+=lead:·
 " }}}
 
 " GUI-settings ------------------------------------------------------------- {{{
