@@ -152,7 +152,7 @@ installBasics() {
   # symlinks to $HOME
   ln -s "${HOME}/.dotfiles/bash/.bash_profile" "${HOME}/.bash_profile"
   ln -s "${HOME}/.dotfiles/bash/.bashrc" "${HOME}/.bashrc"
-  ln -s "${HOME}/.dotfiles/alacritty/alacritty.yml" "${HOME}/.config/alacritty/alacritty.yml"
+  ln -s "${HOME}/.dotfiles/alacritty/alacritty.toml" "${HOME}/.config/alacritty/alacritty.toml"
   ln -s "${HOME}/.dotfiles/misc/.common.sh" "${HOME}/.common.sh"
   ln -s "${HOME}/.dotfiles/misc/.ripgreprc" "${HOME}/.config/ripgrep/.ripgreprc"
   ln -s "${HOME}/.dotfiles/misc/.editorconfig" "${HOME}/.editorconfig"
@@ -167,7 +167,7 @@ installBasics() {
   find "${HOME}/.dotfiles/vim/colors/" -type f -name "*.vim" -exec cp -s {} "${HOME}/.config/nvim/colors/" \;
   # do the same for alacritty themes after cloning public themes repo
   git clone https://github.com/alacritty/alacritty-theme ${HOME}/.config/alacritty/themes
-  find "${HOME}/.dotfiles/alacritty/themes" -type f -name "*.yml" -exec cp -s {} "${HOME}/.config/alacritty/themes/themes/" \;
+  find "${HOME}/.dotfiles/alacritty/themes" -type f -name "*.toml" -exec cp -s {} "${HOME}/.config/alacritty/themes/themes/" \;
 }
 
 #### Run it ####
