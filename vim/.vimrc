@@ -707,6 +707,7 @@ require'nvim-treesitter.configs'.setup {
       lint_events = {"BufWrite", "CursorHold"},
       custom_captures = {
         -- Highlight TODO in red
+        -- TODO ironically, needs fixing/tweaking
         ["todo"] = "TODO"
       },
       severity = {
