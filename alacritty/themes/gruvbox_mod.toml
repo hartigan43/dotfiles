@@ -1,0 +1,24 @@
+#terminal.sexy - modified gruvbox
+[colors.gruv_modified.primary]
+background = "0x1d1f21"
+foreground = "0xc5c8c6"
+
+[colors.gruv_modified.normal]
+black = "0x34373c"
+red = "0xaf4646"
+green = "0x8c9440"
+yellow = "0xdeae5f"
+blue = "0x5985a9"
+magenta = "0x85678f"
+cyan = "0x5e8d87"
+white = "0x707880"
+
+[colors.gruv_modified.bright]
+black = "0x4e545c"
+red = "0xcc6666"
+green = "0xb5bd68"
+yellow = "0xf0c674"
+blue = "0x789bbe"
+magenta = "0xb294bb"
+cyan = "0x8abeb7"
+white = "0xc5c8c6"
