@@ -1,0 +1,4 @@
+# Global git aliases stored here
+[alias]
+  # git main to fetch, checkout main/master, and pull latest from remote
+  main = ! MAIN=$(git branch -l master main | sed -r 's/^[* ] //' | head -n 1) && git fetch && git checkout $MAIN && git pull origin $MAIN

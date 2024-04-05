@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# check for TODO strings
+check_todo_strings() {
+    # Store the strings to search for in an array
+    todo_strings="TODO todo @TODO @todo"
+
+    # Loop through the staged files
+    while IFS= read -r file; do
+        # Check each staged file for the presence of the TODO strings
+        for todo_string in $todo_strings; do
+            if grep -q "$todo_string" "$file"; then
+                echo "Error: Commit contains '$todo_string' in $file. Please remove before committing."
+                exit 1
+            fi
+        done
+    done < <(git diff --cached --name-only)
+}
+
+# add other global functions here
+
+# Run checks
+check_todo_strings
