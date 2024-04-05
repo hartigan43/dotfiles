@@ -601,17 +601,18 @@ lspconfig.bashls.setup{}
 lspconfig.pyright.setup{}
 lspconfig.tsserver.setup{}
 lspconfig.terraformls.setup{}
-lspconfig.yamlls.setup {
+lspconfig.yamlls.setup{
   settings = {
     yaml = {
       customTags = {
-        "!Ref scalar",
-        "!ref scalar",
-        "!Reference scalar",
-        "!reference scalar",
+        "!Ref",
+        "!ref",
+        "!Reference",
+        "!reference",
       },
       schemas = {
         ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.k8s.yaml",
+        ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "~/.kube/*.yaml",
         ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/edito/schema/ci.json"] = "/.gitlab-ci*.yml",
         ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/edito/schema/ci.json"] = "/templates/.gitlab-ci*.yml",
       },
@@ -753,7 +754,7 @@ let g:vista#renderer#enable_icon = 0
 autocmd bufenter * if (winnr("$") == 1 && vista#sidebar#IsOpen()) | q | endif
 " }}}
 
-" Keymaps -------------------------------------------------------------- {{{
+" Functions, Macris, and Keymaps -------------------------------------------------------------- {{{
 " Clean trailing whitespace
 nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
@@ -785,18 +786,17 @@ inoremap <F1> <esc>:checktime<cr>
 " bind K to grep word under cursor
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
-
-"use leader e or leader s to open or vsplit with filename in current directory
-"leader E,S uses parent directory
+" use leader e or leader s to open or vsplit with filename in current directory
+" leader E,S uses parent directory
 nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>E :e <C-R>=expand("%:p:h:h") . "/" <CR>
 nnoremap <leader>s :vsplit <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>S :vsplit <C-R>=expand("%:p:h:h") . "/" <CR>
 
-"yank the whole file to clipboard
+" yank the whole file to clipboard
 nmap <leader>y :%y+<cr>
 
-"vimspector
+" vimspector
 nnoremap <Leader>dd :call vimspector#Launch()<CR>
 nnoremap <Leader>de :call vimspector#Reset()<CR>
 nnoremap <Leader>dc :call vimspector#Continue()<CR>
