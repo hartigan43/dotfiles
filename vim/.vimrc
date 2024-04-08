@@ -213,6 +213,7 @@ let g:ale_linters = {
 \ 'go': ['gofmt', 'golint'],
 \ 'javascript': ['eslint'],
 \ 'python': ['ruff', 'flake8'],
+\ 'rust': ['analyzer'],
 \ 'terraform': ['terraform'],
 \ 'yaml': ['yaml-language-server'],
 \}
@@ -597,11 +598,16 @@ if is_neovim
 lua << LSP_EOF
 -- Setup language servers.
 local lspconfig = require('lspconfig')
-lspconfig.bashls.setup{}
-lspconfig.pyright.setup{}
-lspconfig.tsserver.setup{}
-lspconfig.terraformls.setup{}
-lspconfig.yamlls.setup{
+lspconfig.bashls.setup {}
+lspconfig.pyright.setup {}
+lspconfig.terraformls.setup {}
+lspconfig.tsserver.setup {}
+lspconfig.rust_analyzer.setup {
+   on_attach = function(client, bufnr)
+        vim.lsp.inlay_hint.enable(bufnr)
+    end
+}
+lspconfig.yamlls.setup {
   settings = {
     yaml = {
       customTags = {

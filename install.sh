@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
+# TODO NOT INSTALL.SH UNMUCK TMUX DIR AND SYMLINKS - just reference the dotfiles dir?
+# TODO cleanup symlink section, source RUST vars before install
+# TODO figure out what the hell happened with sudo and "${PACKAGER}" expansion
 # TODO symlink for vim snippets that work for both vim/nvim
+# TODO RIPGREP SYMLINK AND DIR
 
 # do not allow run as root - thanks @freekingdean
 if [ "${EUID}" -eq 0 ]; then
@@ -164,6 +168,7 @@ installBasics() {
   ln -s "${HOME}/.dotfiles/misc/.common.sh" "${HOME}/.common.sh"
   ln -s "${HOME}/.dotfiles/misc/.ripgreprc" "${HOME}/.config/ripgrep/.ripgreprc"
   ln -s "${HOME}/.dotfiles/misc/.editorconfig" "${HOME}/.editorconfig"
+  # TODO FIX this
   ln -s "${HOME}/.dotfiles/tmux/.tmux.conf" "${HOME}/.tmux.conf"
   ln -s "${HOME}/.dotfiles/tmux" "${HOME}/.tmux"
   ln -s "${HOME}/.dotfiles/vim/.vimrc" "${HOME}/.vimrc"

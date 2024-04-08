@@ -16,8 +16,6 @@ zcomet load agkozak/zsh-z
 zcomet load ohmyzsh plugins/gitfast
 zcomet load ohmyzsh plugins/safe-paste
 
-zcomet fpath --no-submodules https://github.com/docker/cli contrib/completion/zsh
-
 # lazy load the archive from prezto without full library
 zcomet trigger --no-submodules archive unarchive lsarchive \
     sorin-ionescu/prezto modules/archive
