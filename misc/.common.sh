@@ -317,14 +317,21 @@ alias lsn="ls --color=never"
 alias me="mullvad-exclude"
 alias mxlookup="nslookup -q=mx"
 #alias rgh="rg -."
-alias tf="terraform"
-alias tfclean='rm -rf .terraform && terraform init'
-alias tfplan='terraform plan -lock=false'
+#alias tf="terraform"
 alias tmux="tmux -2" # assume 256 color
 alias weather="curl wttr.in"
 
-#SO 113529 - emulate pbcopy
-if [[ $unamestr != 'Darwin' ]]; then
+if command_exists tofu ; then
+  alias tf='tofu'
+  alias tfclean='rm -rf .terraform && terraform init'
+else
+  alias tf='terraform'
+  alias tfclean='rm -rf .terraform && terraform init'
+  alias tfplan='terraform plan -lock=false'
+fi
+
+#SO 113529 - emulate pbcopy x11 only
+if [[ $unamestr != 'Darwin' && $XDG_SESSION_TYPE != 'wayland' ]]; then
   alias pbcopy='xsel --clipboard --input'
   alias pbpaste='xsel --clipboard --output'
 fi
