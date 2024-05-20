@@ -105,7 +105,7 @@ kflatten() {
   fi
 }
 
-# mkdir/path and cd to it
+# mkdir with path and cd to it
 mcd () {
   mkdir -p "$1" && cd "$1" || exit;
 }
