@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # create Workspace dir and export
 if [ ! -d "$HOME/Workspace" ]; then
@@ -21,14 +21,14 @@ add_to_path () {
 check_tmux () {
   if [ "$TMUX_AUTO_START" = "true" ] ; then
     if which tmuxp >/dev/null 2>&1; then
-      test -z ${TMUX} && tmuxp load "$HOME/.config/tmuxp/main.json"
+      test -z "${TMUX}" && tmuxp load "$HOME/.config/tmuxp/main.json"
 
     elif which tmux >/dev/null 2>&1; then
         # if no session is started, start a new session
-        test -z ${TMUX} && tmux
+        test -z "${TMUX}" && tmux
 
         # when quitting tmux, try to attach
-        while test -z ${TMUX}; do
+        while test -z "${TMUX}"; do
             tmux attach || break
         done
     fi
@@ -62,6 +62,26 @@ extract () {
      fi
 }
 
+# git commit -am "commit message"
+gcam () {
+  git commit -am "$1"
+}
+
+# git pull --rebase for current branch
+gpur () {
+  git fetch
+  echo "Pulling and rebasing the current branch"
+  git pull --rebase origin "$(git branch --show-current)"
+}
+
+# push to the current branch if no branch specified
+gpush () {
+  REMOTE="${1:-origin}"
+  BRANCH="${2:-$(git branch --show-current)}"
+  git push "$REMOTE" "$BRANCH"
+}
+
+
 # flatten multiple kube configs into one yaml file, useful for go version of kubectx
 #   kube_dir - path to config directory
 #   prefix   - filename prefix for combining kubeconfigs
@@ -72,11 +92,13 @@ kflatten() {
   local ignored="${3:-}"
 
   # Use find to get the list of files matching the pattern
-  local files=$(find "$kube_dir" -maxdepth 1 -type f -name "${prefix}*" ! -name "$ignored")
+  local files
+  files=$(find "$kube_dir" -maxdepth 1 -type f -name "${prefix}*" ! -name "$ignored")
 
   if [ -n "$files" ]; then
     # Use tr to replace spaces with colons
-    local kubeconfig=$(echo "$files" | tr '\n' ':')
+    local kubeconfig
+    kubeconfig=$(echo "$files" | tr '\n' ':')
     KUBECONFIG="$kubeconfig" kubectl config view --merge --flatten > "$kube_dir/all.yaml"
   else
     echo "No matching files found in $kube_dir with prefix '$prefix' (ignored: '$ignored')"
@@ -277,7 +299,7 @@ if command_exists fzf ; then
 
       if [ "x$pid" != "x" ]
       then
-          echo $pid | xargs kill -${1:-9}
+          echo "$pid" | xargs kill -"${1:-9}"
       fi
   }
   fi
@@ -301,6 +323,7 @@ alias d="docker"
 alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d'"
 alias dcu="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose up -d'"
 alias docker="podman"
+alias gpurm="git fetch && git pull --rebase origin main"
 alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gitroot='cd $(git rev-parse --show-toplevel)'
 alias gitsup="git submodule foreach git pull origin master" # SO 5828324 - git submodule recursive updates

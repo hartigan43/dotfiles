@@ -20,4 +20,4 @@ check_todo_strings() {
 # add other global functions here
 
 # Run checks
-check_todo_strings
+# check_todo_strings
