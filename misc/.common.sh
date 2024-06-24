@@ -132,6 +132,10 @@ randocommissian () {
   git commit -m "$(curl -s http://whatthecommit.com/index.txt)"
 }
 
+sanitize_path () {
+  PATH=$(echo $PATH | tr -s ':' | sed 's/:$//')
+}
+
 # https://github.com/mrusme/dotfiles/blob/dbb63bc1401f9752209296b019f8b362b42c1012/.zshrc#L358
 ssh () {
   if [ "$2" = "" ]; then
