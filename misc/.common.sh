@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#
+
 # create Workspace dir and export
 if [ ! -d "$HOME/Workspace" ]; then
   mkdir "$HOME/Workspace"
@@ -81,7 +81,6 @@ gpush () {
   git push "$REMOTE" "$BRANCH"
 }
 
-
 # flatten multiple kube configs into one yaml file, useful for go version of kubectx
 #   kube_dir - path to config directory
 #   prefix   - filename prefix for combining kubeconfigs
@@ -133,7 +132,7 @@ randocommissian () {
 }
 
 sanitize_path () {
-  PATH=$(echo $PATH | tr -s ':' | sed 's/:$//')
+  PATH=$(echo "$PATH" | tr -s ':' | sed 's/:$//')
 }
 
 # https://github.com/mrusme/dotfiles/blob/dbb63bc1401f9752209296b019f8b362b42c1012/.zshrc#L358
@@ -144,11 +143,11 @@ ssh () {
     if rg -U -i "^#.*Features:.*mosh.*\nHost $sshhost" "$HOME/.ssh/config" > /dev/null; then
       if command_exists mosh ; then
         printf "connecting with mosh ...\n"
-        command mosh $conn
+        command mosh "$conn"
       fi
     else
       printf "connecting with ssh ...\n"
-      command ssh $conn
+      command ssh "$conn"
     fi
   else
     printf "connecting with ssh ...\n"
@@ -177,9 +176,9 @@ tup () {
     echo y # enable keybindings
     echo n #update config files
   } | ./install
-  cd $CURRDIR
+  cd "$CURRDIR" || return
   echo "Refreshing the shell with exec $SHELL"
-  exec $SHELL
+  exec "$SHELL"
 }
 
 undozip (){
@@ -215,38 +214,22 @@ fi
 
 ### asdf-vm
 if [ -d "$HOME/.asdf" ] ; then
-  . "$HOME/.asdf/asdf.sh"
+  source "$HOME/.asdf/asdf.sh"
 
   if [ -n "$BASH" ] ; then
-    . "$HOME/.asdf/completions/asdf.bash"
+    source "$HOME/.asdf/completions/asdf.bash"
   else
     # zsh -- append completions to fpath
-    fpath=("${ASDF_DIR}"/completions $fpath)
+    fpath=("${ASDF_DIR}"/completions "$fpath")
     # initialise completions with ZSH's compinit
     autoload -Uz compinit && compinit
   fi
 
   # have yay ignore asdf shims for building packages
   if command_exists yay ; then
-    alias yay="PATH=$(getconf PATH) yay"
+    alias yay='PATH=$(getconf PATH) yay'
   fi
 fi
-###
-
-### poetry
-# TODO re-eval poetry
-# if ! command_exists poetry; then
-#   curl -sSL https://install.python-poetry.org | python3 -
-# fi
-#
-# if [ -n "$BASH" ] ; then
-#   mkdir -p /etc/bash_completion.d
-#   poetry completions bash > /etc/bash_completion.d/poetry
-# else
-#   mkdir -p $HOME/.zfunc
-#   poetry completions zsh > ~/.zfunc/_poetry
-#   fpath+=~/.zfunc
-# fi
 ###
 
 if command_exists nvim ; then
@@ -265,7 +248,7 @@ fi
 # fzf
 if command_exists fzf ; then
   alias fvim='vim $(fzf --height 40%)'
-  alias fzf="fzf --preview 'head -100 {}'"
+#  alias fzf="fzf --preview 'head -100 {}'"
 
   export FZF_CTRL_R_OPTS="
     --preview 'echo {}' --preview-window up:3:hidden:wrap
@@ -280,19 +263,22 @@ if command_exists fzf ; then
       --preview 'bat -n --color=always {}'
       --bind 'ctrl-/:change-preview-window(down|hidden|)'
     "
-    alias fzf="fzf --height 40% --border --preview 'bat --style=numbers --color=always {} | head -500'"
+    #alias fzf="fzf --height 40% --border --preview 'bat --style=numbers --color=always {} | head -500'"
   fi
 
   if command_exists tree ; then
     export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 	fi
 
+  # TODO SET AND SOURCE DEFAULTS WITHOUT ANY COMMANDS
+  # https://github.com/junegunn/fzf?tab=readme-ov-file#environment-variables for more info
   if command_exists fd ; then
     export FZF_DEFAULT_COMMAND="fd --type f"
     export FZF_ALT_C_COMMAND="fd --type d --follow"
   fi
 
   # fkill - kill processes - list only the ones you can kill. Modified the earlier script.
+  # TODO replace with kill -9 ** ?
   fkill() {
       local pid
       if [ "$UID" != "0" ]; then
@@ -323,46 +309,47 @@ if command_exists cmatrix; then
 fi
 
 ### aliases
-alias d="docker"
-alias dcb="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d'"
-alias dcu="sudo -- sh -c 'docker-compose pull && docker-compose down && docker-compose up -d'"
-alias docker="podman"
-alias gpurm="git fetch && git pull --rebase origin main"
-alias gitog="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+# TODO - https://www.shellcheck.net/wiki/SC2139 - aliases should use single quotes to prevent confusion
+alias d='docker'
+alias dcb='sudo -- sh -c "docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d"'
+alias dcu='sudo -- sh -c "docker-compose pull && docker-compose down && docker-compose up -d"'
+alias docker='podman'
+alias gpurm='git fetch && git pull --rebase origin main'
+alias gitog='git log --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
 alias gitroot='cd $(git rev-parse --show-toplevel)'
-alias gitsup="git submodule foreach git pull origin master" # SO 5828324 - git submodule recursive updates
-alias k=kubectl
+alias gitsup='git submodule foreach git pull origin master' # SO 5828324 - git submodule recursive updates
+alias k='kubectl'
 alias kcurr='kubectl config current-context'
-alias kctx=kubectx
+alias kctx='kubectx'
 alias kdesc='kubectl describe'
 alias kedit='kubectl edit'
 alias kexec='kubectl exec'
 alias klogs='kubectl logs'
-alias kns=kubens
+alias kns='kubens'
 alias knodes='kubectl get nodes'
-alias la="ls -a"
-alias ll="ls -l"
-alias lla="ls -lah"
-alias ls="ls --color=auto"
-alias lsn="ls --color=never"
-alias me="mullvad-exclude"
-alias mxlookup="nslookup -q=mx"
-#alias rgh="rg -."
-#alias tf="terraform"
-alias tmux="tmux -2" # assume 256 color
-alias weather="curl wttr.in"
+alias la='ls -a'
+alias ll='ls -l'
+alias lla='ls -lah'
+alias ls='ls --color=auto'
+alias lsn='ls --color=never'
+alias me='mullvad-exclude'
+alias mxlookup='nslookup -q=mx'
+#alias tf='terraform'
+alias tf-update-lockfile='terraform providers lock -platform=darwin_amd64 -platform=linux_amd64 -platform=darwin_arm64'
+alias tmux='tmux -2' # assume 256 color
+alias weather='curl wttr.in'
 
 if command_exists tofu ; then
   alias tf='tofu'
-  alias tfclean='rm -rf .terraform && terraform init'
 else
   alias tf='terraform'
-  alias tfclean='rm -rf .terraform && terraform init'
   alias tfplan='terraform plan -lock=false'
 fi
 
+alias tfclean='rm -rf .terraform && terraform init'
+
 #SO 113529 - emulate pbcopy x11 only
-if [[ $unamestr != 'Darwin' && $XDG_SESSION_TYPE != 'wayland' ]]; then
+if [[ "$unamestr" != 'Darwin' && $XDG_SESSION_TYPE != 'wayland' ]]; then
   alias pbcopy='xsel --clipboard --input'
   alias pbpaste='xsel --clipboard --output'
 fi

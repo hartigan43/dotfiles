@@ -202,10 +202,11 @@ nnoremap zO zczO
 " Plugin-settings ---------------------------------------------------------- {{{
 
 " ALE settings ------------------------------------------------------- {{{
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'            "define the format of the messages
 let g:ale_completion_delay = 250                                    "delay before ale completion, def 100
+let g:ale_disable_lsp = 'auto'                                      "disables ale-lsp features for those loaded by nvim-lspconfig, set to 1 to disable for all
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'            "define the format of the messages
+let g:ale_echo_msg_warning_str = 'W'
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
 
 let g:ale_linters = {
@@ -251,6 +252,8 @@ let g:ale_yaml_ls_config = {
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1
+" valid options are current for the current cursor is on, disabled to disable, or default by removing the setting
+let g:ale_virtualtext_cursor = 'disabled'
 
 " checks for an open preview window - SO14300101
 function! CheckPreviewWindow()
