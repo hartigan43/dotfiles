@@ -78,7 +78,7 @@ fi
 
 # use local neovim on servers
 if [ ! -f /usr/bin/nvim ] ; then
-  alias vim="$NEOVIM_BIN"
+  alias vim='$NEOVIM_BIN'
 fi
 
 function getNvim() {

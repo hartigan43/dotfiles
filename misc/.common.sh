@@ -277,7 +277,7 @@ if command_exists fzf ; then
     export FZF_ALT_C_COMMAND="fd --type d --follow"
   fi
 
-  # fkill - kill processes - list only the ones you can kill. Modified the earlier script.
+  # fkill - kill processes - list only the ones you can kill
   # TODO replace with kill -9 ** ?
   fkill() {
       local pid
@@ -335,18 +335,19 @@ alias lsn='ls --color=never'
 alias me='mullvad-exclude'
 alias mxlookup='nslookup -q=mx'
 #alias tf='terraform'
-alias tf-update-lockfile='terraform providers lock -platform=darwin_amd64 -platform=linux_amd64 -platform=darwin_arm64'
 alias tmux='tmux -2' # assume 256 color
 alias weather='curl wttr.in'
 
 if command_exists tofu ; then
-  alias tf='tofu'
+  tf_cmd='tofu'
 else
-  alias tf='terraform'
-  alias tfplan='terraform plan -lock=false'
+  tf_cmd='terraform'
 fi
 
-alias tfclean='rm -rf .terraform && terraform init'
+alias tf='"$tf_cmd"'
+alias tfplan='"$tf_cmd" plan -lock=false'
+alias tfclean='rm -rf .terraform && "$tf_cmd" init'
+alias tf-update-lockfile='"$tf_cmd" providers lock -platform=darwin_amd64 -platform=linux_amd64 -platform=darwin_arm64'
 
 #SO 113529 - emulate pbcopy x11 only
 if [[ "$unamestr" != 'Darwin' && $XDG_SESSION_TYPE != 'wayland' ]]; then
