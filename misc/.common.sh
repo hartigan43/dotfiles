@@ -5,6 +5,11 @@ if [ ! -d "$HOME/Workspace" ]; then
   mkdir "$HOME/Workspace"
 fi
 
+# check for bash
+if [ -n "$BASH" ] ; then
+  IS_BASH=true
+fi
+
 export WORKSPACE="$HOME/Workspace"
 export DATA_HOME="${XDG_DATA_HOME:-$WORKSPACE}"
 
@@ -12,7 +17,7 @@ export DATA_HOME="${XDG_DATA_HOME:-$WORKSPACE}"
 # add to path
 add_to_path () {
   if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-      PATH="${PATH:+"$PATH:"}$1"
+      PATH="${PATH:+$PATH:}$1"
   fi
 }
 
@@ -32,6 +37,15 @@ check_tmux () {
             tmux attach || break
         done
     fi
+  fi
+}
+
+# determine if opentofu or terraform are in use
+check_tf () {
+  if command_exists tofu ; then
+    tf_cmd='tofu'
+  else
+    tf_cmd='terraform'
   fi
 }
 
@@ -112,7 +126,7 @@ mcd () {
 # prepend to path, thanks tommyvyo
 prepend_to_path () {
   if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-      PATH="$1:${PATH:+"$PATH:"}"
+      PATH="$1${PATH:+":$PATH"}"
   fi
 }
 
@@ -155,11 +169,12 @@ ssh () {
   fi
 }
 
+# displays terraform workspace information
 tf_prompt_info() {
   psvar+=([2]="")
   [[ "$PWD" == ~ ]] && return
   if [ -d .terraform ]; then
-    workspace=$(terraform workspace show 2> /dev/null) || return
+    workspace=$("$tf_cmd" workspace show 2> /dev/null) || return
     psvar=([2]=$workspace)
   fi
 }
@@ -169,7 +184,7 @@ tup () {
   CURRDIR=$(pwd)
   vim +PlugUpdate +qall && vim +PlugUpgrade +qall
   zcomet update && zcomet self-update
-  asdf update
+  mise self-update -y
   cd ~/.fzf && git pull &&
   {
     echo y # enable completion
@@ -188,54 +203,6 @@ undozip (){
 ### end functions
 
 ### path updates and tooling
-
-# go
-if command_exists go ; then
-  export GOPATH="$DATA_HOME/go"
-fi
-
-add_to_path "$GOPATH/bin"
-prepend_to_path "$HOME/.yarn/bin"
-prepend_to_path "$HOME/.local/bin"
-
-# rust - rustup / cargo
-export RUSTUP_HOME="$DATA_HOME/rust/rustup"
-export CARGO_HOME="$DATA_HOME/rust/cargo"
-
-if [ -f "$CARGO_HOME/env" ]; then
-  source "$CARGO_HOME/env"
-else
-  prepend_to_path "$CARGO_HOME/bin"
-fi
-
-if command_exists fuck ; then
-  eval "$(thefuck --alias)"
-fi
-
-### asdf-vm
-if [ -d "$HOME/.asdf" ] ; then
-  source "$HOME/.asdf/asdf.sh"
-
-  if [ -n "$BASH" ] ; then
-    source "$HOME/.asdf/completions/asdf.bash"
-  else
-    # zsh -- append completions to fpath
-    fpath=("${ASDF_DIR}"/completions "$fpath")
-    # initialise completions with ZSH's compinit
-    autoload -Uz compinit && compinit
-  fi
-
-  # have yay ignore asdf shims for building packages
-  if command_exists yay ; then
-    alias yay='PATH=$(getconf PATH) yay'
-  fi
-fi
-###
-
-if command_exists nvim ; then
-  alias vim='nvim'
-fi
-
 # use bat, or pygmentize for easier cat viewing
 BAT="false"
 if command_exists bat ; then
@@ -248,7 +215,6 @@ fi
 # fzf
 if command_exists fzf ; then
   alias fvim='vim $(fzf --height 40%)'
-#  alias fzf="fzf --preview 'head -100 {}'"
 
   export FZF_CTRL_R_OPTS="
     --preview 'echo {}' --preview-window up:3:hidden:wrap
@@ -263,7 +229,6 @@ if command_exists fzf ; then
       --preview 'bat -n --color=always {}'
       --bind 'ctrl-/:change-preview-window(down|hidden|)'
     "
-    #alias fzf="fzf --height 40% --border --preview 'bat --style=numbers --color=always {} | head -500'"
   fi
 
   if command_exists tree ; then
@@ -292,21 +257,60 @@ if command_exists fzf ; then
           echo "$pid" | xargs kill -"${1:-9}"
       fi
   }
-  fi
-###
+fi
 
-### ripgrep
+# go
+if command_exists go ; then
+  export GOPATH="$DATA_HOME/go"
+fi
+
+add_to_path "$GOPATH/bin"
+prepend_to_path "$HOME/.yarn/bin"
+prepend_to_path "$HOME/.local/bin"
+
+# mise
+if [ ! -f "$HOME/.local/bin/mise" ] ; then
+  source "$HOME/.dotfiles/helper_scripts/mise_install.sh" && mise_install
+else
+  if [ "$IS_BASH" = true ] ; then
+    eval "$(~/.local/bin/mise activate bash)"
+  else
+    # zsh
+    eval "$(~/.local/bin/mise activate zsh)"
+  fi
+  # mise shims, can also use `mise activate --shims` to enable on demand
+  # prepend_to_path "$HOME/.local/share/mise/shims:$PATH"
+fi
+
+# rust - rustup / cargo
+export RUSTUP_HOME="$DATA_HOME/rust/rustup"
+export CARGO_HOME="$DATA_HOME/rust/cargo"
+
+if [ -f "$CARGO_HOME/env" ]; then
+  source "$CARGO_HOME/env"
+else
+  prepend_to_path "$CARGO_HOME/bin"
+fi
+
+if command_exists nvim ; then
+  alias vim='nvim'
+fi
+
+# ripgrep
 if command_exists rg ; then
   export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/.ripgreprc
 fi
 
+# zoxide - via mise
+# TODO - sort out mise eval before sourcing below
+if [ "$IS_BASH" = true ] ; then
+  eval "$(zoxide init bash)"
+else
+  echo $PATH
+  eval "$(zoxide init zsh)"
+fi
 
 ### end tooling
-
-# have some fun
-if command_exists cmatrix; then
-  alias clear='[ $[$RANDOM % 10] = 0 ] && timeout 3 cmatrix; clear || clear'
-fi
 
 ### aliases
 # TODO - https://www.shellcheck.net/wiki/SC2139 - aliases should use single quotes to prevent confusion
@@ -317,6 +321,7 @@ alias docker='podman'
 alias gpurm='git fetch && git pull --rebase origin main'
 alias gitog='git log --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
 alias gitroot='cd $(git rev-parse --show-toplevel)'
+alias gitstat='git status -s -b --show-stash'
 alias gitsup='git submodule foreach git pull origin master' # SO 5828324 - git submodule recursive updates
 alias k='kubectl'
 alias kcurr='kubectl config current-context'
@@ -335,19 +340,12 @@ alias lsn='ls --color=never'
 alias me='mullvad-exclude'
 alias mxlookup='nslookup -q=mx'
 #alias tf='terraform'
+alias tf='$tf_cmd'
+alias tfplan='$tf_cmd plan -lock=false'
+alias tfclean='rm -rf .terraform && $tf_cmd init'
+alias tf-update-lockfile='$tf_cmd providers lock -platform=darwin_amd64 -platform=linux_amd64 -platform=darwin_arm64'
 alias tmux='tmux -2' # assume 256 color
 alias weather='curl wttr.in'
-
-if command_exists tofu ; then
-  tf_cmd='tofu'
-else
-  tf_cmd='terraform'
-fi
-
-alias tf='"$tf_cmd"'
-alias tfplan='"$tf_cmd" plan -lock=false'
-alias tfclean='rm -rf .terraform && "$tf_cmd" init'
-alias tf-update-lockfile='"$tf_cmd" providers lock -platform=darwin_amd64 -platform=linux_amd64 -platform=darwin_arm64'
 
 #SO 113529 - emulate pbcopy x11 only
 if [[ "$unamestr" != 'Darwin' && $XDG_SESSION_TYPE != 'wayland' ]]; then
@@ -359,8 +357,16 @@ if command_exists markdown-pdf ; then
   alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/modified-gfm.css'
 fi
 
+# have some fun
+if command_exists cmatrix; then
+  alias clear='[ $[$RANDOM % 10] = 0 ] && timeout 3 cmatrix; clear || clear'
+fi
+
 ### end aliases
 
-# add terraform info to prompt
+# check tf command and add tf workspace info to prompt
+if [[ -z "$tf_cmd" ]]; then
+  check_tf
+fi
 precmd_functions+=(tf_prompt_info)
 PROMPT="${PROMPT:0:${#PROMPT}-5}%2(V.%F{13}[tf:%2v].)%f $ "

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# this is mostly used on servers I might frequent and is kept in
+# "best effort" parity with my main zsh configuration
 
 # Source global definitions
 [ -f /etc/bashrc ] && . /etc/bashrc
@@ -95,16 +97,14 @@ function getNvim() {
 # load fzf if it exists
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-# load z
-[ -f ~/.dotfiles/z/z.sh ]  && source ~/.dotfiles/z/z.sh
-
 # source common
 [ -f "$HOME/.common.sh" ] && source "$HOME/.common.sh"
 
 # allow local machine overrides
 [ -f "$HOME/.bashrc.local" ] && source "$HOME/.bashrc.local"
 
-# allow alliases
+# A trailing space in VALUE causes the next word to be checked
+# for alias substitution when the alias is expanded.
 alias sudo="sudo "
 
-complete -C $(which terraform) terraform
+complete -C $(which "$tf_cmd") terraform

@@ -1,6 +1,5 @@
 #!/usr/bin/env zsh
 # TODO move .bashrc.local and .zshrc.local into sh.local
-# TODO source common.sh earlier?
 
 #################
 # zcomet config #
@@ -11,7 +10,8 @@ if [[ ! -f "${ZDOTDIR:-${HOME}}"/.zcomet/bin/zcomet.zsh ]]; then
 fi
 
 source "${ZDOTDIR:-${HOME}}"/.zcomet/bin/zcomet.zsh
-zcomet load agkozak/zsh-z
+# trying zoxide via mise
+#zcomet load agkozak/zsh-z
 
 zcomet load ohmyzsh plugins/gitfast
 zcomet load ohmyzsh plugins/safe-paste
@@ -144,7 +144,8 @@ bindkey '^R' history-incremental-search-backward # reverse histroy search
 alias sudo="nocorrect sudo "
 
 # load fzf if it exists
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+# install and ran with mise
+# [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
 # source common
 [[ -f ~/.common.sh ]] && source ~/.common.sh
@@ -155,4 +156,4 @@ alias sudo="nocorrect sudo "
 # completions
 zcomet compinit
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C "$(which terraform)" terraform
+complete -o nospace -C $(which "$tf_cmd") terraform

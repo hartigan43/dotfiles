@@ -1,0 +1,6 @@
+[tools]
+python = "3.12.1"
+zoxide = "latest"
+zellij = "latest"
+argocd = "latest"
+spacectl = "latest"
