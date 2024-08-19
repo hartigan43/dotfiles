@@ -184,7 +184,8 @@ tup () {
   CURRDIR=$(pwd)
   vim +PlugUpdate +qall && vim +PlugUpgrade +qall
   zcomet update && zcomet self-update
-  mise self-update -y
+  mise self-update -y && mise upgrade
+  # TODO install fzf with mise after plugin is fixed
   cd ~/.fzf && git pull &&
   {
     echo y # enable completion
@@ -306,7 +307,6 @@ fi
 if [ "$IS_BASH" = true ] ; then
   eval "$(zoxide init bash)"
 else
-  echo $PATH
   eval "$(zoxide init zsh)"
 fi
 

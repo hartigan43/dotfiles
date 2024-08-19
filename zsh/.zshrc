@@ -144,8 +144,8 @@ bindkey '^R' history-incremental-search-backward # reverse histroy search
 alias sudo="nocorrect sudo "
 
 # load fzf if it exists
-# install and ran with mise
-# [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+# install and ran with mise - 20240819 currently broken asdf-fzf installer
+[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
 # source common
 [[ -f ~/.common.sh ]] && source ~/.common.sh

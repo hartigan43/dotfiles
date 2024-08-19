@@ -4,3 +4,8 @@ zoxide = "latest"
 zellij = "latest"
 argocd = "latest"
 spacectl = "latest"
+glab = "latest"
+
+[plugins]
+# patched fzf installer until the MR is merged upstream
+fzf-patched = "https://github.com/christasich/asdf-fzf.git"
