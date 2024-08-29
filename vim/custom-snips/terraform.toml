@@ -1,0 +1,13 @@
+# TODO fix the ${path.root}
+[helm-values]
+prefix = ["helm_values", "helm-values", "helm", "hv"]
+body = [
+  "helm_values = yamldecode(templatefile(\"{path.root}/config.yaml.tpl\", {",
+  "}))"
+  ]
+description = "Microservice helm_values template snippet"
+
+[sb-helm-values]
+prefix = ["sb_helm_values", "sb-helm-values", "sb_helm", "sbhv"]
+body = "helm_values = merge(local.helm_values, yamldecode(templatefile(\"{path.root}/config.yaml.tpl\", {\n}))"
+description = "Sandbox service helm_values template snippet"
