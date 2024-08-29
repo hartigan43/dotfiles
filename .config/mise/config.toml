@@ -1,11 +1,16 @@
 [tools]
-python = "3.12.1"
-zoxide = "latest"
-zellij = "latest"
+"cargo:twm" = "latest"
 argocd = "latest"
-spacectl = "latest"
 glab = "latest"
+python = "3.12.1"
+spacectl = "latest"
+usage = "latest"
+zellij = "latest"
+zoxide = "latest"
 
 [plugins]
 # patched fzf installer until the MR is merged upstream
 fzf-patched = "https://github.com/christasich/asdf-fzf.git"
+
+[settings]
+experimental = true

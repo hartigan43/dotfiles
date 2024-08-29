@@ -1,4 +1,7 @@
-#!/usr/bin/env bash
+# this script shell-agnostic and intended to be sourced, not executed directly
+
+# load required helper scripts
+source "${HOME}/.dotfiles/helper_scripts/command_exists.sh"
 
 # create Workspace dir and export
 if [ ! -d "$HOME/Workspace" ]; then
@@ -47,11 +50,6 @@ check_tf () {
   else
     tf_cmd='terraform'
   fi
-}
-
-# check for a command within your path
-command_exists () {
-  command -v "$1" >/dev/null 2>&1;
 }
 
 # alias.sh
@@ -263,9 +261,9 @@ fi
 # go
 if command_exists go ; then
   export GOPATH="$DATA_HOME/go"
+  add_to_path "$GOPATH/bin"
 fi
 
-add_to_path "$GOPATH/bin"
 prepend_to_path "$HOME/.yarn/bin"
 prepend_to_path "$HOME/.local/bin"
 
@@ -284,6 +282,7 @@ else
 fi
 
 # rust - rustup / cargo
+# TODO add installer in helpder?
 export RUSTUP_HOME="$DATA_HOME/rust/rustup"
 export CARGO_HOME="$DATA_HOME/rust/cargo"
 
@@ -303,7 +302,6 @@ if command_exists rg ; then
 fi
 
 # zoxide - via mise
-# TODO - sort out mise eval before sourcing below
 if [ "$IS_BASH" = true ] ; then
   eval "$(zoxide init bash)"
 else
@@ -313,7 +311,7 @@ fi
 ### end tooling
 
 ### aliases
-# TODO - https://www.shellcheck.net/wiki/SC2139 - aliases should use single quotes to prevent confusion
+# https://www.shellcheck.net/wiki/SC2139 - aliases should use single quotes to prevent confusion
 alias d='docker'
 alias dcb='sudo -- sh -c "docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d"'
 alias dcu='sudo -- sh -c "docker-compose pull && docker-compose down && docker-compose up -d"'
@@ -340,6 +338,7 @@ alias lsn='ls --color=never'
 alias me='mullvad-exclude'
 alias mxlookup='nslookup -q=mx'
 #alias tf='terraform'
+alias sudo="nocorrect sudo "
 alias tf='$tf_cmd'
 alias tfplan='$tf_cmd plan -lock=false'
 alias tfclean='rm -rf .terraform && $tf_cmd init'
