@@ -2,11 +2,10 @@
 "cargo:twm" = "latest"
 argocd = "latest"
 glab = "latest"
-python = "3.12.1"
 spacectl = "latest"
 usage = "latest"
-zellij = "latest"
 zoxide = "latest"
+python = "system"
 
 [plugins]
 # patched fzf installer until the MR is merged upstream
