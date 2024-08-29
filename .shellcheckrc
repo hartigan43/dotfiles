@@ -1,0 +1,4 @@
+# ~/.dotfiles/.shellcheckrc
+# TODO fix directives to properly search the helper_scrips https://www.shellcheck.net/wiki/Directive
+external-sources=true
+source-path=helper_scrips

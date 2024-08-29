@@ -23,7 +23,6 @@ Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries', 'for': 'go' }
 Plug 'hashivim/vim-terraform',          { 'for': 'tf' }
-Plug 'honza/vim-snippets'
 Plug 'lambdalisue/fern.vim',            { 'on': 'Fern' }
 Plug 'itchyny/lightline.vim'
 Plug 'jeffkreeftmeijer/vim-dim'
@@ -37,7 +36,6 @@ Plug 'mg979/vim-visual-multi'
 Plug 'mgee/lightline-bufferline'
 Plug 'puremourning/vimspector'
 "Plug 'ryanoasis/vim-devicons'
-Plug 'SirVer/ultisnips'
 Plug 'simnalamburt/vim-mundo',          { 'on': 'MundoToggle' }
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
@@ -75,8 +73,9 @@ if executable('deno')
   Plug 'Shougo/ddc-source-nvim-lsp'
   Plug 'Shougo/ddc-source-rg'
   "Plug 'shun/ddc-vim-lsp'
-  Plug 'tani/ddc-path'
   Plug 'statiolake/ddc-ale'
+  Plug 'tani/ddc-path'
+  Plug 'uga-rosa/denippet.vim'
 
   " ddc filters and matchers
   Plug 'Shougo/ddc-filter-matcher_head'
@@ -86,6 +85,8 @@ if executable('deno')
 
 else "alternatives when on a machine without deno
   echo "deno not found in $PATH, using fallback plugins"
+  Plug 'honza/vim-snippets'
+  Plug 'SirVer/ultisnips'
   if is_neovim
     " deoplete
     Plug 'nvim-lua/plenary.nvim' | Plug 'NTBBloodbath/rest.nvim'
@@ -202,10 +203,11 @@ nnoremap zO zczO
 " Plugin-settings ---------------------------------------------------------- {{{
 
 " ALE settings ------------------------------------------------------- {{{
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'            "define the format of the messages
 let g:ale_completion_delay = 250                                    "delay before ale completion, def 100
+let g:ale_disable_lsp = 'auto'                                      "disables ale-lsp features for those loaded by nvim-lspconfig, set to 1 to disable for all
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'            "define the format of the messages
+let g:ale_echo_msg_warning_str = 'W'
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
 
 let g:ale_linters = {
@@ -251,6 +253,8 @@ let g:ale_yaml_ls_config = {
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1
+" valid options are current for the current cursor is on, disabled to disable, or default by removing the setting
+let g:ale_virtualtext_cursor = 'disabled'
 
 " checks for an open preview window - SO14300101
 function! CheckPreviewWindow()
@@ -276,7 +280,7 @@ endfunction
 
 " ui must be set -- native: https://github.com/Shougo/ddc-ui-native
 call ddc#custom#patch_global('ui', 'native')
-call ddc#custom#patch_global('sources', ['ale','around','buffer','file','lsp','path','rg','treesitter','tmux']) "path, treesitter, tmux
+call ddc#custom#patch_global('sources', ['ale','around','buffer','denippet','file','lsp','path','rg','treesitter','tmux']) "path, treesitter, tmux
 call ddc#custom#patch_global('sourceOptions', {
     \ '_': {
     \   'matchers': ['matcher_fuzzy', 'matcher_head'],
@@ -293,6 +297,10 @@ call ddc#custom#patch_global('sourceOptions', {
     \ },
     \ 'buffer': {
     \   'mark': 'BUF',
+    \   'maxItems': 3,
+    \ },
+    \ 'denippet': {
+    \   'mark': 'SNIP',
     \   'maxItems': 3,
     \ },
     \ 'file': {
@@ -363,6 +371,21 @@ inoremap <expr><S-TAB>  pumvisible() ? '<C-p>' : '<C-h>'
 
 call ddc#enable()
 " }}}
+
+" denippet settings  ------------------------------------------------------- {{{
+let snip_dir = expand("$HOME/.dotfiles/vim/custom-snips")
+
+for file in split(glob(snip_dir . "/*.toml"), "\n")
+  call denippet#load(file)
+endfor
+
+" Key mappings for denippet
+inoremap <C-e> <Plug>(denippet-expand)
+inoremap <expr> <Tab> denippet#jumpable() ? '<Plug>(denippet-jump-next)' : '<Tab>'
+snoremap <expr> <Tab> denippet#jumpable() ? '<Plug>(denippet-jump-next)' : '<Tab>'
+inoremap <expr> <S-Tab> denippet#jumpable(-1) ? '<Plug>(denippet-jump-prev)' : '<S-Tab>'
+snoremap <expr> <S-Tab> denippet#jumpable(-1) ? '<Plug>(denippet-jump-prev)' : '<S-Tab>'
+"  }}}
 
 " deoplete settings ------------------------------------------------------- {{{
 if 'g:loaded_deoplete'->exists()

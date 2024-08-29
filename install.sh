@@ -11,8 +11,12 @@ if [ "${EUID}" -eq 0 ]; then
   exit 1
 fi
 
-#current user
-#USER="$(whoami)"
+# source installation helper scripts. each script here is just an individual function
+for script in "$HOME"/.dotfiles/helper_scripts/*.sh ; do
+  if [ -f "$script" ]; then
+    source "$script"
+  fi
+done
 
 # make workspace and misc
 mkdir -p "${HOME}/Workspace/misc"
@@ -73,32 +77,9 @@ else
   exit 1
 fi
 
-#### FUNCTIONS ####
-asdfInstall() {
-  BRANCH=$(curl -s https://api.github.com/repos/asdf-vm/asdf/releases/latest | sed -n 's/.*"tag_name": "\(.*\)".*/\1/p')
-  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch "$BRANCH"
-}
-
-# confirmation prompt wrapper for read use in zsh and bash
-confirm() {
-  echo "Do you want to $1? [y/N] "
-  read response
-  response="$(echo "$response"  | tr '[:upper:]' '[:lower:]')"
-
-  if [[ "$response" =~ ^(yes|y)$ ]]; then
-    return 0
-  else
-    return 1
-  fi
-}
-
-# install fzf
-fzfInstall() {
-  if [ ! -d "${HOME}/.fzf" ]; then
-    git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf"
-    cd "${HOME}/.fzf" && ./install
-  fi
-}
+###
+# most functions have been moved to individual scripts within `helper_scripts/$NAME.sh` for portability
+###
 
 # configure the global get settings for name, email, and editor
 gitConfig() {
@@ -114,23 +95,10 @@ gitConfig() {
   fi
 }
 
-# clone and install patched nerdfonts to work with airline and powerline symbols locally
-installNERDFonts() {
-  echo "Installing Nerd Fonts..."
-  mkdir -p "${HOME}/.local/share/fonts"
-
-  git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git "${HOME}/Workspace/misc/nerd-fonts"
-  cd "${HOME}/Workspace/misc/nerd-fonts" || return
-  ./install.sh Inconsolata
-  ./install.sh InconsolataGo
-  ./install.sh Iosevka
-  ./install.sh DroidSansMono
-}
-
 # Set real username
 setRealName() {
   echo -e "Please enter you real name, for your user account. ex: John Doe:\n"; read realName
-  sudo usermod -c "'${realName}' ${USER}"
+  sudo usermod -c "'${realName}' $(whoami)"
 }
 
 installBasics() {
@@ -145,6 +113,7 @@ installBasics() {
   sudo ${PACKAGER} ${PACKAGER_INSTALL} ${PACKAGES}
 
   # install zcomet
+  # TODO break out
   echo -e "Cloning zcomet into ~/.zcomet ...\n"
   git clone https://github.com/agkozak/zcomet.git "${HOME}/.zcomet"
 
@@ -188,11 +157,11 @@ installBasics
 if confirm "configure git"; then
   gitConfig
 fi
-if confirm "install asdf-vm"; then
-  asdfInstall
-fi
+#if confirm "install asdf-vm"; then
+#  asdfInstall
+#fi
 if confirm "install deno"; then
-  # TODO use asdf? - https://docs.deno.com/runtime/manual/getting_started/installation
+  # TODO use asdf/mise? - https://docs.deno.com/runtime/manual/getting_started/installation
   curl -fsSL https://deno.land/x/install/install.sh | sh
 fi
 if confirm "install fzf"; then
@@ -203,5 +172,5 @@ if confirm "install rust via rustup"; then
 fi
 setRealName
 if confirm "install NERDFonts"; then
-  installNERDFonts
+  nerdFontsInstall
 fi

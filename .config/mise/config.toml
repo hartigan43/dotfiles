@@ -1,0 +1,13 @@
+[tools]
+"cargo:twm" = "latest"
+glab = "latest"
+usage = "latest"
+zoxide = "latest"
+python = "system"
+
+[plugins]
+# patched fzf installer until the MR is merged upstream
+fzf-patched = "https://github.com/christasich/asdf-fzf.git"
+
+[settings]
+experimental = true
