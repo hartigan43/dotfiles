@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+# this script shell-agnostic and intended to be sourced, not executed directly
 
-# clone and install patched nerdfonts to work with airline and powerline symbols locally
+# clone and install patched nerdfonts to work with airline and powerline symbols
 nerdFontsInstall() {
   echo "Installing Nerd Fonts..."
   mkdir -p "${HOME}/.local/share/fonts"

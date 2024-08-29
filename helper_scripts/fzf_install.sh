@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# this script shell-agnostic and intended to be sourced, not executed directly
 
 fzfInstall() {
   if [ ! -d "${HOME}/.fzf" ]; then
