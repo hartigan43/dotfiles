@@ -13,8 +13,14 @@ if [ -n "$BASH" ] ; then
   IS_BASH=true
 fi
 
-export WORKSPACE="$HOME/Workspace"
 export DATA_HOME="${XDG_DATA_HOME:-$WORKSPACE}"
+# check for nvim and default to vim
+nvim=$(command -v nvim)
+vim=$(command -v vim)
+export EDITOR="${nvim:-vim}"
+export VISUAL=code #TODO
+export DIFFPROG="${EDITOR} -d" #vim and nvim use -d for diffmode
+export WORKSPACE="$HOME/Workspace"
 
 ### functions
 # add to path
@@ -338,7 +344,7 @@ alias lsn='ls --color=never'
 alias me='mullvad-exclude'
 alias mxlookup='nslookup -q=mx'
 #alias tf='terraform'
-alias sudo="nocorrect sudo "
+alias sudo="nocorrect sudo " # A trailing space in VALUE causes the next word to be checked for alias substitution when the alias is expanded.
 alias tf='$tf_cmd'
 alias tfplan='$tf_cmd plan -lock=false'
 alias tfclean='rm -rf .terraform && $tf_cmd init'

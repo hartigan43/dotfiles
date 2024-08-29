@@ -107,18 +107,12 @@ fi
 # user and default editor and history
 # override locally with .zsh.local
 DEFAULT_USER="hartigan"
-# check for nvim and default to vim
-export EDITOR="${$(command -v nvim):-$(command -v vim)}" # TODO move to common?
-export VISUAL=code
-export DIFFPROG="${EDITOR} -d" #vim and nvim use -d for diffmode
 export HISTFILE="${HOME}/.config/zsh/.zsh_history"
 if [[ -f "${HISTFILE}" ]]; then
   touch "$HISTFILE"
 fi
 export HISTSIZE=10000
 export SAVEHIST=10000
-# TODO investigate why below stopped working
-#export HISTORY_CONTROL="HIST_IGNORE_DUPS:HIST_EXPIRE_DUPS_FIRST:INC_APPEND_HISTORY:EXTENDED_HISTORY:SHARE_HISTORY"
 setopt HIST_IGNORE_DUPS
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt INC_APPEND_HISTORY

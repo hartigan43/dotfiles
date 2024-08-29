@@ -68,11 +68,12 @@ force_color_prompt=yes
 export HISTCONTROL=ignoredups:erasedups
 export HISTSIZE=100000
 export HISTFILESIZE=100000
+export HISTFILE="$HOME/.config/bash/.bash_history"
+if [[ -f "${HISTFILE}" ]]; then
+  touch "$HISTFILE"
+fi
 export LS_COLORS='ln=38;5;199:fi=38;5;222:di=38;5;4'
 export PS1="\u:\[\e[34m\]\W\[\e[m\]\[\e[34m\]/\[\e[m\] \[\e[33m\]\`parse_git_branch\`\[\e[m\] \\$ "
-export VISUAL=vim
-export EDITOR=vim
-export DIFFPROG=vimdiff
 export TERM="screen-256color"
 if [ "$VIM" ]; then
     export PS1='\h:\w› '
@@ -103,8 +104,4 @@ function getNvim() {
 # allow local machine overrides
 [ -f "$HOME/.bashrc.local" ] && source "$HOME/.bashrc.local"
 
-# A trailing space in VALUE causes the next word to be checked
-# for alias substitution when the alias is expanded.
-alias sudo="sudo "
-
-complete -C $(which "$tf_cmd") terraform
+complete -C "$(which "$tf_cmd")" terraform
