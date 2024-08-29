@@ -1,8 +1,6 @@
 [tools]
 "cargo:twm" = "latest"
-argocd = "latest"
 glab = "latest"
-spacectl = "latest"
 usage = "latest"
 zoxide = "latest"
 python = "system"
