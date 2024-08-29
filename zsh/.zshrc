@@ -10,8 +10,6 @@ if [[ ! -f "${ZDOTDIR:-${HOME}}"/.zcomet/bin/zcomet.zsh ]]; then
 fi
 
 source "${ZDOTDIR:-${HOME}}"/.zcomet/bin/zcomet.zsh
-# trying zoxide via mise
-#zcomet load agkozak/zsh-z
 
 zcomet load ohmyzsh plugins/gitfast
 zcomet load ohmyzsh plugins/safe-paste
@@ -113,7 +111,7 @@ DEFAULT_USER="hartigan"
 export EDITOR="${$(command -v nvim):-$(command -v vim)}" # TODO move to common?
 export VISUAL=code
 export DIFFPROG="${EDITOR} -d" #vim and nvim use -d for diffmode
-export HISTFILE="${HOME}/.zsh_history"
+export HISTFILE="${HOME}/.config/zsh/.zsh_history"
 if [[ -f "${HISTFILE}" ]]; then
   touch "$HISTFILE"
 fi
@@ -141,8 +139,6 @@ bindkey '^R' history-incremental-search-backward # reverse histroy search
 #eval $(keychain --eval --quiet id_rsa ~/.ssh/id_rsa)
 #eval $(keychain --eval --quiet id_rsa ~/.ssh/hartigan)
 
-alias sudo="nocorrect sudo "
-
 # load fzf if it exists
 # install and ran with mise - 20240819 currently broken asdf-fzf installer
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
@@ -153,7 +149,11 @@ alias sudo="nocorrect sudo "
 # allow local machine overrides
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
-# completions
+#################
+#  completions  #
+#################
+[[ -d ~/.config/zsh/completions ]] && fpath=(~/.config/zsh/completions $fpath)
+
 zcomet compinit
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C $(which "$tf_cmd") terraform
