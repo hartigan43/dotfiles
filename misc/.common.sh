@@ -213,6 +213,7 @@ BAT="false"
 if command_exists bat ; then
   alias cat='bat'
   BAT="true"
+  export BAT_THEME=ansi
 elif command_exists pygmentize ; then
   alias cat='pygmentize -g'
 fi
@@ -351,6 +352,7 @@ alias tfclean='rm -rf .terraform && $tf_cmd init'
 alias tf-update-lockfile='$tf_cmd providers lock -platform=darwin_amd64 -platform=linux_amd64 -platform=darwin_arm64'
 alias tmux='tmux -2' # assume 256 color
 alias weather='curl wttr.in'
+alias yay="PATH=$(getconf PATH) mullvad-exclude yay" # have yay build aur apps with system libraries
 
 #SO 113529 - emulate pbcopy x11 only
 if [[ "$unamestr" != 'Darwin' && $XDG_SESSION_TYPE != 'wayland' ]]; then

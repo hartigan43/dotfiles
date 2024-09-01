@@ -1,9 +1,10 @@
 [tools]
 "cargo:twm" = "latest"
+deno = "latest"
 glab = "latest"
+python = "system"
 usage = "latest"
 zoxide = "latest"
-python = "system"
 
 [plugins]
 # patched fzf installer until the MR is merged upstream
