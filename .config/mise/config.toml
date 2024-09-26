@@ -1,5 +1,6 @@
 [tools]
 "cargo:git-delta" = "latest"
+"cargo:dotter" = "latest"
 "cargo:du-dust" = "latest"
 "cargo:tlrc" = "latest"
 "cargo:twm" = "latest"
