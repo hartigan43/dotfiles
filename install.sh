@@ -82,6 +82,7 @@ fi
 ###
 
 # configure the global get settings for name, email, and editor
+# TODO move to helper_scripts
 gitConfig() {
   echo -e "Running basic git configuration...\n"
   echo "Enter your full name for git: "; read name
@@ -113,10 +114,11 @@ installBasics() {
   sudo ${PACKAGER} ${PACKAGER_INSTALL} ${PACKAGES}
 
   # install zcomet
-  # TODO break out
+  # TODO break out into helper function
   echo -e "Cloning zcomet into ~/.zcomet ...\n"
   git clone https://github.com/agkozak/zcomet.git "${HOME}/.zcomet"
 
+  # TODO GNUSTOW/alternative
   # Symlink vimrc, zshrc and aliases/functions
   echo -e "Symlinks for vimrc, zshrc, tmux.conf, etc to HOME...\n"
   #backup any original config files
@@ -156,16 +158,6 @@ installBasics() {
 installBasics
 if confirm "configure git"; then
   gitConfig
-fi
-#if confirm "install asdf-vm"; then
-#  asdfInstall
-#fi
-if confirm "install deno"; then
-  # TODO use asdf/mise? - https://docs.deno.com/runtime/manual/getting_started/installation
-  curl -fsSL https://deno.land/x/install/install.sh | sh
-fi
-if confirm "install fzf"; then
-  fzfInstall
 fi
 if confirm "install rust via rustup"; then
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path

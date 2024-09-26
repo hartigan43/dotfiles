@@ -1,7 +1,6 @@
 "" .vimrc
 " TODO consider mason for language servers/linters/formatters?
 " many things from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
-
 set nocompatible             " be iMproved
 
 let is_neovim = has('nvim')
@@ -280,7 +279,7 @@ endfunction
 
 " ui must be set -- native: https://github.com/Shougo/ddc-ui-native
 call ddc#custom#patch_global('ui', 'native')
-call ddc#custom#patch_global('sources', ['ale','around','buffer','denippet','file','lsp','path','rg','treesitter','tmux']) "path, treesitter, tmux
+call ddc#custom#patch_global('sources', ['ale','around','buffer','denippet','file','lsp','path','rg','treesitter','tmux'])
 call ddc#custom#patch_global('sourceOptions', {
     \ '_': {
     \   'matchers': ['matcher_fuzzy', 'matcher_head'],
@@ -294,10 +293,13 @@ call ddc#custom#patch_global('sourceOptions', {
     \ 'around': {
     \   'mark': 'ARO',
     \   'maxItems': 5,
+    \   'minAutoCompleteLength': 5,
+    \   'timeout': 1000,
     \ },
     \ 'buffer': {
     \   'mark': 'BUF',
     \   'maxItems': 3,
+    \   'minAutoCompleteLength': 4,
     \ },
     \ 'denippet': {
     \   'mark': 'SNIP',
@@ -337,11 +339,11 @@ call ddc#custom#patch_global('sourceParams', {
     \   'cleanResultsWhitespace': v:false,
     \ },
     \ 'around': {
-    \   'maxCandidates': 3,
+    \   'maxSize': 300,
     \ },
     \ 'buffer': {
     \   'requireSameFiletype': v:false,
-    \   'limitBytes': 5000000,
+    \   'limitBytes': 500000,
     \   'fromAltBuf': v:true,
     \   'forceCollect': v:true,
     \ },

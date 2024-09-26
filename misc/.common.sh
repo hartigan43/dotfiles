@@ -19,7 +19,7 @@ nvim=$(command -v nvim)
 vim=$(command -v vim)
 export EDITOR="${nvim:-vim}"
 export VISUAL=code #TODO
-export DIFFPROG="${EDITOR} -d" #vim and nvim use -d for diffmode
+export DIFFPROG="${delta:-${EDITOR} -d}" #vim and nvim use -d for diffmode
 export WORKSPACE="$HOME/Workspace"
 
 ### functions
@@ -88,7 +88,7 @@ gcam () {
 # git pull --rebase for current branch
 gpur () {
   git fetch
-  echo "Pulling and rebasing the current branch"
+  echo "Pulling and rebasing the current branch..."
   git pull --rebase origin "$(git branch --show-current)"
 }
 
@@ -96,6 +96,7 @@ gpur () {
 gpush () {
   REMOTE="${1:-origin}"
   BRANCH="${2:-$(git branch --show-current)}"
+  echo "Pushing to ${REMOTE} ${BRANCH}..."
   git push "$REMOTE" "$BRANCH"
 }
 
@@ -174,7 +175,7 @@ ssh () {
 }
 
 # displays terraform workspace information
-tf_prompt_info() {
+tf_prompt_info () {
   psvar+=([2]="")
   [[ "$PWD" == ~ ]] && return
   if [ -d .terraform ]; then
@@ -186,16 +187,17 @@ tf_prompt_info() {
 # update tooling - vim plugins, zcomet, fzf, and asdf. etc. bbq
 tup () {
   CURRDIR=$(pwd)
-  vim +PlugUpdate +qall && vim +PlugUpgrade +qall
-  zcomet update && zcomet self-update
   mise self-update -y && mise upgrade
+  vim +PlugUpdate +qall +PlugUpgrade -c "call denops#cache#update(#{reload: v:true})" +qall && \
+    deno cache --reload "/home/hartigan/.vim/plugged/ddc-around/denops/@ddc-sources/around.ts"
+  zcomet update && zcomet self-update
   # TODO install fzf with mise after plugin is fixed
-  cd ~/.fzf && git pull &&
-  {
-    echo y # enable completion
-    echo y # enable keybindings
-    echo n #update config files
-  } | ./install
+#  cd ~/.fzf && git pull &&
+#  {
+#    echo y # enable completion
+#    echo y # enable keybindings
+#    echo n #update config files
+#  } | ./install
   cd "$CURRDIR" || return
   echo "Refreshing the shell with exec $SHELL"
   exec "$SHELL"
@@ -345,7 +347,8 @@ alias lsn='ls --color=never'
 alias me='mullvad-exclude'
 alias mxlookup='nslookup -q=mx'
 #alias tf='terraform'
-alias sudo="nocorrect sudo " # A trailing space in VALUE causes the next word to be checked for alias substitution when the alias is expanded.
+alias sudo='nocorrect sudo ' # A trailing space in VALUE causes the next word to be checked for alias substitution when the alias is expanded.
+alias sdiff='sudo vimdiff'
 alias tf='$tf_cmd'
 alias tfplan='$tf_cmd plan -lock=false'
 alias tfclean='rm -rf .terraform && $tf_cmd init'
