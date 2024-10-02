@@ -209,6 +209,14 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'            "define the 
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
 
+function! FormatToml(buffer) abort
+  return {
+  \  'command': 'taplo format -'
+  \}
+endfunction
+
+execute ale#fix#registry#Add('taplo', 'FormatToml', ['toml'], 'taplo fmt for toml')
+
 let g:ale_linters = {
 \ 'cpp': ['clang'],
 \ 'go': ['gofmt', 'golint'],
@@ -226,6 +234,7 @@ let g:ale_fixers = {
 \ 'javascript': ['eslint', 'remove_trailing_lines', 'trim_whitespace'],
 \ 'python': ['black', 'trim_whitespace'],
 \ 'terraform': ['terraform', 'trim_whitespace'],
+\ 'toml': ['taplo', 'trim_whitespace'],
 \ 'yaml': ['trim_whitespace'],
 \}
 
