@@ -28,17 +28,7 @@ zcomet load zsh-users/zsh-history-substring-search
 #################
 # check session #
 #################
-
-if [[ -n "${SSH_CLIENT}" ]] || [[ -n "${SSH_TTY}" ]]; then
-  REMOTE_SESSION=true
-else
-  # TODO why was */sshd included
-  case $(ps -o comm= -p "${PPID}") in
-    sshd|mosh-server|mosh)
-      REMOTE_SESSION=true
-      ;;
-  esac
-fi
+source "${HOME}/.dotfiles/helper_scripts/check_remote_session.sh" && REMOTE_SESSION=$(check_remote_session)
 
 #################
 # prompt config #

@@ -1,0 +1,65 @@
+# Helpers are user-defined functions that can be executed inside templates.
+# This section is optional.
+[helpers]
+
+[alacritty.files]
+
+[bash.files]
+"bash/bash_profile" = "~/.bash_profile"
+"bash/bashrc"       = "~/.bashrc"
+if                  = "(eq shell 'bash')"
+
+[graphics.variables.font]
+regular   = "Noto Sans"
+monospace = "Iosevka Term"
+size      = 12
+
+[graphics.variables.color16]
+# modified seoul256-light
+background = "d1d0d0"
+foreground = "4e4e4e"
+cursor     = "4e4e4e"
+# In terminal color index order
+black        = "4e4e4e"
+red          = "af5f5f"
+green        = "5f885f"
+yellow       = "af8760"
+blue         = "5f87ae"
+magenta      = "875f87"
+cyan         = "5f8787"
+light_gray   = "e4e4e4"
+dark_gray    = "3a3a3a"
+light_red    = "870100"
+light_green  = "005f00"
+light_yellow = "d8865f"
+light_blue   = "0087af"
+light_purple = "87025f"
+light_cyan   = "008787"
+white        = "eeeeee"
+
+[shell.files]
+# TODO -- common.sh ? use templates and totally refactor alongside dotter watch
+ripgrep = { type = "symbolic", target = "~/.config/ripgrep/.ripgreprc", if = '(is_executable "rg")' }
+tmux    = "~/.config/tmux"
+
+[shell.variables]
+CONFIG_HOME = "~/.config/"
+
+[vim.files]
+# TODO migrate to nvim proper and send the whole dir?
+# nvim = "~/.config/nvim"
+"vim/vimrc" = "~/.vimrc"
+"vim/vimrc" = "~/.config/nvim/init.vim"
+
+[zsh]
+depends = ["shell"]
+
+[zsh.files]
+"zsh/zshenv" = "~/.zshenv"
+"zsh/zshrc"  = "~/.config/zsh/.zshrc"
+
+[zsh.variables]
+psvar+=([1]="${REMOTE_SESSION}")
+BASE_PROMPT  = '%1(V.%n%F{5}@%m:%B%F{4}%1~/%f%b.%n:%B%F{4}%1~/%f%b) %F{11}${vcs_info_msg_0_}%f\$ '
+RPROMPT = '[%*]'
+# PROMPT="${PROMPT:0:${#PROMPT}-5}%2(V.%F{13}[tf:%2v].)%f $ "
