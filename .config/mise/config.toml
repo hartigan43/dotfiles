@@ -11,6 +11,7 @@ glab = "latest"
 python = "system"
 usage = "latest"
 zoxide = "latest"
+"cargo:taplo-cli" = "latest"
 
 [plugins]
 # patched fzf installer until the MR is merged upstream
