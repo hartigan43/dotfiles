@@ -142,9 +142,9 @@ set backupdir=~/.vim/tmp/backups//                "backup dir -- // saves full f
 set directory=~/.vim/tmp/swap//                   "temporary dir for swap files
 set noswapfile                                    "disable swaps - were using backups
 set undofile                                      "allow per file undo persistance
-set undoreload=10000
+set undoreload=10000                              "max lines that can change outside vim and preserve history
 set undodir=~/.vim/tmp/undo//                     "undo dir
-set writebackup                                   "enabling backups
+set writebackup                                   "enabling temp backups during save
 
 if !empty($EDITOR_MONOTONE)
   set background=light
