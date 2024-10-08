@@ -17,9 +17,10 @@ export DATA_HOME="${XDG_DATA_HOME:-$WORKSPACE}"
 # check for nvim and default to vim
 nvim=$(command -v nvim)
 vim=$(command -v vim)
-export EDITOR="${nvim:-vim}"
+export EDITOR="${nvim:-$vim}"
 export VISUAL=code #TODO
 export DIFFPROG="${delta:-${EDITOR} -d}" #vim and nvim use -d for diffmode
+export TAPLO_CONFIG="${XDG_CONFIG_HOME}/taplo/taplo.toml" # TODO template if taplo installed
 export WORKSPACE="$HOME/Workspace"
 
 ### functions
@@ -346,7 +347,6 @@ alias ls='ls --color=auto'
 alias lsn='ls --color=never'
 alias me='mullvad-exclude'
 alias mxlookup='nslookup -q=mx'
-#alias tf='terraform'
 alias sudo='nocorrect sudo ' # A trailing space in VALUE causes the next word to be checked for alias substitution when the alias is expanded.
 alias sdiff='sudo vimdiff'
 alias tf='$tf_cmd'
@@ -355,7 +355,8 @@ alias tfclean='rm -rf .terraform && $tf_cmd init'
 alias tf-update-lockfile='$tf_cmd providers lock -platform=darwin_amd64 -platform=linux_amd64 -platform=darwin_arm64'
 alias tmux='tmux -2' # assume 256 color
 alias weather='curl wttr.in'
-alias yay="PATH=$(getconf PATH) mullvad-exclude yay" # have yay build aur apps with system libraries
+alias yay='PATH=$(getconf PATH) mullvad-exclude yay' # have yay build aur apps with system libraries
+alias v='vim'
 
 #SO 113529 - emulate pbcopy x11 only
 if [[ "$unamestr" != 'Darwin' && $XDG_SESSION_TYPE != 'wayland' ]]; then
@@ -364,7 +365,7 @@ if [[ "$unamestr" != 'Darwin' && $XDG_SESSION_TYPE != 'wayland' ]]; then
 fi
 
 if command_exists markdown-pdf ; then
-  alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/modified-gfm.css'
+  alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/misc/modified-gfm.css'
 fi
 
 # have some fun
