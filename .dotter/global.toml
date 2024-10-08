@@ -3,9 +3,12 @@
 [helpers]
 bash = "(eq shell 'bash')"
 
+[alacritty]
+depends = ["shell"]
+
 [alacritty.files]
 "alacritty/alacritty.toml" = "~/.config/alacritty/alacritty.toml"
-"alacritty/themes" = ~/.config/alacritty/themes/themes"
+"alacritty/themes"         = "~/.config/alacritty/themes/themes"
 # TODO ~/.config/alacritty/local.toml as template?
 
 [bash]
