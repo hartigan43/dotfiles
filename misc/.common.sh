@@ -88,9 +88,19 @@ gcam () {
 
 # git pull --rebase for current branch
 gpur () {
-  git fetch
   echo "Pulling and rebasing the current branch..."
   git pull --rebase origin "$(git branch --show-current)"
+}
+
+# git pull origin --rebase on top of main/master
+gpurm() {
+  echo "Pulling and rebasing on top of the main branch..."
+  # Check if 'main' branch exists, otherwise use 'master'
+  if git show-ref --verify --quiet refs/heads/main; then
+    git pull --rebase origin main
+  else
+    git pull --rebase origin master
+  fi
 }
 
 # push to the current branch if no branch specified
@@ -326,7 +336,6 @@ alias d='docker'
 alias dcb='sudo -- sh -c "docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d"'
 alias dcu='sudo -- sh -c "docker-compose pull && docker-compose down && docker-compose up -d"'
 alias docker='podman'
-alias gpurm='git fetch && git pull --rebase origin main'
 alias gitog='git log --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
 alias gitroot='cd $(git rev-parse --show-toplevel)'
 alias gitstat='git status -s -b --show-stash'
@@ -379,5 +388,6 @@ fi
 if [[ -z "$tf_cmd" ]]; then
   check_tf
 fi
+# TODO bash uses PROMPT_COMMAND
 precmd_functions+=(tf_prompt_info)
 PROMPT="${PROMPT:0:${#PROMPT}-5}%2(V.%F{13}[tf:%2v].)%f $ "
