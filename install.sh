@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# TODO NOT INSTALL.SH UNMUCK TMUX DIR AND SYMLINKS - just reference the dotfiles dir?
 # TODO cleanup symlink section, source RUST vars before install
 # TODO figure out what the hell happened with sudo and "${PACKAGER}" expansion
 # TODO symlink for vim snippets that work for both vim/nvim
-# TODO RIPGREP SYMLINK AND DIR
+# TODO deprecate all of this except for installs of base packages, dotter, and mise
 
 # do not allow run as root - thanks @freekingdean
 if [ "${EUID}" -eq 0 ]; then
@@ -164,5 +163,5 @@ if confirm "install rust via rustup"; then
 fi
 setRealName
 if confirm "install NERDFonts"; then
-  nerdFontsInstall
+  nerd_fonts_install
 fi

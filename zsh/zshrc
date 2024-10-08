@@ -128,7 +128,7 @@ bindkey '^R' history-incremental-search-backward # reverse histroy search
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
 # source common
-[[ -f ~/.common.sh ]] && source ~/.common.sh
+[[ -f ~/.config/common.sh ]] && source ~/.config/common.sh
 
 # allow local machine overrides
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local

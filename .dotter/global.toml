@@ -1,13 +1,20 @@
 # Helpers are user-defined functions that can be executed inside templates.
 # This section is optional.
 [helpers]
+bash = "(eq shell 'bash')"
 
 [alacritty.files]
+"alacritty/alacritty.toml" = "~/.config/alacritty/alacritty.toml"
+"alacritty/themes" = ~/.config/alacritty/themes/themes"
+# TODO ~/.config/alacritty/local.toml as template?
+
+[bash]
+depends = ["shell"]
 
 [bash.files]
 "bash/bash_profile" = "~/.bash_profile"
 "bash/bashrc"       = "~/.bashrc"
-if                  = "(eq shell 'bash')"
+if                  = "bash"
 
 [graphics.variables.font]
 regular   = "Noto Sans"
@@ -39,17 +46,25 @@ white        = "eeeeee"
 
 [shell.files]
 # TODO -- common.sh ? use templates and totally refactor alongside dotter watch
-ripgrep = { type = "symbolic", target = "~/.config/ripgrep/.ripgreprc", if = '(is_executable "rg")' }
-tmux    = "~/.config/tmux"
+# TODO -- use config = ~/.config ?
+# TODO -- template gitconfig out
+"misc/editorconfig" = "~/.editorconfig"
+"misc/common.sh"    = "~/.config/common.sh"
+"config/mise"       = { type = "symbolic", target = "~/.config/mise" }
+"config/ripgrep"    = { type = "symbolic", target = "~/.config/ripgrep", if = '(is_executable "rg")' }
+"config/taplo"      = { type = "symbolic", target = "~/.config/taplo", if = '(is_executable "taplo")' }
+tmux                = "~/.config/tmux"
 
 [shell.variables]
 CONFIG_HOME = "~/.config/"
 
 [vim.files]
 # TODO migrate to nvim proper and send the whole dir?
+# TODO custom snips
 # nvim = "~/.config/nvim"
-"vim/vimrc" = "~/.vimrc"
-"vim/vimrc" = "~/.config/nvim/init.vim"
+"vim/vimrc"  = "~/.vimrc"
+"vim/vimrc"  = "~/.config/nvim/init.vim"
+"vim/colors" = "~/.vim/colors"
 
 [zsh]
 depends = ["shell"]
@@ -59,7 +74,8 @@ depends = ["shell"]
 "zsh/zshrc"  = "~/.config/zsh/.zshrc"
 
 [zsh.variables]
-psvar+=([1]="${REMOTE_SESSION}")
-BASE_PROMPT  = '%1(V.%n%F{5}@%m:%B%F{4}%1~/%f%b.%n:%B%F{4}%1~/%f%b) %F{11}${vcs_info_msg_0_}%f\$ '
-RPROMPT = '[%*]'
-# PROMPT="${PROMPT:0:${#PROMPT}-5}%2(V.%F{13}[tf:%2v].)%f $ "
+# TODO eval template use and clean up
+# psvar+=([1]="${REMOTE_SESSION}")
+# BASE_PROMPT  = '%1(V.%n%F{5}@%m:%B%F{4}%1~/%f%b.%n:%B%F{4}%1~/%f%b) %F{11}${vcs_info_msg_0_}%f\$ '
+# RPROMPT = '[%*]'
+# FINAL_PROMPT="${PROMPT:0:${#PROMPT}-5}%2(V.%F{13}[tf:%2v].)%f $ "
