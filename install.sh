@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
+set -ex
 # TODO figure out what the hell happened with sudo and "${PACKAGER}" expansion
-# TODO deprecate all of this except for installs of base packages, dotter, and mise
 
 # do not allow run as root - thanks @freekingdean
 if [ "${EUID}" -eq 0 ]; then
@@ -8,13 +8,7 @@ if [ "${EUID}" -eq 0 ]; then
   exit 1
 fi
 
-# source installation helper scripts. each script here is just an individual function
-# TODO all are not needed and should be cleaned up
-for script in "$HOME"/.dotfiles/helper_scripts/*.sh ; do
-  if [ -f "$script" ]; then
-    source "$script"
-  fi
-done
+HELPER_DIR="${HOME}/.dotfiles/helper_scripts"
 
 # make workspace and misc
 mkdir -p "${HOME}/Workspace/misc"
@@ -22,7 +16,6 @@ mkdir -p "${HOME}/Workspace/misc"
 #### PLATFORM AND PACKAGES ####
 
 PLATFORM="$(uname)"
-# TODO - no longer necessary?
 if [ "${PLATFORM}" = "linux" ] || [ "${PLATFORM}" = "Linux" ]; then
   PLATFORM="$(cat /etc/*-release | grep ^ID= | sed 's/^ID=\(.*\)$/\1/')"
   if [ "${PLATFORM}" = "" ]; then
@@ -75,17 +68,13 @@ else
   exit 1
 fi
 
-###
-# most functions have been moved to individual scripts within `helper_scripts/$NAME.sh` for portability
-###
-
 # Set real username
-setRealName() {
-  echo -e "Please enter you real name, for your user account. ex: John Doe:\n"; read realName
-  sudo usermod -c "'${realName}' $(whoami)"
+set_real_name () {
+  echo -e "Please enter you real name, for your user account. ex: John Doe:\n"; read real_name
+  sudo usermod -c "'${real_name}' $(whoami)"
 }
 
-installBasics() {
+install_basics () {
   mkdir -p "${HOME}/.local/bin"
 
   # first update and install of packages
@@ -96,13 +85,11 @@ installBasics() {
   echo "Running ${PACKAGER} ${PACKAGER_INSTALL} ${PACKAGES}..."
   sudo ${PACKAGER} ${PACKAGER_INSTALL} ${PACKAGES}
 
-  # install zcomet
-  # TODO break out into helper function
-  echo -e "Cloning zcomet into ~/.zcomet ...\n"
-  git clone https://github.com/agkozak/zcomet.git "${HOME}/.zcomet"
+  source "${HELPER_DIR}/zcomet_install.sh" && zcomet_install
+  source "${HELPER_DIR}/mise_install.sh" && mise_install
 
   # Symlink vimrc, zshrc and aliases/functions
-  echo -e "Symlinks for vimrc, zshrc, tmux.conf, etc to HOME...\n"
+  echo -e "Backing up existing config files...\n"
   #backup any original config files
   mv "${HOME}/.zshrc" "${HOME}/.zshrc.bak"
   mv "${HOME}/.bashrc" "${HOME}/.bashrc.bak"
@@ -111,18 +98,29 @@ installBasics() {
   # vim/nvim, config directories
   mkdir -p "${HOME}/.config/vim"
   mkdir -p "${HOME}/.vim/colors"
-  mkdir -p "${HOME}/.config/nvim/colors"
   mkdir -p "${HOME}/.config/alacritty/themes"
+  mkdir -p "${HOME}/.config/mise"
+  mkdir -p "${HOME}/.config/nvim/colors"
 
-  git clone https://github.com/alacritty/alacritty-theme "${HOME}/.config/alacritty/themes"
+  source "${HELPER_DIR}/alacritty_themes_install.sh" && alacritty_themes_install
+
+  # we need to link mise manually so we can then install tools and dependencies in mise and use dotter after.
+  ln -s "${HOME}/.dotfiles/config/mise/config.toml" "${HOME}/.config/mise/config.toml"
 }
 
 #### Run it ####
-installBasics
+install_basics
 if confirm "install rust via rustup"; then
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path
 fi
-setRealName
-if confirm "install NERDFonts"; then
-  nerd_fonts_install
+if [[ "${PLATFORM}" != "Darwin" ]] ; then
+  if confirm "set current user's real name"; then
+    set_real_name
+  fi
 fi
+if confirm "install NERDFonts"; then
+  source "${HELPER_DIR}/nerdfonts_install.sh" && nerd_fonts_install
+fi
+
+echo -e "Wrapping up.  Starting a new shell and running mise i && cd ~/.dotfiles && dotter"
+exec $SHELL -c "mise i && cd ~/.dotfiles && dotter"
