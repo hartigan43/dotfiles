@@ -1,7 +1,6 @@
 # Helpers are user-defined functions that can be executed inside templates.
 # This section is optional.
 [helpers]
-# bash = "(eq shell 'bash')"
 
 [alacritty]
 depends = ["shell"]
@@ -9,15 +8,14 @@ depends = ["shell"]
 [alacritty.files]
 "alacritty/alacritty.toml" = "~/.config/alacritty/alacritty.toml"
 "alacritty/themes"         = "~/.config/alacritty/themes/themes"
-# TODO ~/.config/alacritty/local.toml as template?
+"alacritty/local.toml.tpl" = { target = "~/.config/alacritty/local.toml", type = "template" }
 
 [bash]
 depends = ["shell"]
 
 [bash.files]
-"bash/bash_profile" = "~/.bash_profile"
-"bash/bashrc"       = "~/.bashrc"
-if                  = "bash"
+"bash/bash_profile" = { target = "~/.bash_profile", type = "symbolic", if = "(eq shell bash)" }
+"bash/bashrc"       = { target = "~/.bashrc", type = "symbolic", if = "(eq shell bash)" }
 
 [graphics.variables.font]
 regular   = "Noto Sans"
@@ -50,20 +48,23 @@ white        = "eeeeee"
 [shell.files]
 # TODO -- common.sh ? use templates and totally refactor alongside dotter watch
 # TODO -- use config = ~/.config ?
-# TODO -- template gitconfig out
-"misc/editorconfig" = "~/.editorconfig"
+"config/mise"       = "~/.config/mise"
+"config/ripgrep"    = { target = "~/.config/ripgrep", type = "symbolic", if = '(is_executable "rg")' }
+"config/taplo"      = { target = "~/.config/taplo", type = "symbolic", if = '(is_executable "taplo")' }
+"config/twm"        = { target = "~/.config/twm", type = "symbolic", if = '(is_executable "twm")' }
 "misc/common.sh"    = "~/.config/common.sh"
-"config/mise"       = { type = "symbolic", target = "~/.config/mise" }
-"config/ripgrep"    = { type = "symbolic", target = "~/.config/ripgrep", if = '(is_executable "rg")' }
-"config/taplo"      = { type = "symbolic", target = "~/.config/taplo", if = '(is_executable "taplo")' }
+"misc/editorconfig" = "~/.editorconfig"
+"misc/gitconfig"    = { target = "~/.config/git/config", type = "template" }
 tmux                = "~/.config/tmux"
 
 [shell.variables]
-CONFIG_HOME = "~/.config/"
+editor = "nvim"
+pager  = "delta"
 
 [vim.files]
 # TODO migrate to nvim proper and send the whole dir?
 # TODO custom snips
+# TODO VIMDOTDIR AND VIMINIT
 # nvim = "~/.config/nvim"
 "vim/vimrc"  = "~/.vimrc"
 "vim/vimrc"  = "~/.config/nvim/init.vim"

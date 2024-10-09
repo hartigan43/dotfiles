@@ -1,8 +1,8 @@
 [font]
-size = 10
+size = {{ font_size}}
 
   [font.normal]
-  family = "Iosevka Term"
+  family = "{{ monospace }}"
   style = "Regular"
 
   [font.bold]
