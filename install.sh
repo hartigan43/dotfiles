@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-# TODO cleanup symlink section, source RUST vars before install
 # TODO figure out what the hell happened with sudo and "${PACKAGER}" expansion
-# TODO symlink for vim snippets that work for both vim/nvim
 # TODO deprecate all of this except for installs of base packages, dotter, and mise
 
 # do not allow run as root - thanks @freekingdean
@@ -11,6 +9,7 @@ if [ "${EUID}" -eq 0 ]; then
 fi
 
 # source installation helper scripts. each script here is just an individual function
+# TODO all are not needed and should be cleaned up
 for script in "$HOME"/.dotfiles/helper_scripts/*.sh ; do
   if [ -f "$script" ]; then
     source "$script"
@@ -80,21 +79,6 @@ fi
 # most functions have been moved to individual scripts within `helper_scripts/$NAME.sh` for portability
 ###
 
-# configure the global get settings for name, email, and editor
-# TODO move to helper_scripts
-gitConfig() {
-  echo -e "Running basic git configuration...\n"
-  echo "Enter your full name for git: "; read name
-  echo "Enter your git email address: "; read email
-  git config --global user.name "${name}"
-  git config --global user.email "${email}"
-  git config --global core.editor "${EDITOR}"
-  git config --global init.defaultBranch "main"
-  if confirm "add global git aliases"; then
-    git config --global alias.main "! MAIN=$(git branch -l master main | sed -r 's/^[* ] //' | head -n 1) && git fetch && git checkout $MAIN && git pull origin $MAIN"
-  fi
-}
-
 # Set real username
 setRealName() {
   echo -e "Please enter you real name, for your user account. ex: John Doe:\n"; read realName
@@ -117,7 +101,6 @@ installBasics() {
   echo -e "Cloning zcomet into ~/.zcomet ...\n"
   git clone https://github.com/agkozak/zcomet.git "${HOME}/.zcomet"
 
-  # TODO GNUSTOW/alternative
   # Symlink vimrc, zshrc and aliases/functions
   echo -e "Symlinks for vimrc, zshrc, tmux.conf, etc to HOME...\n"
   #backup any original config files
@@ -131,33 +114,11 @@ installBasics() {
   mkdir -p "${HOME}/.config/nvim/colors"
   mkdir -p "${HOME}/.config/alacritty/themes"
 
-  # symlinks to $HOME
-  ln -s "${HOME}/.dotfiles/bash/.bash_profile" "${HOME}/.bash_profile"
-  ln -s "${HOME}/.dotfiles/bash/.bashrc" "${HOME}/.bashrc"
-  ln -s "${HOME}/.dotfiles/alacritty/alacritty.toml" "${HOME}/.config/alacritty/alacritty.toml"
-  ln -s "${HOME}/.dotfiles/misc/.common.sh" "${HOME}/.common.sh"
-  ln -s "${HOME}/.dotfiles/misc/.ripgreprc" "${HOME}/.config/ripgrep/.ripgreprc"
-  ln -s "${HOME}/.dotfiles/misc/.editorconfig" "${HOME}/.editorconfig"
-  # TODO FIX this
-  ln -s "${HOME}/.dotfiles/tmux/.tmux.conf" "${HOME}/.tmux.conf"
-  ln -s "${HOME}/.dotfiles/tmux" "${HOME}/.tmux"
-  ln -s "${HOME}/.dotfiles/vim/.vimrc" "${HOME}/.vimrc"
-  ln -s "${HOME}/.dotfiles/vim/.vimrc" "${HOME}/.config/nvim/init.vim"
-  ln -s "${HOME}/.dotfiles/zsh/.zshrc" "${HOME}/.zshrc"
-
-  # use find and cp -s to add symlink for any .vim colors files
-  find "${HOME}/.dotfiles/vim/colors/" -type f -name "*.vim" -exec cp -s {} "${HOME}/.vim/colors/" \;
-  find "${HOME}/.dotfiles/vim/colors/" -type f -name "*.vim" -exec cp -s {} "${HOME}/.config/nvim/colors/" \;
-  # do the same for alacritty themes after cloning public themes repo
   git clone https://github.com/alacritty/alacritty-theme "${HOME}/.config/alacritty/themes"
-  find "${HOME}/.dotfiles/alacritty/themes" -type f -name "*.toml" -exec cp -s {} "${HOME}/.config/alacritty/themes/themes/" \;
 }
 
 #### Run it ####
 installBasics
-if confirm "configure git"; then
-  gitConfig
-fi
 if confirm "install rust via rustup"; then
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path
 fi

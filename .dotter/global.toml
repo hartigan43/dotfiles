@@ -14,8 +14,11 @@ depends = ["shell"]
 depends = ["shell"]
 
 [bash.files]
-"bash/bash_profile" = { target = "~/.bash_profile", type = "symbolic", if = "(eq shell bash)" }
-"bash/bashrc"       = { target = "~/.bashrc", type = "symbolic", if = "(eq shell bash)" }
+"bash/bash_profile" = { target = "~/.bash_profile", type = "symbolic", if = "(eq login_shell bash)" }
+"bash/bashrc"       = { target = "~/.bashrc", type = "symbolic", if = "(eq login_shell bash)" }
+
+[bash.variables]
+login_shell = "bash"
 
 [graphics.variables.font]
 regular   = "Noto Sans"
@@ -46,30 +49,31 @@ light_cyan   = "008787"
 white        = "eeeeee"
 
 [shell.files]
-# TODO -- common.sh ? use templates and totally refactor alongside dotter watch
 # TODO -- use config = ~/.config ?
-"config/mise"       = "~/.config/mise"
-"config/ripgrep"    = { target = "~/.config/ripgrep", type = "symbolic", if = '(is_executable "rg")' }
-"config/taplo"      = { target = "~/.config/taplo", type = "symbolic", if = '(is_executable "taplo")' }
-"config/twm"        = { target = "~/.config/twm", type = "symbolic", if = '(is_executable "twm")' }
-"misc/common.sh"    = "~/.config/common.sh"
-"misc/editorconfig" = "~/.editorconfig"
-"misc/gitconfig"    = { target = "~/.config/git/config", type = "template" }
-tmux                = "~/.config/tmux"
+"config/mise"    = "~/.config/mise"
+"config/ripgrep" = { target = "~/.config/ripgrep", type = "symbolic", if = '(is_executable "rg")' }
+"config/taplo"   = { target = "~/.config/taplo", type = "symbolic", if = '(is_executable "taplo")' }
+"config/twm"     = { target = "~/.config/twm", type = "symbolic", if = '(is_executable "twm")' }
+"misc/common.sh" = "~/.config/common.sh"
+# "misc/common.sh.tpl" = { target = "~/.config/common.sh", type = "template" } # TODO finish modularizing template and migrate
+"misc/editorconfig"  = "~/.editorconfig"
+"misc/gitconfig.tpl" = { target = "~/.config/git/config", type = "template" }
+tmux                 = "~/.config/tmux"
 
 [shell.variables]
-editor = "nvim"
-pager  = "delta"
+editor    = "nvim"
+pager     = "delta"
+hooksPath = "~/.config/git/hooks"
 
 [vim.files]
 # TODO migrate to nvim proper and send the whole dir?
-# TODO custom snips
 # TODO VIMDOTDIR AND VIMINIT
 # TODO nvim colors?
 # nvim = "~/.config/nvim"
-"vim/vimrc"  = { target = "~/.vimrc", type = "symbolic" }
-"vim/vimrc"  = { target = "~/.config/nvim/init.vim", type = "symbolic", if = '(is_executable "nvim")' }
-"vim/colors" = "~/.vim/colors"
+# "vim/vimrc"  = { target = "~/.vimrc", type = "symbolic" } # requires a manual link as dual entries are not supported
+"vim/vimrc"        = { target = "~/.config/nvim/init.vim", type = "symbolic", if = '(is_executable "nvim")' }
+"vim/colors"       = "~/.vim/colors"
+"vim/custom-snips" = { target = "~/.vim/custom-snips", type = "symbolic" }
 
 [zsh]
 depends = ["shell"]
@@ -79,8 +83,4 @@ depends = ["shell"]
 "zsh/zshrc"  = "~/.config/zsh/.zshrc"
 
 [zsh.variables]
-# TODO eval template use and clean up
-# psvar+=([1]="${REMOTE_SESSION}")
-# BASE_PROMPT  = '%1(V.%n%F{5}@%m:%B%F{4}%1~/%f%b.%n:%B%F{4}%1~/%f%b) %F{11}${vcs_info_msg_0_}%f\$ '
-# RPROMPT = '[%*]'
-# FINAL_PROMPT="${PROMPT:0:${#PROMPT}-5}%2(V.%F{13}[tf:%2v].)%f $ "
+login_shell = "zsh"

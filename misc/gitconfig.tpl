@@ -1,9 +1,10 @@
 [user]
 	name = {{ name }} {{ surname }}
-	email = hartiganj@protonmail.com
+	email = {{ email }}
 [core]
 	editor = {{ editor }}
   pager = {{ pager }}
+  hooksPath = {{ hooksPath }}
 {{#if (eq pager "delta")}}
 [delta]
   navigate = true    # use n and N to move between diff sections
@@ -20,6 +21,8 @@
 {{/if}}
 [init]
 	defaultBranch = main
+[alias]
+  main = ! MAIN=$(git branch -l master main | sed -r 's/^[* ] //' | head -n 1) && git fetch && git checkout $MAIN && git pull origin $MAIN
 [filter "lfs"]
 	required = true
 	clean = git-lfs clean -- %f
