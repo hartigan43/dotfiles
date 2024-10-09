@@ -1,0 +1,19 @@
+[tools]
+"cargo:dotter"    = "latest"
+"cargo:du-dust"   = "latest"
+"cargo:git-delta" = "latest"
+"cargo:taplo-cli" = "latest"
+"cargo:tlrc"      = "latest"
+"cargo:twm"       = "latest"
+deno              = "latest"
+duf               = "latest"
+fzf               = "latest"
+glab              = "latest"
+python            = "system"
+usage             = "latest"
+zoxide            = "latest"
+
+[plugins]
+
+[settings]
+experimental = true

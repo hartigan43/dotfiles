@@ -1,0 +1,6 @@
+[formatting]
+# https://taplo.tamasfe.dev/configuration/formatter-options.html
+align_comments   = true
+align_entries    = true
+reorder_keys     = false
+trailing_newline = false

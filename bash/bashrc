@@ -99,7 +99,7 @@ function getNvim() {
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 # source common
-[ -f "$HOME/.common.sh" ] && source "$HOME/.common.sh"
+[ -f "$HOME/.config/common.sh" ] && source "$HOME/.config/common.sh"
 
 # allow local machine overrides
 [ -f "$HOME/.bashrc.local" ] && source "$HOME/.bashrc.local"

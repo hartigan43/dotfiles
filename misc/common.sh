@@ -9,6 +9,7 @@ if [ ! -d "$HOME/Workspace" ]; then
 fi
 
 # check for bash
+# TODO tempalte file with dotter and split bash / zsh completely
 if [ -n "$BASH" ] ; then
   IS_BASH=true
 fi
@@ -17,9 +18,10 @@ export DATA_HOME="${XDG_DATA_HOME:-$WORKSPACE}"
 # check for nvim and default to vim
 nvim=$(command -v nvim)
 vim=$(command -v vim)
-export EDITOR="${nvim:-vim}"
+export EDITOR="${nvim:-$vim}"
 export VISUAL=code #TODO
 export DIFFPROG="${delta:-${EDITOR} -d}" #vim and nvim use -d for diffmode
+export TAPLO_CONFIG="${XDG_CONFIG_HOME}/taplo/taplo.toml" # TODO template if taplo installed
 export WORKSPACE="$HOME/Workspace"
 
 ### functions
@@ -87,9 +89,19 @@ gcam () {
 
 # git pull --rebase for current branch
 gpur () {
-  git fetch
   echo "Pulling and rebasing the current branch..."
   git pull --rebase origin "$(git branch --show-current)"
+}
+
+# git pull origin --rebase on top of main/master
+gpurm() {
+  echo "Pulling and rebasing on top of the main branch..."
+  # Check if 'main' branch exists, otherwise use 'master'
+  if git show-ref --verify --quiet refs/heads/main; then
+    git pull --rebase origin main
+  else
+    git pull --rebase origin master
+  fi
 }
 
 # push to the current branch if no branch specified
@@ -191,13 +203,13 @@ tup () {
   vim +PlugUpdate +qall +PlugUpgrade -c "call denops#cache#update(#{reload: v:true})" +qall && \
     deno cache --reload "/home/hartigan/.vim/plugged/ddc-around/denops/@ddc-sources/around.ts"
   zcomet update && zcomet self-update
-  # TODO install fzf with mise after plugin is fixed
-#  cd ~/.fzf && git pull &&
-#  {
-#    echo y # enable completion
-#    echo y # enable keybindings
-#    echo n #update config files
-#  } | ./install
+  # TODO see about passing flag to asdf-fzf for mise to support install --xdg
+  cd "${XDG_DATA_HOME}/fzf" && git pull &&
+  {
+    echo y # enable completion
+    echo y # enable keybindings
+    echo n #update config files
+  } | ./install --xdg
   cd "$CURRDIR" || return
   echo "Refreshing the shell with exec $SHELL"
   exec "$SHELL"
@@ -282,9 +294,11 @@ if [ ! -f "$HOME/.local/bin/mise" ] ; then
 else
   if [ "$IS_BASH" = true ] ; then
     eval "$(~/.local/bin/mise activate bash)"
+    eval "$(mise hook-env -s bash)"
   else
     # zsh
     eval "$(~/.local/bin/mise activate zsh)"
+    eval "$(mise hook-env -s zsh)"
   fi
   # mise shims, can also use `mise activate --shims` to enable on demand
   # prepend_to_path "$HOME/.local/share/mise/shims:$PATH"
@@ -310,13 +324,12 @@ if command_exists rg ; then
   export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/.ripgreprc
 fi
 
-# zoxide - via mise
+# zoxide
 if [ "$IS_BASH" = true ] ; then
   eval "$(zoxide init bash)"
 else
   eval "$(zoxide init zsh)"
 fi
-
 ### end tooling
 
 ### aliases
@@ -325,7 +338,6 @@ alias d='docker'
 alias dcb='sudo -- sh -c "docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d"'
 alias dcu='sudo -- sh -c "docker-compose pull && docker-compose down && docker-compose up -d"'
 alias docker='podman'
-alias gpurm='git fetch && git pull --rebase origin main'
 alias gitog='git log --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
 alias gitroot='cd $(git rev-parse --show-toplevel)'
 alias gitstat='git status -s -b --show-stash'
@@ -346,7 +358,6 @@ alias ls='ls --color=auto'
 alias lsn='ls --color=never'
 alias me='mullvad-exclude'
 alias mxlookup='nslookup -q=mx'
-#alias tf='terraform'
 alias sudo='nocorrect sudo ' # A trailing space in VALUE causes the next word to be checked for alias substitution when the alias is expanded.
 alias sdiff='sudo vimdiff'
 alias tf='$tf_cmd'
@@ -355,7 +366,8 @@ alias tfclean='rm -rf .terraform && $tf_cmd init'
 alias tf-update-lockfile='$tf_cmd providers lock -platform=darwin_amd64 -platform=linux_amd64 -platform=darwin_arm64'
 alias tmux='tmux -2' # assume 256 color
 alias weather='curl wttr.in'
-alias yay="PATH=$(getconf PATH) mullvad-exclude yay" # have yay build aur apps with system libraries
+alias yay='PATH=$(getconf PATH) mullvad-exclude yay' # have yay build aur apps with system libraries
+alias v='vim'
 
 #SO 113529 - emulate pbcopy x11 only
 if [[ "$unamestr" != 'Darwin' && $XDG_SESSION_TYPE != 'wayland' ]]; then
@@ -364,7 +376,7 @@ if [[ "$unamestr" != 'Darwin' && $XDG_SESSION_TYPE != 'wayland' ]]; then
 fi
 
 if command_exists markdown-pdf ; then
-  alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/modified-gfm.css'
+  alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/misc/modified-gfm.css'
 fi
 
 # have some fun
@@ -378,5 +390,6 @@ fi
 if [[ -z "$tf_cmd" ]]; then
   check_tf
 fi
+# TODO bash uses PROMPT_COMMAND
 precmd_functions+=(tf_prompt_info)
 PROMPT="${PROMPT:0:${#PROMPT}-5}%2(V.%F{13}[tf:%2v].)%f $ "

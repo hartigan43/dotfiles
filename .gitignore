@@ -3,3 +3,6 @@
 .mise.*.local.toml
 .zshrc.local
 .bashrc.local
+.dotter/local.toml
+.dotter/cache.toml
+.dotter/cache

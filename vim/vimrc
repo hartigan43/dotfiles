@@ -142,9 +142,9 @@ set backupdir=~/.vim/tmp/backups//                "backup dir -- // saves full f
 set directory=~/.vim/tmp/swap//                   "temporary dir for swap files
 set noswapfile                                    "disable swaps - were using backups
 set undofile                                      "allow per file undo persistance
-set undoreload=10000
+set undoreload=10000                              "max lines that can change outside vim and preserve history
 set undodir=~/.vim/tmp/undo//                     "undo dir
-set writebackup                                   "enabling backups
+set writebackup                                   "enabling temp backups during save
 
 if !empty($EDITOR_MONOTONE)
   set background=light
@@ -209,6 +209,14 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'            "define the 
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
 
+function! FormatToml(buffer) abort
+  return {
+  \  'command': 'taplo format -'
+  \}
+endfunction
+
+execute ale#fix#registry#Add('taplo', 'FormatToml', ['toml'], 'taplo fmt for toml')
+
 let g:ale_linters = {
 \ 'cpp': ['clang'],
 \ 'go': ['gofmt', 'golint'],
@@ -226,6 +234,7 @@ let g:ale_fixers = {
 \ 'javascript': ['eslint', 'remove_trailing_lines', 'trim_whitespace'],
 \ 'python': ['black', 'trim_whitespace'],
 \ 'terraform': ['terraform', 'trim_whitespace'],
+\ 'toml': ['taplo', 'trim_whitespace'],
 \ 'yaml': ['trim_whitespace'],
 \}
 
@@ -293,7 +302,7 @@ call ddc#custom#patch_global('sourceOptions', {
     \ 'around': {
     \   'mark': 'ARO',
     \   'maxItems': 5,
-    \   'minAutoCompleteLength': 5,
+    \   'minAutoCompleteLength': 4,
     \   'timeout': 1000,
     \ },
     \ 'buffer': {
@@ -339,7 +348,7 @@ call ddc#custom#patch_global('sourceParams', {
     \   'cleanResultsWhitespace': v:false,
     \ },
     \ 'around': {
-    \   'maxSize': 300,
+    \   'maxSize': 350,
     \ },
     \ 'buffer': {
     \   'requireSameFiletype': v:false,
@@ -370,6 +379,9 @@ inoremap <silent><expr> <TAB>
 
 " <S-TAB>: completion back.
 inoremap <expr><S-TAB>  pumvisible() ? '<C-p>' : '<C-h>'
+
+" limit sources in vimrc to prevent hanging
+autocmd FileType vim call ddc#custom#patch_buffer('sources', ['around', 'buffer', 'lsp'])
 
 call ddc#enable()
 " }}}
