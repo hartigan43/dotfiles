@@ -1,7 +1,8 @@
 [tools]
-"cargo:git-delta" = "latest"
 "cargo:dotter"    = "latest"
 "cargo:du-dust"   = "latest"
+"cargo:git-delta" = "latest"
+"cargo:taplo-cli" = "latest"
 "cargo:tlrc"      = "latest"
 "cargo:twm"       = "latest"
 deno              = "latest"
@@ -11,7 +12,6 @@ glab              = "latest"
 python            = "system"
 usage             = "latest"
 zoxide            = "latest"
-"cargo:taplo-cli" = "latest"
 
 [plugins]
 

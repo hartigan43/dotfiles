@@ -124,8 +124,10 @@ bindkey '^R' history-incremental-search-backward # reverse histroy search
 #eval $(keychain --eval --quiet id_rsa ~/.ssh/hartigan)
 
 # load fzf if it exists
-# install and ran with mise, might need to install manually via ./install --xdg to get this result
-[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+# previously installed and ran with mise, might need to install manually via ./install --xdg to get this result
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && \
+  source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh && \
+  export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
 # source common
 [[ -f ~/.config/common.sh ]] && source ~/.config/common.sh

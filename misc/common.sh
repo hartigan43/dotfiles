@@ -293,9 +293,11 @@ if [ ! -f "$HOME/.local/bin/mise" ] ; then
 else
   if [ "$IS_BASH" = true ] ; then
     eval "$(~/.local/bin/mise activate bash)"
+    eval "$(mise hook-env -s bash)"
   else
     # zsh
     eval "$(~/.local/bin/mise activate zsh)"
+    eval "$(mise hook-env -s zsh)"
   fi
   # mise shims, can also use `mise activate --shims` to enable on demand
   # prepend_to_path "$HOME/.local/share/mise/shims:$PATH"
@@ -321,13 +323,12 @@ if command_exists rg ; then
   export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/.ripgreprc
 fi
 
-# zoxide - via mise
+# zoxide
 if [ "$IS_BASH" = true ] ; then
   eval "$(zoxide init bash)"
 else
   eval "$(zoxide init zsh)"
 fi
-
 ### end tooling
 
 ### aliases
