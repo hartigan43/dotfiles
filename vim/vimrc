@@ -322,11 +322,13 @@ call ddc#custom#patch_global('sourceOptions', {
     \ },
     \ 'lsp': {
     \   'mark': 'LSP',
+    \   'minAutoCompleteLength': 4,
     \   'forceCompletionPattern': '\.\w*|:\w*|->\w*',
     \ },
     \ 'path': {
     \   'mark': 'PATH',
     \   'maxItems': 3,
+    \   'minAutoCompleteLength': 6,
     \ },
     \ 'rg': {
     \   'mark': 'RG',
@@ -335,6 +337,7 @@ call ddc#custom#patch_global('sourceOptions', {
     \ },
     \ 'tmux': {
     \   'mark' : 'TMUX',
+    \   'minAutoCompleteLength': 4,
     \   'maxItems': 2,
     \ },
     \ 'treesitter': {
@@ -395,10 +398,10 @@ endfor
 
 " Key mappings for denippet
 inoremap <C-e> <Plug>(denippet-expand)
-inoremap <expr> <Tab> denippet#jumpable() ? '<Plug>(denippet-jump-next)' : '<Tab>'
-snoremap <expr> <Tab> denippet#jumpable() ? '<Plug>(denippet-jump-next)' : '<Tab>'
-inoremap <expr> <S-Tab> denippet#jumpable(-1) ? '<Plug>(denippet-jump-prev)' : '<S-Tab>'
-snoremap <expr> <S-Tab> denippet#jumpable(-1) ? '<Plug>(denippet-jump-prev)' : '<S-Tab>'
+"inoremap <expr> <C-Tab> denippet#jumpable() ? '<Plug>(denippet-jump-next)' : '<C-Tab>'
+"snoremap <expr> <C-Tab> denippet#jumpable() ? '<Plug>(denippet-jump-next)' : '<C-Tab>'
+"inoremap <expr> <C-S-Tab> denippet#jumpable(-1) ? '<Plug>(denippet-jump-prev)' : '<C-S-Tab>'
+"snoremap <expr> <C-S-Tab> denippet#jumpable(-1) ? '<Plug>(denippet-jump-prev)' : '<C-S-Tab>'
 "  }}}
 
 " deoplete settings ------------------------------------------------------- {{{
@@ -489,11 +492,6 @@ command! -bang -nargs=* Rg
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
 " revist  https://medium.com/@crashybang/supercharge-vim-with-fzf-and-ripgrep-d4661fc853d2
-" }}}
-
-" gundo.vim settings ------------------------------------------------------- {{{
-let g:gundo_width = 60
-let g:gundo_preview_height = 40
 " }}}
 
 " lightline.vim settings  ------------------------------------------------------- {{{
