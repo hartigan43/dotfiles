@@ -3,5 +3,5 @@
 
 alacritty_themes_install () {
   mkdir -p ~/.config/alacritty/themes
-  git clone https://github.com/alacritty/alacritty-theme ~/.config/alacritty/themes
+  git clone https://github.com/alacritty/alacritty-theme "${HOME}/.config/alacritty/themes"
 }
