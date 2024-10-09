@@ -19,3 +19,8 @@ history = 1_000
 
 [shell]
 program = "/bin/zsh"
+
+{{#if (eq platform "darwin")}}
+[window]
+option_as_alt = "OnlyRight"
+{{/if}}
