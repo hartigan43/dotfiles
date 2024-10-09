@@ -1,5 +1,4 @@
 #!/usr/bin/env zsh
-# TODO move .bashrc.local and .zshrc.local into sh.local
 
 #################
 # zcomet config #
@@ -70,7 +69,8 @@ if [[ "${unamestr}" == 'Linux' ]]; then
   export XDG_CONFIG_HOME="${HOME}/.config"
   export XDG_CACHE_HOME="${HOME}/.cache"
   export XDG_DATA_HOME="${HOME}/.local/share"
-  export XDG_DATA_DIRS="/usr/share:/usr/local/share"
+  export XDG_DATA_DIRS="/usr/local/share:/usr/share"
+  export XDG_STATE_HOME="${HOME}/.local/state"
   if [[ -d /usr/local/bin ]]; then
     export XDG_DATA_DIRS="$XDG_DATA_DIRS:/usr/local/bin"
   fi
@@ -124,14 +124,14 @@ bindkey '^R' history-incremental-search-backward # reverse histroy search
 #eval $(keychain --eval --quiet id_rsa ~/.ssh/hartigan)
 
 # load fzf if it exists
-# install and ran with mise - 20240819 currently broken asdf-fzf installer
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+# install and ran with mise, might need to install manually via ./install --xdg to get this result
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh && export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
 # source common
 [[ -f ~/.config/common.sh ]] && source ~/.config/common.sh
 
 # allow local machine overrides
-[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+[[ -f ~/.config/zsh/.zshrc.local ]] && source ~/.config/zsh/.zshrc.local
 
 #################
 #  completions  #

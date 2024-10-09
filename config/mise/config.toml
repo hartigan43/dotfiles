@@ -1,21 +1,19 @@
 [tools]
 "cargo:git-delta" = "latest"
-"cargo:dotter" = "latest"
-"cargo:du-dust" = "latest"
-"cargo:tlrc" = "latest"
-"cargo:twm" = "latest"
-deno = "latest"
-duf = "latest"
-fzf = "latest"
-glab = "latest"
-python = "system"
-usage = "latest"
-zoxide = "latest"
+"cargo:dotter"    = "latest"
+"cargo:du-dust"   = "latest"
+"cargo:tlrc"      = "latest"
+"cargo:twm"       = "latest"
+deno              = "latest"
+duf               = "latest"
+fzf               = "latest"
+glab              = "latest"
+python            = "system"
+usage             = "latest"
+zoxide            = "latest"
 "cargo:taplo-cli" = "latest"
 
 [plugins]
-# patched fzf installer until the MR is merged upstream
-fzf-patched = "https://github.com/christasich/asdf-fzf.git"
 
 [settings]
 experimental = true

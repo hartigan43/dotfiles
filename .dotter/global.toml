@@ -1,7 +1,7 @@
 # Helpers are user-defined functions that can be executed inside templates.
 # This section is optional.
 [helpers]
-bash = "(eq shell 'bash')"
+# bash = "(eq shell 'bash')"
 
 [alacritty]
 depends = ["shell"]
