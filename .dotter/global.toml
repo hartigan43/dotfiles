@@ -65,9 +65,10 @@ pager  = "delta"
 # TODO migrate to nvim proper and send the whole dir?
 # TODO custom snips
 # TODO VIMDOTDIR AND VIMINIT
+# TODO nvim colors?
 # nvim = "~/.config/nvim"
-"vim/vimrc"  = "~/.vimrc"
-"vim/vimrc"  = "~/.config/nvim/init.vim"
+"vim/vimrc"  = { target = "~/.vimrc", type = "symbolic" }
+"vim/vimrc"  = { target = "~/.config/nvim/init.vim", type = "symbolic", if = '(is_executable "nvim")' }
 "vim/colors" = "~/.vim/colors"
 
 [zsh]

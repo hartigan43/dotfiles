@@ -302,7 +302,7 @@ call ddc#custom#patch_global('sourceOptions', {
     \ 'around': {
     \   'mark': 'ARO',
     \   'maxItems': 5,
-    \   'minAutoCompleteLength': 5,
+    \   'minAutoCompleteLength': 4,
     \   'timeout': 1000,
     \ },
     \ 'buffer': {
@@ -348,7 +348,7 @@ call ddc#custom#patch_global('sourceParams', {
     \   'cleanResultsWhitespace': v:false,
     \ },
     \ 'around': {
-    \   'maxSize': 300,
+    \   'maxSize': 350,
     \ },
     \ 'buffer': {
     \   'requireSameFiletype': v:false,
@@ -379,6 +379,9 @@ inoremap <silent><expr> <TAB>
 
 " <S-TAB>: completion back.
 inoremap <expr><S-TAB>  pumvisible() ? '<C-p>' : '<C-h>'
+
+" limit sources in vimrc to prevent hanging
+autocmd FileType vim call ddc#custom#patch_buffer('sources', ['around', 'buffer', 'lsp'])
 
 call ddc#enable()
 " }}}
