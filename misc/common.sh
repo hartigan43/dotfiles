@@ -202,13 +202,13 @@ tup () {
   vim +PlugUpdate +qall +PlugUpgrade -c "call denops#cache#update(#{reload: v:true})" +qall && \
     deno cache --reload "/home/hartigan/.vim/plugged/ddc-around/denops/@ddc-sources/around.ts"
   zcomet update && zcomet self-update
-  # TODO install fzf with mise after plugin is fixed
-#  cd ~/.fzf && git pull &&
-#  {
-#    echo y # enable completion
-#    echo y # enable keybindings
-#    echo n #update config files
-#  } | ./install
+  # TODO see about passing flag to asdf-fzf for mise to support install --xdg
+  cd "${XDG_DATA_HOME}/fzf" && git pull &&
+  {
+    echo y # enable completion
+    echo y # enable keybindings
+    echo n #update config files
+  } | ./install --xdg
   cd "$CURRDIR" || return
   echo "Refreshing the shell with exec $SHELL"
   exec "$SHELL"
