@@ -9,6 +9,7 @@ if [ ! -d "$HOME/Workspace" ]; then
 fi
 
 # check for bash
+# TODO tempalte file with dotter and split bash / zsh completely
 if [ -n "$BASH" ] ; then
   IS_BASH=true
 fi
