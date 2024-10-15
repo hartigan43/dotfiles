@@ -8,7 +8,8 @@ if [ ! -d "$HOME/Workspace" ]; then
   mkdir "$HOME/Workspace"
 fi
 
-export DATA_HOME="${XDG_DATA_HOME:-$WORKSPACE}"
+# use XDG_DATA_HOME or equivalent path for macOS compatibility
+export DATA_HOME="${XDG_DATA_HOME:=$HOME/.local/share}"
 # check for nvim and default to vim
 nvim=$(command -v nvim)
 vim=$(command -v vim)
@@ -16,7 +17,7 @@ export EDITOR="${nvim:-$vim}"
 export VISUAL=code #TODO
 export DIFFPROG="${delta:-${EDITOR} -d}" #vim and nvim use -d for diffmode
 {{#if (is_executable "taplo")}}
-export TAPLO_CONFIG="${XDG_CONFIG_HOME}/taplo/taplo.toml" # TODO template if taplo installed
+export TAPLO_CONFIG="${XDG_CONFIG_HOME:=$HOME/.config}/taplo/taplo.toml" # TODO template if taplo installed
 {{/if}}
 export WORKSPACE="$HOME/Workspace"
 
@@ -200,7 +201,7 @@ tup () {
     deno cache --reload "/home/hartigan/.vim/plugged/ddc-around/denops/@ddc-sources/around.ts"
   zcomet update && zcomet self-update
   # TODO see about passing flag to asdf-fzf for mise to support install --xdg
-  cd "${XDG_DATA_HOME}/fzf" && git pull &&
+  cd "${DATA_HOME}/fzf" && git pull &&
   {
     echo y # enable completion
     echo y # enable keybindings

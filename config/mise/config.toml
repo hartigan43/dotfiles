@@ -7,7 +7,6 @@
 "cargo:twm"       = "latest"
 deno              = "latest"
 duf               = "latest"
-fzf               = "latest"
 glab              = "latest"
 python            = "system"
 usage             = "latest"
