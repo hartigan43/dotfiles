@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# Function to prepend the branch name to the commit message
+prepend_branch_name() {
+    commit_msg_file="$1"
+    branch_name="$2"
+
+    # Prepend the branch name to the commit message, if it's not already there
+    if ! grep -q "^[$branch_name]" "$commit_msg_file"; then
+        sed -i.bak -e "1s/^/[$branch_name] /" "$commit_msg_file"
+    fi
+}
+
+# Main logic
+main() {
+    # Define the regex pattern for branch names
+    branch_regex="([A-Z]{2,10}-[0-9]{1,6})([^()]*|[^[]*|$)"
+
+    # Define a list of excluded branch names
+    excluded_branches="main|master|develop"
+
+    # Get the branch name
+    branch_name=$(git symbolic-ref --short HEAD)
+
+    # Get the commit message file path and source
+    commit_msg_file="$1"
+    commit_source="$2"
+
+    # If it's a merge commit or an amend operation, don't modify the message
+    if [ "$commit_source" = "merge" ] || [ "$commit_source" = "commit" ]; then
+        exit 0
+    fi
+
+    # Check if the branch name matches the branch_regex AND is not in the excluded list
+    if echo "$branch_name" | grep -qE "$branch_regex" && ! echo "$branch_name" | grep -qE "^($excluded_branches)$"; then
+        prepend_branch_name "$commit_msg_file" "$branch_name"
+    fi
+
+    # add functions here
+}
+
+# Run the main function
+main "$@"
