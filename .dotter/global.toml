@@ -63,8 +63,8 @@ tmux                 = "~/.config/tmux"
 
 [shell.variables]
 editor    = "nvim"
-pager     = "delta"
 hooksPath = "~/.config/git/hooks"
+pager     = "delta"
 
 [vim.files]
 # TODO migrate to nvim proper and send the whole dir?

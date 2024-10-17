@@ -8,6 +8,7 @@
 deno              = "latest"
 duf               = "latest"
 glab              = "latest"
+lazygit           = "latest"
 python            = "system"
 usage             = "latest"
 zoxide            = "latest"
