@@ -1,11 +1,12 @@
+[general]
 import = [
   "~/.config/alacritty/themes/themes/seoul256-light-mod.toml",
-  "~/.config/alacritty/local.toml"
+  "~/.config/alacritty/local.toml",
 ]
 live_config_reload = true
 
 [window]
-startup_mode = "Windowed"
+startup_mode  = "Windowed"
 dynamic_title = true
 
 [scrolling]
@@ -14,6 +15,5 @@ history = 0
 [cursor]
 unfocused_hollow = true
 
-  [cursor.style]
-  shape = "Block"
-
+[cursor.style]
+shape = "Block"

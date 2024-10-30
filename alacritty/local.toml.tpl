@@ -17,7 +17,9 @@ size = {{ font_size}}
 [scrolling]
 history = 1_000
 
-[shell]
+[terminal]
+
+[terminal.shell]
 program = "/bin/zsh"
 
 {{#if (eq platform "Darwin")}}
