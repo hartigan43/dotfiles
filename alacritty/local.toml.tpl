@@ -1,8 +1,8 @@
 [font]
-size = {{ font_size}}
+size = {{font_size}}
 
   [font.normal]
-  family = "{{ monospace }}"
+  family = "{{monospace}}"
   style = "Regular"
 
   [font.bold]
@@ -22,7 +22,10 @@ history = 1_000
 [terminal.shell]
 program = "/bin/zsh"
 
-{{#if (eq platform "Darwin")}}
 [window]
+dimensions.columns = {{#if t_cols}}{{t_cols}}{{else}}0{{/if}}
+dimensions.lines   = {{#if t_lines}}{{t_lines}}{{else}}0{{/if}}
+
+{{#if (eq platform "Darwin")}}
 option_as_alt = "OnlyRight"
 {{/if}}
