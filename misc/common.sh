@@ -16,12 +16,14 @@ fi
 
 # use XDG_DATA_HOME or equivalent path for macOS compatibility
 export DATA_HOME="${XDG_DATA_HOME:=$HOME/.local/share}"
+export STATE_HOME="${XDG_STATE_HOME:=$HOME/.local/state}"
 # check for nvim and default to vim
 nvim=$(command -v nvim)
 vim=$(command -v vim)
 export EDITOR="${nvim:-$vim}"
-export VISUAL=code #TODO
-export DIFFPROG="${delta:-${EDITOR} -d}" #vim and nvim use -d for diffmode
+export VISUAL=code # TODO
+export DIFFPROG="${delta:-${EDITOR} -d}" # vim and nvim use -d for diffmode
+export LESSHISTFILE="$STATE_HOME"/less/history
 export TAPLO_CONFIG="${XDG_CONFIG_HOME:=$HOME/.config}/taplo/taplo.toml" # TODO template if taplo installed
 export WORKSPACE="$HOME/Workspace"
 
