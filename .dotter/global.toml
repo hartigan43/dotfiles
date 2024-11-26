@@ -49,13 +49,12 @@ light_cyan   = "008787"
 white        = "eeeeee"
 
 [shell.files]
-# TODO -- use config = ~/.config ?
-"config/mise"              = "~/.config/mise"
-"config/ripgrep/ripgreprc" = { target = "~/.config/ripgrep/.ripgreprc", type = "symbolic", if = '(is_executable "rg")' }
-"config/taplo"             = { target = "~/.config/taplo", type = "symbolic", if = '(is_executable "taplo")' }
-"config/twm"               = { target = "~/.config/twm", type = "symbolic", if = '(is_executable "twm")' }
-git                        = "~/.config/git"
-"misc/common.sh"           = "~/.config/common.sh"
+"config/mise"    = "~/.config/mise"
+"config/ripgrep" = { target = "~/.config/ripgrep", type = "symbolic", if = '(is_executable "rg")' }
+"config/taplo"   = { target = "~/.config/taplo", type = "symbolic", if = '(is_executable "taplo")' }
+"config/twm"     = { target = "~/.config/twm", type = "symbolic", if = '(is_executable "twm")' }
+git              = "~/.config/git"
+"misc/common.sh" = "~/.config/common.sh"
 # "misc/common.sh.tpl" = { target = "~/.config/common.sh", type = "template" } # TODO finish modularizing template and migrate
 "misc/editorconfig"  = "~/.editorconfig"
 "misc/gitconfig.tpl" = { target = "~/.config/git/config", type = "template" }
