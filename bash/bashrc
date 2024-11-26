@@ -68,7 +68,7 @@ force_color_prompt=yes
 export HISTCONTROL=ignoredups:erasedups
 export HISTSIZE=100000
 export HISTFILESIZE=100000
-export HISTFILE="$HOME/.config/bash/.bash_history"
+export HISTFILE="${XDG_STATE_HOME}"/bash/history
 if [[ -f "${HISTFILE}" ]]; then
   touch "$HISTFILE"
 fi
