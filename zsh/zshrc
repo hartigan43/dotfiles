@@ -61,6 +61,8 @@ export LS_COLORS='no=00:fi=00:di=01;34:ln=00;36:pi=40;33:so=01;35:do=01;35:bd=40
 #################
 
 ######################
+# TODO break out and #
+# source in bashrc   #
 # platform detection #
 ######################
 unamestr=$(uname)
@@ -97,7 +99,7 @@ fi
 # user and default editor and history
 # override locally with .zsh.local
 DEFAULT_USER="hartigan"
-export HISTFILE="${HOME}/.config/zsh/.zsh_history"
+export HISTFILE="${XDG_STATE_HOME}/zsh_history"
 if [[ -f "${HISTFILE}" ]]; then
   touch "$HISTFILE"
 fi
