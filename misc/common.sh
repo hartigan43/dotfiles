@@ -222,6 +222,12 @@ undozip (){
   unzip -l "$1" |  awk 'BEGIN { OFS="" ; ORS="" } ; { for ( i=4; i<NF; i++ ) print $i " "; print $NF "\n" }' | xargs -I{} rm -r {}
 }
 
+yay() {
+  echo "Checking for news with yay -Pw..."
+  command yay -Pw | grep -q . && exit
+  PATH=$(getconf PATH) mullvad-exclude yay "$@"
+}
+
 ### end functions
 
 ### path updates and tooling
@@ -369,7 +375,7 @@ alias tfclean='rm -rf .terraform && $tf_cmd init'
 alias tf-update-lockfile='$tf_cmd providers lock -platform=darwin_amd64 -platform=linux_amd64 -platform=darwin_arm64'
 alias tmux='tmux -2' # assume 256 color
 alias weather='curl wttr.in'
-alias yay='PATH=$(getconf PATH) mullvad-exclude yay' # have yay build aur apps with system libraries
+# alias yay='PATH=$(getconf PATH) yay -Pw && mullvad-exclude yay' # have yay build aur apps with system libraries
 alias v='vim'
 
 #SO 113529 - emulate pbcopy x11 only
