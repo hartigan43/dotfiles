@@ -30,7 +30,7 @@ max_line_length = 80
 
 # JSON files contain newlines inconsistently
 [*.json]
-insert_final_newline = ignore
+insert_final_newline = true
 
 # Makefiles use tabs for indent
 [Makefile]
