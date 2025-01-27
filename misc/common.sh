@@ -213,6 +213,7 @@ tup () {
     echo y # enable keybindings
     echo n #update config files
   } | ./install --xdg
+  rustup update
   cd "$CURRDIR" || return
   echo "Refreshing the shell with exec $SHELL"
   exec "$SHELL"
