@@ -869,9 +869,11 @@ if has('gui_running')
   set guioptions-=L                               "oddly, only way to get scrollbars
   set guioptions-=r                               "properly hidden on left and right
   set background=dark
-  colorscheme gruvbox                             "or seoul256
   set noerrorbells                                "stop flashing screen
   set novisualbell
+  if (exists('plug'))                             " hack to prevent looking for colorscheme in embedded VScode and others
+    colorscheme gruvbox                           "or seoul256
+  endif
 endif
 " }}}
 

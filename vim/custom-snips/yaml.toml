@@ -1,0 +1,127 @@
+# Gitlab CICD Components
+
+
+[component-full-spec]
+prefix = ["comonent-spec", "spec-full", "full-spec", "full-component-spec"]
+body = [
+  """
+spec:
+  inputs:
+    job_allow_failure: # https://docs.gitlab.com/ee/ci/yaml/#allow_failure
+      default: false
+      description: \"Use allow_failure to determine whether a pipeline should continue running when a job fails.\"
+      type: boolean
+    job_image:         # https://docs.gitlab.com/ee/ci/yaml/#image
+      default: \"umbralab/buildah:latest\"
+      description: \"The container image to use for the job execution.\"
+      type: string
+    job_needs:         # https://docs.gitlab.com/ee/ci/yaml/#needs
+      default: [{job: job, optional: true}]
+      description: \"Use 'needs' to execute jobs out-of-order.\"
+      type: array
+    job_rules:         # https://docs.gitlab.com/ee/ci/yaml/#rules
+      default:
+        - if: \\$CI_PIPELINE_SOURCE == \"merge_request_event\"
+        - if: \\$CI_COMMIT_REF_NAME == \\$CI_DEFAULT_BRANCH
+        - if: \\$CI_COMMIT_TAG
+      type: array
+    job_stage:         # https://docs.gitlab.com/ee/ci/yaml/#stage
+      default: deploy
+      type: string
+      description: \"Use stage to define which stage a job runs in. Jobs in the same stage can execute in parallel.\"
+    job_tags:          # https://docs.gitlab.com/ee/ci/yaml/#tags
+      default: []
+      description: \"List of runner tags.\"
+      type: array
+    job_when:          # https://docs.gitlab.com/ee/ci/yaml/#when
+      default: on_success
+      description: \"Use when to configure the conditions for when jobs run.\"
+      options: ['on_success', 'on_failure', 'always', 'manual', 'delayed']
+      type: string
+""",
+]
+description = "Baseline component spec boilerplate"
+
+[component-default-inputs]
+prefix = ["component-def-inp", "def-inp", "cdef"]
+body = [
+  """
+job_allow_failure: # https://docs.gitlab.com/ee/ci/yaml/#allow_failure
+  default: false
+  description: \"Use allow_failure to determine whether a pipeline should continue running when a job fails.\"
+  type: boolean
+job_image:         # https://docs.gitlab.com/ee/ci/yaml/#image
+  default: \"umbralab/buildah:latest\"
+  description: \"The container image to use for the job execution.\"
+  type: string
+job_needs:         # https://docs.gitlab.com/ee/ci/yaml/#needs
+  default: [{job: job, optional: true}]
+  description: \"Use 'needs' to execute jobs out-of-order.\"
+  type: array",
+job_rules:         # https://docs.gitlab.com/ee/ci/yaml/#rules
+  default:
+    - if: \\$CI_PIPELINE_SOURCE == \"merge_request_event\"
+    - if: \\$CI_COMMIT_REF_NAME == \\$CI_DEFAULT_BRANCH
+    - if: \\$CI_COMMIT_TAG
+  type: array
+job_stage:         # https://docs.gitlab.com/ee/ci/yaml/#stage
+  default: deploy
+  type: string
+  description: \"Use stage to define which stage a job runs in. Jobs in the same stage can execute in parallel.\"
+job_tags:          # https://docs.gitlab.com/ee/ci/yaml/#tags
+  default: []
+  description: \"List of runner tags.\"
+  type: array
+job_when:          # https://docs.gitlab.com/ee/ci/yaml/#when
+  default: on_success
+  description: \"Use when to configure the conditions for when jobs run.\"
+  options: ['on_success', 'on_failure', 'always', 'manual', 'delayed']
+  type: string
+""",
+]
+description = "Default inputs starting with job_ for all component jobs"
+
+[component-input]
+prefix      = ["input", "inp", "cinp", "c-inp"]
+body        = ["${1:name}:", "  ${2:default}:", "  description: ${3}", "  type: $0"]
+description = "A single component input"
+
+[component-local-include]
+prefix = ["local-include", "linc", "lcinc", "lc-inc"]
+body = ["""
+  include:
+    - component: \\$CI_SERVER_FQDN/\\$CI_PROJECT_PATH/${1:COMPONENT_NAME}
+"""]
+description = "Basic include string for local component path"
+
+[component-include]
+prefix = ["include", "inc", "cinc", "c-inc"]
+body = [
+  """
+  include:
+    - component: \\$CI_SERVER_FQDN/\\$UMBRA_GITLAB_COMPONENT_PATH/${1:PROJECT_NAME}/${2:COMPONENT_NAME}
+""",
+]
+description = "Basic include string for umbra component path"
+
+[component-def-job]
+prefix = ["job", "cdjob", "cdj"]
+body = ["""
+  ${1:job_name}:
+    allow_failure: \\$[[ inputs.job_allow_failure ]]
+    image: \\$[[ inputs.job_image ]]
+    needs: \\$[[ inputs.job_needs ]]
+    rules: \\$[[ inputs.job_rules ]]
+    stage: \\$[[ inputs.job_stage ]]
+    tags:
+      - umbra
+      - \\$[[ inputs.job_tags ]]
+    when: \\$[[ inputs.job_when ]]
+"""]
+description = "Basic component job scaffolding with all default job_ prefixed inputs."
+
+
+[component-tags-when]
+prefix      = ["tags", "cmtag", "tagwhen", "tagw", "ct", "ctw"]
+body        = ["tags:", "  - umbra", "  - $[[ inputs.tags ]]"]
+description = "Tag definition used by all components"

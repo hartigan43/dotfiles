@@ -13,6 +13,8 @@ prepend_branch_name() {
 
 # Main logic
 main() {
+    echo "Running prepare-commit-msg hook" >> /tmp/hook-debug.log
+
     # Define the regex pattern for branch names
     branch_regex="([A-Z]{2,10}-[0-9]{1,6})([^()]*|[^[]*|$)"
 
@@ -31,8 +33,10 @@ main() {
         exit 0
     fi
 
+    echo "branch name check" >> /tmp/hook-debug.log
     # Check if the branch name matches the branch_regex AND is not in the excluded list
     if echo "$branch_name" | grep -qE "$branch_regex" && ! echo "$branch_name" | grep -qE "^($excluded_branches)$"; then
+        echo "branch name matches regex and not excluded" >> /tmp/hook-debug.log
         prepend_branch_name "$commit_msg_file" "$branch_name"
     fi
 
