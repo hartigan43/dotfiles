@@ -7,9 +7,7 @@
 "cargo:tlrc"        = "latest"
 "cargo:twm"         = "latest"
 duf                 = "latest"
-glab                = "latest"
 lazygit             = "latest"
-python              = "system"
 usage               = "latest"
 zoxide              = "latest"
 
