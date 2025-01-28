@@ -6,7 +6,6 @@
 "cargo:taplo-cli"   = "latest"
 "cargo:tlrc"        = "latest"
 "cargo:twm"         = "latest"
-deno                = "latest"
 duf                 = "latest"
 glab                = "latest"
 lazygit             = "latest"
