@@ -233,6 +233,7 @@ let g:ale_fixers = {
 \ 'go': ['gofmt'],
 \ 'javascript': ['eslint', 'remove_trailing_lines', 'trim_whitespace'],
 \ 'python': ['black', 'trim_whitespace'],
+\ 'rust': ['rustfmt'],
 \ 'terraform': ['terraform', 'trim_whitespace'],
 \ 'toml': ['taplo', 'trim_whitespace'],
 \ 'yaml': ['trim_whitespace'],
