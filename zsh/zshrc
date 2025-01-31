@@ -99,7 +99,7 @@ fi
 # user and default editor and history
 # override locally with .zsh.local
 DEFAULT_USER="hartigan"
-export HISTFILE="${XDG_STATE_HOME}/zsh_history"
+export HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh_history"
 if [[ -f "${HISTFILE}" ]]; then
   touch "$HISTFILE"
 fi

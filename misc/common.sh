@@ -15,8 +15,8 @@ if [ -n "$BASH" ] ; then
 fi
 
 # use XDG_DATA_HOME or equivalent path for macOS compatibility
-export DATA_HOME="${XDG_DATA_HOME:=$HOME/.local/share}"
-export STATE_HOME="${XDG_STATE_HOME:=$HOME/.local/state}"
+export DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 # check for nvim and default to vim
 nvim=$(command -v nvim)
 vim=$(command -v vim)
