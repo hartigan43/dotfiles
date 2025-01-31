@@ -90,6 +90,10 @@ gcam () {
   git commit -am "$1"
 }
 
+gcd () {
+  git clone "$1" && cd "$(basename "$1" .git)" || return 1
+}
+
 # git pull --rebase for current branch
 gpur () {
   echo "Pulling and rebasing the current branch..."
