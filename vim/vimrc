@@ -56,8 +56,9 @@ endif
 " plugins that require deno
 if executable('deno')
   """ ddc
-  Plug 'Shougo/ddc.vim'
   Plug 'vim-denops/denops.vim'
+  Plug 'Shougo/ddc.vim'
+  Plug 'Shougo/pum.vim'
 
   " Install your UIs
   Plug 'Shougo/ddc-ui-native'
@@ -132,6 +133,7 @@ set showmatch
 set smartcase                                     "case insensitive search if capital letters are used
 set smarttab
 set timeoutlen=350                                "delay for accepting key combination
+set sts=2                                         "softtabstop as two spaces, used whren hitting tab or backspace to erase a tab
 set ts=2                                          "tabs width as two spaces
 set visualbell                                    "kill the noise
 set tgc                                           "set termguicolors on
@@ -181,7 +183,7 @@ endif
 
 "hide ugly code past 120 characters on a line
 "from https://kinbiko.com/vim/my-shiniest-vim-gems/
-autocmd Filetype if &ft!="txt,md" match ErrorMsg '\%>120v.\+' endif
+autocmd FileType if &ft!="txt,md" match ErrorMsg '\%>120v.\+' endif
 " }}}
 " Folding ------------------------------------------------------------------ {{{
 
@@ -288,43 +290,47 @@ endfunction
 " ddc.vim settings ------------------------------------------------------- {{{
 
 " ui must be set -- native: https://github.com/Shougo/ddc-ui-native
+ "   \   'matchers': ['matcher_fuzzy', 'matcher_head'],
 call ddc#custom#patch_global('ui', 'native')
 call ddc#custom#patch_global('sources', ['ale','around','buffer','denippet','file','lsp','path','rg','treesitter','tmux'])
 call ddc#custom#patch_global('sourceOptions', {
     \ '_': {
-    \   'matchers': ['matcher_fuzzy', 'matcher_head'],
+    \   'matchers': ['matcher_fuzzy'],
     \   'sorters': ['sorter_fuzzy'],
     \   'converters': ['converter_fuzzy']
     \ },
     \ 'ale': {
     \   'mark': 'ALE',
+    \   'minAutoCompleteLength': 4,
     \   'maxItems': 3,
     \ },
     \ 'around': {
     \   'mark': 'ARO',
     \   'maxItems': 5,
-    \   'minAutoCompleteLength': 4,
+    \   'minAutoCompleteLength': 6,
     \   'timeout': 1000,
     \ },
     \ 'buffer': {
     \   'mark': 'BUF',
     \   'maxItems': 3,
-    \   'minAutoCompleteLength': 4,
+    \   'minAutoCompleteLength': 5,
     \ },
     \ 'denippet': {
     \   'mark': 'SNIP',
     \   'maxItems': 3,
+    \   'minAutoCompleteLength': 3,
     \ },
     \ 'file': {
     \   'mark': 'FILE',
     \   'isVolatile': v:true,
     \   'forceCompletionPattern': '\S/\S*',
     \   'maxItems': 3,
+    \   'minAutoCompleteLength': 6,
     \ },
     \ 'lsp': {
+    \   'forceCompletionPattern': '\.\w*|:\w*|->\w*',
     \   'mark': 'LSP',
     \   'minAutoCompleteLength': 4,
-    \   'forceCompletionPattern': '\.\w*|:\w*|->\w*',
     \ },
     \ 'path': {
     \   'mark': 'PATH',
@@ -338,12 +344,13 @@ call ddc#custom#patch_global('sourceOptions', {
     \ },
     \ 'tmux': {
     \   'mark' : 'TMUX',
-    \   'minAutoCompleteLength': 4,
+    \   'minAutoCompleteLength': 5,
     \   'maxItems': 2,
     \ },
     \ 'treesitter': {
     \   'mark': 'TREE',
     \   'maxItems': 5,
+    \   'minAutoCompleteLength': 5
     \ },
     \})
 
@@ -352,7 +359,8 @@ call ddc#custom#patch_global('sourceParams', {
     \   'cleanResultsWhitespace': v:false,
     \ },
     \ 'around': {
-    \   'maxSize': 350,
+    \   'maxSize': 275,
+    \   'minLength': 6,
     \ },
     \ 'buffer': {
     \   'requireSameFiletype': v:false,
@@ -360,6 +368,9 @@ call ddc#custom#patch_global('sourceParams', {
     \   'fromAltBuf': v:true,
     \   'forceCollect': v:true,
     \ },
+    \   'path': {
+    \     'cmd': ['fd', '--max-depth', '5'],
+    \ }
     \})
 
 call ddc#custom#patch_filetype(
@@ -385,6 +396,7 @@ inoremap <silent><expr> <TAB>
 inoremap <expr><S-TAB>  pumvisible() ? '<C-p>' : '<C-h>'
 
 " limit sources in vimrc to prevent hanging
+" TODO figure out ow to tune these
 autocmd FileType vim call ddc#custom#patch_buffer('sources', ['around', 'buffer', 'lsp'])
 
 call ddc#enable()
@@ -634,15 +646,14 @@ if is_neovim
 lua << LSP_EOF
 -- Setup language servers.
 local lspconfig = require('lspconfig')
+local capabilities = require("ddc_source_lsp").make_client_capabilities()
+
 lspconfig.bashls.setup {}
+lspconfig.denols.setup { capabilities = capabilities, }
 lspconfig.pyright.setup {}
+lspconfig.rust_analyzer.setup {}
 lspconfig.terraformls.setup {}
 lspconfig.tsserver.setup {}
-lspconfig.rust_analyzer.setup {
-   on_attach = function(client, bufnr)
-        vim.lsp.inlay_hint.enable(bufnr)
-    end
-}
 lspconfig.yamlls.setup {
   settings = {
     yaml = {
@@ -860,6 +871,7 @@ augroup WrapLineForTextFiles
   autocmd FileType txt,text setlocal wrap spell spelllang=en_us
 augroup END
 autocmd FileType yaml,yml,toml setlocal list listchars+=lead:·
+autocmd FileType rs setlocal ts=4 sts=4 shiftwidth=4
 " }}}
 
 " GUI-settings ------------------------------------------------------------- {{{
