@@ -1,36 +1,41 @@
 # this script shell-agnostic and intended to be sourced, not executed directly
 
 # load required helper scripts
-source "${HOME}/.dotfiles/helper_scripts/command_exists.sh"
+source "${HOME}"/.dotfiles/helper_scripts/command_exists.sh
 
 # create Workspace dir and export
-if [ ! -d "$HOME/Workspace" ]; then
-  mkdir "$HOME/Workspace"
+if [ ! -d "${HOME}"/Workspace ]; then
+  mkdir "${HOME}"/Workspace
 fi
 
 # check for bash
 # TODO tempalte file with dotter and split bash / zsh completely
-if [ -n "$BASH" ] ; then
+if [ -n "${BASH}" ] ; then
   IS_BASH=true
 fi
 
+# check and set unamestr if it was somehow unset in bashrc/zshrc
+unamestr="${unamestr:-$(uname)}"
+
 # use XDG_DATA_HOME or equivalent path for macOS compatibility
+export CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 # check for nvim and default to vim
-nvim=$(command -v nvim)
-vim=$(command -v vim)
+nvim="$(command -v nvim)"
+vim="$(command -v vim)"
 export EDITOR="${nvim:-$vim}"
-export VISUAL=code # TODO
+export VISUAL=zeditor # TODO, some kind of sane check for installed editor
 export DIFFPROG="${delta:-${EDITOR} -d}" # vim and nvim use -d for diffmode
-export LESSHISTFILE="$STATE_HOME"/less/history
-export TAPLO_CONFIG="${XDG_CONFIG_HOME:=$HOME/.config}/taplo/taplo.toml" # TODO template if taplo installed
-export WORKSPACE="$HOME/Workspace"
+export LESSHISTFILE="${STATE_HOME}"/less/history
+export TAPLO_CONFIG="${XDG_CONFIG_HOME:=$HOME/.config}"/taplo/taplo.toml # TODO template if taplo installed
+export WORKSPACE="${HOME}"/Workspace
+export WINEPREFIX="{$DATA_HOME}"/wine
 
 ### functions
 # add to path
 add_to_path () {
-  if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+  if [ -d "$1" ] && [[ ":${PATH}:" != *":$1:"* ]]; then
       PATH="${PATH:+$PATH:}$1"
   fi
 }
@@ -38,9 +43,9 @@ add_to_path () {
 # tmux auto start/attach, only if installed and set to start by env
 # variable, https://wiki.archlinux.org/index.php/Tmux
 check_tmux () {
-  if [ "$TMUX_AUTO_START" = "true" ] ; then
+  if [ "${TMUX_AUTO_START}" = "true" ] ; then
     if which tmuxp >/dev/null 2>&1; then
-      test -z "${TMUX}" && tmuxp load "$HOME/.config/tmuxp/main.json"
+      test -z "${TMUX}" && tmuxp load "$HOME"/.config/tmuxp/main.json
 
     elif which tmux >/dev/null 2>&1; then
         # if no session is started, start a new session
@@ -90,6 +95,7 @@ gcam () {
   git commit -am "$1"
 }
 
+# git clone && cd ${cloned-dir}
 gcd () {
   git clone "$1" && cd "$(basename "$1" .git)" || return 1
 }
@@ -112,11 +118,12 @@ gpurm() {
 }
 
 # push to the current branch if no branch specified
+# git push $1/origin $2/current branch
 gpush () {
   REMOTE="${1:-origin}"
   BRANCH="${2:-$(git branch --show-current)}"
   echo "Pushing to ${REMOTE} ${BRANCH}..."
-  git push "$REMOTE" "$BRANCH"
+  git push "${REMOTE}" "${BRANCH}"
 }
 
 # flatten multiple kube configs into one yaml file, useful for go version of kubectx
@@ -130,15 +137,15 @@ kflatten() {
 
   # Use find to get the list of files matching the pattern
   local files
-  files=$(find "$kube_dir" -maxdepth 1 -type f -name "${prefix}*" ! -name "$ignored")
+  files=$(find "${kube_dir}" -maxdepth 1 -type f -name "${prefix}*" ! -name "${ignored}")
 
-  if [ -n "$files" ]; then
+  if [ -n "${files}" ]; then
     # Use tr to replace spaces with colons
     local kubeconfig
-    kubeconfig=$(echo "$files" | tr '\n' ':')
-    KUBECONFIG="$kubeconfig" kubectl config view --merge --flatten > "$kube_dir/all.yaml"
+    kubeconfig="$(echo "$files" | tr '\n' ':')"
+    KUBECONFIG="${kubeconfig}" kubectl config view --merge --flatten > "${kube_dir}"/all.yaml
   else
-    echo "No matching files found in $kube_dir with prefix '$prefix' (ignored: '$ignored')"
+    echo "No matching files found in ${kube_dir} with prefix '${prefix}' (ignored: '${ignored}')"
   fi
 }
 
@@ -157,9 +164,9 @@ prepend_to_path () {
 # jam out
 rainymood () {
   if command_exists mpv ; then
-    FILE=$((RANDOM%4))
+    FILE="$((RANDOM%4))"
     URL="https://rainymood.com/audio1110/${FILE}.ogg"
-    mpv ${URL} && rainymood
+    mpv "${URL}" && rainymood
   else
     echo "Please install mpv to use rainymood function"
   fi
@@ -170,22 +177,22 @@ randocommissian () {
 }
 
 sanitize_path () {
-  PATH=$(echo "$PATH" | tr -s ':' | sed 's/:$//')
+  PATH=$(echo "${PATH}" | tr -s ':' | sed 's/:$//')
 }
 
 # https://github.com/mrusme/dotfiles/blob/dbb63bc1401f9752209296b019f8b362b42c1012/.zshrc#L358
 ssh () {
   if [ "$2" = "" ]; then
     conn="$1"
-    sshhost=$(printf "%s" "$conn" | cut -d '@' -f2)
-    if rg -U -i "^#.*Features:.*mosh.*\nHost $sshhost" "$HOME/.ssh/config" > /dev/null; then
+    sshhost=$(printf "%s" "${conn}" | cut -d '@' -f2)
+    if rg -U -i "^#.*Features:.*mosh.*\nHost ${sshhost}" "${HOME}/.ssh/config" > /dev/null; then
       if command_exists mosh ; then
         printf "connecting with mosh ...\n"
-        command mosh "$conn"
+        command mosh "${conn}"
       fi
     else
       printf "connecting with ssh ...\n"
-      command ssh "$conn"
+      command ssh "${conn}"
     fi
   else
     printf "connecting with ssh ...\n"
@@ -198,8 +205,8 @@ tf_prompt_info () {
   psvar+=([2]="")
   [[ "$PWD" == ~ ]] && return
   if [ -d .terraform ]; then
-    workspace=$("$tf_cmd" workspace show 2> /dev/null) || return
-    psvar=([2]=$workspace)
+    workspace=$("${tf_cmd}" workspace show 2> /dev/null) || return
+    psvar=([2]=${workspace})
   fi
 }
 
@@ -211,16 +218,16 @@ tup () {
     deno cache --reload "/home/hartigan/.vim/plugged/ddc-around/denops/@ddc-sources/around.ts"
   zcomet update && zcomet self-update
   # TODO see about passing flag to asdf-fzf for mise to support install --xdg
-  cd "${DATA_HOME}/fzf" && git pull &&
+  cd "${DATA_HOME}"/fzf && git pull &&
   {
     echo y # enable completion
     echo y # enable keybindings
     echo n #update config files
   } | ./install --xdg
   rustup update
-  cd "$CURRDIR" || return
-  echo "Refreshing the shell with exec $SHELL"
-  exec "$SHELL"
+  cd "${CURRDIR}" || return
+  echo "Refreshing the shell with exec ${SHELL}"
+  exec "${SHELL}"
 }
 
 undozip (){
@@ -280,31 +287,31 @@ if command_exists fzf ; then
   # TODO replace with kill -9 ** ?
   fkill() {
       local pid
-      if [ "$UID" != "0" ]; then
-          pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+      if [ "${UID}" != "0" ]; then
+          pid=$(ps -f -u "${UID}" | sed 1d | fzf -m | awk '{print $2}')
       else
           pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
       fi
 
-      if [ "x$pid" != "x" ]
+      if [ "x${pid}" != "x" ]
       then
-          echo "$pid" | xargs kill -"${1:-9}"
+          echo "${pid}" | xargs kill -"${1:-9}"
       fi
   }
 fi
 
 # go
 if command_exists go ; then
-  export GOPATH="$DATA_HOME/go"
-  add_to_path "$GOPATH/bin"
+  export GOPATH="${DATA_HOME}/go"
+  add_to_path "${GOPATH}/bin"
 fi
 
-prepend_to_path "$HOME/.yarn/bin"
-prepend_to_path "$HOME/.local/bin"
+prepend_to_path "${HOME}"/.yarn/bin
+prepend_to_path "${HOME}"/.local/bin
 
 # mise
-if [ ! -f "$HOME/.local/bin/mise" ] ; then
-  source "$HOME/.dotfiles/helper_scripts/mise_install.sh" && mise_install
+if [ ! -f "${HOME}"/.local/bin/mise ] ; then
+  source "${HOME}"/.dotfiles/helper_scripts/mise_install.sh && mise_install
 else
   if [ "$IS_BASH" = true ] ; then
     eval "$(~/.local/bin/mise activate bash)"
@@ -320,13 +327,13 @@ fi
 
 # rust - rustup / cargo
 # TODO add installer in helpder?
-export RUSTUP_HOME="$DATA_HOME/rust/rustup"
-export CARGO_HOME="$DATA_HOME/rust/cargo"
+export RUSTUP_HOME="${DATA_HOME}"/rust/rustup
+export CARGO_HOME="${DATA_HOME}"/rust/cargo
 
-if [ -f "$CARGO_HOME/env" ]; then
-  source "$CARGO_HOME/env"
+if [ -f "${CARGO_HOME}"/env ]; then
+  source "${CARGO_HOME}"/env
 else
-  prepend_to_path "$CARGO_HOME/bin"
+  prepend_to_path "${CARGO_HOME}"/bin
 fi
 
 if command_exists nvim ; then
@@ -335,7 +342,7 @@ fi
 
 # ripgrep
 if command_exists rg ; then
-  export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/ripgreprc
+  export RIPGREP_CONFIG_PATH="${HOME}"/.config/ripgrep/ripgreprc
 fi
 
 # zoxide
@@ -384,13 +391,13 @@ alias weather='curl wttr.in'
 alias v='vim'
 
 #SO 113529 - emulate pbcopy x11 only
-if [[ "$unamestr" != 'Darwin' && $XDG_SESSION_TYPE != 'wayland' ]]; then
+if [[ "${unamestr}" != 'Darwin' && "${XDG_SESSION_TYPE}" != 'wayland' ]]; then
   alias pbcopy='xsel --clipboard --input'
   alias pbpaste='xsel --clipboard --output'
 fi
 
 if command_exists markdown-pdf ; then
-  alias markdown-pdf='markdown-pdf -s $HOME/.dotfiles/misc/modified-gfm.css'
+  alias markdown-pdf='markdown-pdf -s "${HOME}"/.dotfiles/misc/modified-gfm.css'
 fi
 
 # have some fun
@@ -401,7 +408,7 @@ fi
 ### end aliases
 
 # check tf command and add tf workspace info to prompt
-if [[ -z "$tf_cmd" ]]; then
+if [[ -z "${tf_cmd}" ]]; then
   check_tf
 fi
 # TODO bash uses PROMPT_COMMAND

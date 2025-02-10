@@ -2,6 +2,8 @@
 # modified from https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-cht.sh
 
 cat=$(which cat)
+TMUX_HOME="$HOME/.config/tmux"
+
 source "${HOME}/.dotfiles/helper_scripts/command_exists.sh"
 
 if ! command_exists fzf; then
@@ -14,7 +16,7 @@ if command_exists bat; then
   export BAT_THEME="gruvbox-light"
 fi
 
-selected=$(cat ~/.tmux/tmux-cht-languages ~/.tmux/tmux-cht-command | fzf --height ~100%)
+selected=$(cat "${TMUX_HOME}"/tmux-cht-languages "${TMUX_HOME}"/tmux-cht-command | fzf --height ~100%)
 if [[ -z $selected ]]; then
     exit 0
 fi

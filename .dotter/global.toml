@@ -1,6 +1,7 @@
 # Helpers are user-defined functions that can be executed inside templates.
 # This section is optional.
 [helpers]
+string_in_file = "./helpers/string_in_file.rhai"
 
 [alacritty]
 depends = ["shell"]
@@ -79,6 +80,7 @@ pager     = "delta"
 depends = ["shell"]
 
 [zsh.files]
+# zshenv can be edited in /etc/zsh/zshenv or /etc/zshenv to bypass this file entirely
 "zsh/zshenv" = "~/.zshenv"
 "zsh/zshrc"  = "~/.config/zsh/.zshrc"
 

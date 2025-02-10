@@ -1,5 +1,15 @@
 # this script shell-agnostic and intended to be sourced, not executed directly
 
+# TODO run a check for arch and use extra repo for fonts - https://archlinux.org/groups/any/nerd-fonts/:
+# ttf-iosevka-nerd
+# ttf-iosevkaterm-nerd
+# itf-incosolata-go-nerd
+# ttf-inconsolata-nerd
+# otf-droid-nerd
+
+# TODO same for brew + macos: brew install font-hack-nerd-font
+
+# TODO use clone as last resort method
 # clone and install patched nerdfonts to work with airline and powerline symbols
 nerd_fonts_install() {
   echo "Installing Nerd Fonts..."
