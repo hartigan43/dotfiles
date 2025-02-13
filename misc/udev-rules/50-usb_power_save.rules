@@ -1,0 +1,28 @@
+# blacklist for usb autosuspend
+
+# phony devices representing the usb bus itself
+#ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="1d6b", ATTR{idProduct}=="0002", GOTO="power_usb_rules_end"
+#ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="1d6b", ATTR{idProduct}=="0003", GOTO="power_usb_rules_end"
+
+# Hori POKKEN CONTROLLER - GC adapter??
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0f0d", ATTR{idProduct}=="0092", GOTO="power_usb_rules_end"
+
+# Keychron Q1 HE
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="3434", ATTR{idProduct}=="0b10", GOTO="power_usb_rules_end"
+
+# Movemaster RSG
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="16d0", ATTR{idProduct}=="1182", GOTO="power_usb_rules_end"
+
+# Schiit Modi, Magni
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="30be", ATTR{idProduct}=="100c", GOTO="power_usb_rules_end"
+
+# Glorious (SINOWEALTH) Mouse
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="258a", ATTR{idProduct}=="0036", GOTO="power_usb_rules_end"
+
+# rule for autosuspend on other devies
+ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="auto"
+LABEL="power_usb_rules_end"
+
+# if the above fails, try:
+# ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="05c6", ATTR{idProduct}=="9205", ATTR{power/autosuspend}="-1"
+# or adding kernel parameter usbcore.autosuspend=5
