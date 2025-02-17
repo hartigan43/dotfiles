@@ -24,8 +24,9 @@ export STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 # check for nvim and default to vim
 nvim="$(command -v nvim)"
 vim="$(command -v vim)"
+zed="$(command -v zeditor)"
 export EDITOR="${nvim:-$vim}"
-export VISUAL=zeditor # TODO, some kind of sane check for installed editor
+export VISUAL="${zed}" # TODO, some kind of sane check for installed editor
 export DIFFPROG="${delta:-${EDITOR} -d}" # vim and nvim use -d for diffmode
 export LESSHISTFILE="${STATE_HOME}"/less/history
 export TAPLO_CONFIG="${XDG_CONFIG_HOME:=$HOME/.config}"/taplo/taplo.toml # TODO template if taplo installed
