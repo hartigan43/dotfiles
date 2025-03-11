@@ -1,4 +1,14 @@
 # Global git aliases stored here
+# many from https://gggritso.com/human-git-aliases
 [alias]
-  # git main to fetch, checkout main/master, and pull latest from remote
+  amend = commit --amend
+  discard = checkout --
+  graph = log --graph -10 --branches --remotes --tags  --format=format:'%Cgreen%h %Creset• %<(75,trunc)%s (%cN, %cr) %Cred%d' --date-order
+  # main - to fetch, checkout main/master, and pull latest from remote
   main = ! MAIN=$(git branch -l master main | sed -r 's/^[* ] //' | head -n 1) && git fetch && git checkout $MAIN && git pull origin $MAIN
+  # nevermind - unstages changes in the index, discards changes in the working directory, and removes any new files.
+  nevermind = !git reset --hard HEAD && git clean -d -f
+  remotes = remote -v
+  root = rev-parse --show-toplevel
+  unmerged = diff --name-only --diff-filter=U
+  unstage = reset -q HEAD --

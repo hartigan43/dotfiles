@@ -7,8 +7,9 @@
 "cargo:tlrc"        = "latest"
 "cargo:twm"         = "latest"
 duf                 = "latest"
-lazygit             = "latest"
+gitui               = "latest"
 usage               = "latest"
+uv                  = "latest"
 zoxide              = "latest"
 
 [plugins]
