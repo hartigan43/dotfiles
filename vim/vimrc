@@ -126,7 +126,7 @@ set mousehide                                     "hide mouse while editing
 set noshowmode                                    "hides the mode for default statusline as its unnecessary with powerline/airline/lightline
 set nowrap                                        "no word wrapping
 set number                                        "show line numbers
-set pastetoggle=<F2>                              "when in insert mode, allow easy external clipboard pasting
+"set pastetoggle=<F2>                              "when in insert mode, allow easy external clipboard pasting
 set shiftwidth=2
 set showbreak=↪
 set showmatch
