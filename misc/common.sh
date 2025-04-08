@@ -330,6 +330,7 @@ fi
 # atuin
 if command_exists atuin ; then
   if [ "$IS_BASH" = true ] ; then
+    true # no-op for shellcheck
     # TODO install ble.sh for atuin bash -- https://github.com/akinomyoga/ble.sh
     # eval "$(atuin init bash)"
   else
