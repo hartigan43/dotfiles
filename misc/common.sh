@@ -235,11 +235,11 @@ undozip (){
   unzip -l "$1" |  awk 'BEGIN { OFS="" ; ORS="" } ; { for ( i=4; i<NF; i++ ) print $i " "; print $NF "\n" }' | xargs -I{} rm -r {}
 }
 
-yay() {
-  echo "Checking for news with yay -Pw..."
-  command yay -Pw | grep -q . && exit
-  PATH=$(getconf PATH) mullvad-exclude yay "$@"
-}
+#yay() {
+#  echo "Checking for news with yay -Pw..."
+#  command yay -Pw | grep -q . && exit
+#  PATH=$(getconf PATH) mullvad-exclude yay "$@"
+#}
 
 ### end functions
 
