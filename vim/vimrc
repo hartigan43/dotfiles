@@ -126,7 +126,6 @@ set mousehide                                     "hide mouse while editing
 set noshowmode                                    "hides the mode for default statusline as its unnecessary with powerline/airline/lightline
 set nowrap                                        "no word wrapping
 set number                                        "show line numbers
-set pastetoggle=<F2>                              "when in insert mode, allow easy external clipboard pasting
 set shiftwidth=2
 set showbreak=↪
 set showmatch
@@ -184,6 +183,11 @@ endif
 "hide ugly code past 120 characters on a line
 "from https://kinbiko.com/vim/my-shiniest-vim-gems/
 autocmd FileType if &ft!="txt,md" match ErrorMsg '\%>120v.\+' endif
+
+if !is_neovim
+  set pastetoggle=<F2>                              "when in insert mode, allow easy external clipboard pasting
+endif
+
 " }}}
 " Folding ------------------------------------------------------------------ {{{
 
