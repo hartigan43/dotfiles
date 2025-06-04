@@ -134,7 +134,7 @@ bindkey '^R' history-incremental-search-backward # reverse histroy search
 # source common
 [[ -f ~/.config/common.sh ]] && source ~/.config/common.sh
 
-# allow local machine overrides
+# allow local machine overrides and customization
 [[ -f ~/.config/zsh/.zshrc.local ]] && source ~/.config/zsh/.zshrc.local
 
 #################

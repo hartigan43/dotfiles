@@ -55,6 +55,7 @@ endif
 
 " plugins that require deno
 if executable('deno')
+  " let g:denops#debug = 1
   """ ddc
   Plug 'vim-denops/denops.vim'
   Plug 'Shougo/ddc.vim'
@@ -227,7 +228,7 @@ let g:ale_linters = {
 \ 'cpp': ['clang'],
 \ 'go': ['gofmt', 'golint'],
 \ 'javascript': ['eslint'],
-\ 'python': ['ruff', 'flake8'],
+\ 'python': ['ruff', 'black'],
 \ 'rust': ['analyzer'],
 \ 'terraform': ['terraform'],
 \ 'yaml': ['yaml-language-server'],
@@ -249,9 +250,9 @@ let g:ale_c_parse_makefile = 1
 let g:ale_cpp_clang_executable = 'clang++'
 let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
-"let g:ale_python_black_options = ''
+let g:ale_python_black_options = '--line-length=120'
 let g:ale_python_flake8_options = '--max-line-length=88 --extend-ignore=E203'
-"let g:ale_python_ruff_options = ''
+let g:ale_python_ruff_options = 'line-length 120 --ignore E203'
 let g:ale_yaml_ls_config = {
 \   'yaml': {
 \     'schemaStore': {

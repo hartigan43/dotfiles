@@ -18,6 +18,7 @@ fi
 unamestr="${unamestr:-$(uname)}"
 
 # use XDG_DATA_HOME or equivalent path for macOS compatibility
+export CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
@@ -214,6 +215,7 @@ tf_prompt_info () {
 # update tooling - vim plugins, zcomet, fzf, and asdf. etc. bbq
 tup () {
   CURRDIR=$(pwd)
+  # atuin-update - shouldn't be required as it is managed with mise
   mise self-update -y && mise upgrade
   vim +PlugUpdate +qall +PlugUpgrade -c "call denops#cache#update(#{reload: v:true})" +qall && \
     deno cache --reload "/home/hartigan/.vim/plugged/ddc-around/denops/@ddc-sources/around.ts"
@@ -310,7 +312,7 @@ fi
 prepend_to_path "${HOME}"/.yarn/bin
 prepend_to_path "${HOME}"/.local/bin
 
-# mise
+# mise - configured before other tooling as the hook-env is needed for other tools to function properly
 if [ ! -f "${HOME}"/.local/bin/mise ] ; then
   source "${HOME}"/.dotfiles/helper_scripts/mise_install.sh && mise_install
 else
@@ -326,8 +328,21 @@ else
   # prepend_to_path "$HOME/.local/share/mise/shims:$PATH"
 fi
 
+# atuin
+if command_exists atuin ; then
+  if [ "$IS_BASH" = true ] ; then
+    true # no-op for shellcheck
+    # TODO install ble.sh for atuin bash -- https://github.com/akinomyoga/ble.sh
+    # eval "$(atuin init bash)"
+  else
+    # https://github.com/atuinsh/atuin/issues/68#issuecomment-1585444955
+    eval "$(atuin init zsh --disable-ctrl-r)" # disable ctrl-r to use fzf for now, up still shows atuin
+
+  fi
+fi
+
 # rust - rustup / cargo
-# TODO add installer in helpder?
+# TODO add installer in helpers?
 export RUSTUP_HOME="${DATA_HOME}"/rust/rustup
 export CARGO_HOME="${DATA_HOME}"/rust/cargo
 
@@ -359,6 +374,7 @@ fi
 alias d='docker'
 alias dcb='sudo -- sh -c "docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d"'
 alias dcu='sudo -- sh -c "docker-compose pull && docker-compose down && docker-compose up -d"'
+alias denops-reset='find ~/.vim/plugged -type f -regex ".*/denops/.*\.ts" -exec deno cache --reload {} +'
 alias docker='podman'
 alias gitog='git log --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
 alias gitroot='cd $(git rev-parse --show-toplevel)'
