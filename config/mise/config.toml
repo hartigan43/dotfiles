@@ -13,5 +13,6 @@ uv                      = "latest"
 "ubi:SuperCuber/dotter" = "latest"
 "ubi:tamasfe/taplo"     = "latest"
 zoxide                  = "latest"
+stern = "latest"
 
 [plugins]

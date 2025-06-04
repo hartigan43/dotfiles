@@ -55,6 +55,7 @@ endif
 
 " plugins that require deno
 if executable('deno')
+  " let g:denops#debug = 1
   """ ddc
   Plug 'vim-denops/denops.vim'
   Plug 'Shougo/ddc.vim'

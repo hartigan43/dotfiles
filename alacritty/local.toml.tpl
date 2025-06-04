@@ -14,6 +14,14 @@ size = {{font_size}}
   [font.bold_italic]
   style = "Bold Italic"
 
+[[hints.enabled]]
+command         = {{hints_command}}
+regex           = "(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh:|ftp://)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`\\\\]+"
+hyperlinks      = true
+post_processing = true
+mouse           = { enabled = true, mods = "None" }
+binding         = { key = "O", mods = "Control|Shift" }
+
 [scrolling]
 history = 1_000
 

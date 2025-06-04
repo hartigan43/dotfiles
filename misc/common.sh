@@ -18,6 +18,7 @@ fi
 unamestr="${unamestr:-$(uname)}"
 
 # use XDG_DATA_HOME or equivalent path for macOS compatibility
+export CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
@@ -373,6 +374,7 @@ fi
 alias d='docker'
 alias dcb='sudo -- sh -c "docker-compose pull && docker-compose down && docker-compose build --no-cache && docker-compose up -d"'
 alias dcu='sudo -- sh -c "docker-compose pull && docker-compose down && docker-compose up -d"'
+alias denops-reset='find ~/.vim/plugged -type f -regex ".*/denops/.*\.ts" -exec deno cache --reload {} +'
 alias docker='podman'
 alias gitog='git log --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
 alias gitroot='cd $(git rev-parse --show-toplevel)'
