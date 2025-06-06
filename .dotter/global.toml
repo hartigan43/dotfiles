@@ -50,6 +50,7 @@ light_cyan   = "008787"
 white        = "eeeeee"
 
 [shell.files]
+"config/atuin"   = { target = "~/.conifg", type = "symbolic", if = '(is_executable "atuin")' }
 "config/gitui"   = { target = "~/.config", type = "symbolic", if = '(is_executable "gitui")' }
 "config/mise"    = "~/.config/mise"
 "config/ripgrep" = { target = "~/.config/ripgrep", type = "symbolic", if = '(is_executable "rg")' }
