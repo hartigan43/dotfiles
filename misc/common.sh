@@ -217,8 +217,8 @@ tup () {
   CURRDIR=$(pwd)
   # atuin-update - shouldn't be required as it is managed with mise
   mise self-update -y && mise upgrade
-  vim +PlugUpdate +qall +PlugUpgrade -c "call denops#cache#update(#{reload: v:true})" +qall && \
-    deno cache --reload "/home/hartigan/.vim/plugged/ddc-around/denops/@ddc-sources/around.ts"
+  vim +PlugUpdate +qall +PlugUpgrade -c "call denops#cache#update(#{reload: v:true})" +qall
+  # && \ deno cache --reload "/home/hartigan/.vim/plugged/ddc-around/denops/@ddc-sources/around.ts" -- use new alias?
   zcomet update && zcomet self-update
   # TODO see about passing flag to asdf-fzf for mise to support install --xdg
   cd "${DATA_HOME}"/fzf && git pull &&
