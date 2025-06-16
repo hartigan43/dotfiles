@@ -106,6 +106,8 @@ filter_mode_shell_up_key_binding = "session"
 # history_filter = [
 #   "^secret-cmd",
 #   "^innocuous-cmd .*--secret=.+",
+  "^podman *stash",
+  "^gocryptfs",
 # ]
 
 ## prevent commands run with cwd matching any of these regexes from being written
