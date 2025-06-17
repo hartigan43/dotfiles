@@ -34,6 +34,13 @@ source "${HOME}/.dotfiles/helper_scripts/check_remote_session.sh" && REMOTE_SESS
 #################
 if [[ $UID == 0 ]]; then NCOLOR="red"; else NCOLOR="white"; fi
 
+# Custom vcs_info hook to show untracked files
+function +vi-git-untracked() {
+  if [[ -n $(git ls-files --others --exclude-standard 2>/dev/null) ]]; then
+    hook_com[misc]+=' ?'
+  fi
+}
+
 autoload -Uz add-zsh-hook vcs_info
 setopt prompt_subst
 add-zsh-hook precmd vcs_info
@@ -43,8 +50,10 @@ zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' unstagedstr ' *'
 zstyle ':vcs_info:*' stagedstr   ' +'
 # Set the format of the Git information for vcs_info
-zstyle ':vcs_info:git:*' formats       '(%b%u%c)'
-zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
+zstyle ':vcs_info:git:*' formats       '(%b%u%c%m)'
+zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c%m)'
+# add the custom hook to the message set by vcs_info
+zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 
 # use psvar for dynamic prompt generation
 # V will check the element of the psvar array to see it exists and non-empty
