@@ -1,6 +1,2 @@
-# /etc/udev/rules.d/71-movemaster.rules
-# requires your user be in the uaccess group
-# sudo usermod -aG uaccess $(whoami)
-#
 # Bus 003 Device 020: ID 16d0:1182 MCS MoveMaster RSG1
 SUBSYSTEMS=="tty", ATTRS{idVendor}=="16d0", ATTRS{idProduct}=="1182", MODE="0660", TAG+="uaccess"

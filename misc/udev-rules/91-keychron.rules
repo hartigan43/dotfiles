@@ -1,3 +1,0 @@
-# Bus 001 Device 010: ID 3434:0b10 Keychron Keychron Q1 HE
-SUBSYTEMS=="hidraw", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0b10", MODE="0660", TAG+="uaccess"
-SUBSYTEMS=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0b10", MODE="0660" TAG+="uaccess"

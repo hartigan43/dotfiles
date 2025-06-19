@@ -49,6 +49,9 @@ light_purple = "87025f"
 light_cyan   = "008787"
 white        = "eeeeee"
 
+[linux.files]
+"misc/udev-rules" = { target = "/etc/udev/rules.d/", type = "symbolic", owner = "root" }
+
 [shell.files]
 "config/atuin"   = { target = "~/.config/atuin", type = "symbolic", if = '(is_executable "atuin")' }
 "config/gitui"   = { target = "~/.config/gitui", type = "symbolic", if = '(is_executable "gitui")' }

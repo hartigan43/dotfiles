@@ -1,0 +1,20 @@
+# https://wiki.archlinux.org/title/Udev#Allowing_regular_users_to_use_devices
+#
+# For any rule adding the uaccess tag to be effective, the name of the file it is defined in has to
+# lexically precede /usr/lib/udev/rules.d/73-seat-late.rules - https://github.com/systemd/systemd/issues/4288#issuecomment-348166161
+#
+# 20250619 - Chromium based browsers are required to config webHID devices.  Visit chrome://device-log to debug any connection
+# issuses.  The following commands can be used for further rule generation:
+#   lsusb
+#   ls -la /dev/hidraw*
+#   udevamd info -q all -a /dev/hidrawXX
+#   udevadm control --reload-rules
+#   udevadm trigger
+
+# ID 3434:0b10 Keychron Keychron Q1 HE
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0b10", MODE="0660", TAG+="uaccess"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0b10", MODE="0660", TAG+="uaccess"
+
+# ID 3434:d048 Keychron Keychron M5 8K
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="d048", MODE="0660", TAG+="uaccess"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="d048", MODE="0660", TAG+="uaccess"
