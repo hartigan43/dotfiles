@@ -107,26 +107,29 @@ fi
 
 # user and default editor and history
 # override locally with .zsh.local
+# TODO use template with dotter to set machine user?
 DEFAULT_USER="hartigan"
 export HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh_history"
 if [[ -f "${HISTFILE}" ]]; then
   touch "$HISTFILE"
 fi
-export HISTSIZE=10000
-export SAVEHIST=10000
-setopt HIST_IGNORE_DUPS
+
+# TODO benchmark zsh load times with tweaks
+export HISTSIZE=9800          # footnote on - https://esham.io/2025/05/shell-history, use the bang history feature without needing more than 4 digits
+export SAVEHIST=$HISTSIZE
 setopt HIST_EXPIRE_DUPS_FIRST
-setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE      # prevent history entry of commands prefixed with a space
+setopt INC_APPEND_HISTORY     # write history immediately, not on shell exit
 setopt EXTENDED_HISTORY
-##setopt SHARE_HISTORY
 
 export TERM="xterm-256color"
 
 # vi mode with backspace
 bindkey -v
-bindkey "^?" backward-delete-char #allow backspace to delete behind cursor
-bindkey "^A" vi-beginning-of-line #restore ctrl-a to go to beginning while using vim mode in zsh
-bindkey '^R' history-incremental-search-backward # reverse histroy search
+bindkey "^?" backward-delete-char                 #allow backspace to delete behind cursor
+bindkey "^A" vi-beginning-of-line                 #restore ctrl-a to go to beginning while using vim mode in zsh
+bindkey '^R' history-incremental-search-backward  # reverse histroy search
 
 # ssh-agent
 # TODO figure out why its borked
