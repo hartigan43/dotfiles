@@ -1,18 +1,17 @@
 [tools]
-"aqua:atuinsh/atuin" = "latest"
+"aqua:atuinsh/atuin"    = "latest"
 "aqua:getsops/sops"     = "latest"
+"cargo:atac"            = "latest"
 "cargo:twm"             = "latest"
 "cargo:tlrc"            = "latest"
 duf                     = "latest"
 gitui                   = "latest"
+stern                   = "latest"
 usage                   = "latest"
-uv                      = "latest"
-#"ubi:atuinsh/atuin"     = "latest"
 "ubi:bootandy/dust"     = "latest"
 "ubi:dandavison/delta"  = "latest"
 "ubi:SuperCuber/dotter" = "latest"
 "ubi:tamasfe/taplo"     = "latest"
 zoxide                  = "latest"
-stern = "latest"
 
 [plugins]
