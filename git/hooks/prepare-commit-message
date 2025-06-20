@@ -6,8 +6,10 @@ prepend_branch_name() {
     branch_name="$2"
 
     # Prepend the branch name to the commit message, if it's not already there
-    if ! grep -q "^[$branch_name]" "$commit_msg_file"; then
-        sed -i.bak -e "1s/^/[$branch_name] /" "$commit_msg_file"
+    if ! grep -q "^\[$branch_name\]" "$commit_msg_file"; then
+        if sed -i.bak -e "1s/^/[$branch_name] /" "$commit_msg_file"; then
+            rm -f "$commit_msg_file.bak"
+        fi
     fi
 }
 
@@ -19,7 +21,7 @@ main() {
     branch_regex="([A-Z]{2,10}-[0-9]{1,6})([^()]*|[^[]*|$)"
 
     # Define a list of excluded branch names
-    excluded_branches="main|master|develop"
+    excluded_branches="main|master|develop|dev"
 
     # Get the branch name
     branch_name=$(git symbolic-ref --short HEAD)

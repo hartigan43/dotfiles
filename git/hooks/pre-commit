@@ -1,23 +1,60 @@
 #!/usr/bin/env bash
 
+# This ignores files relative to the git root directory from TODO parsing, so if the file has the same name
+# such as a pyproject.toml or other, it will ignore those across all projects, only add specific files
+IGNORED_FILES=("git/hooks/pre-commit")
+
+# Function to check if a file is in the ignored list
+is_ignored_file() {
+    local rel_path="$1"
+    for ignored in "${IGNORED_FILES[@]}"; do
+        if [[ "$rel_path" == "$ignored" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 # check for TODO strings
 check_todo_strings() {
-    # Store the strings to search for in an array
     todo_strings="TODO todo @TODO @todo"
+    found_todo=0
 
-    # Loop through the staged files
     while IFS= read -r file; do
-        # Check each staged file for the presence of the TODO strings
+        rel_path="$file"
+        if is_ignored_file "$rel_path"; then
+            continue
+        fi
         for todo_string in $todo_strings; do
             if grep -q "$todo_string" "$file"; then
-                echo "Error: Commit contains '$todo_string' in $file. Please remove before committing."
-                exit 1
+                echo "Warning: Commit contains '$todo_string' in $file."
+                found_todo=1
             fi
         done
     done < <(git diff --cached --name-only)
+
+    return $found_todo
 }
 
-# add other global functions here
-
 # Run checks
-# check_todo_strings
+check_todo_strings
+result=$?
+
+if [[ $result -eq 1 ]]; then
+    if [ -t 0 ] || [ -t 1 ]; then
+        # Use /dev/tty to ensure prompt appears even if stdin is not a terminal
+        read -p "TODO strings found. Do you want to proceed with the commit? (y/N): " answer < /dev/tty
+        case "$answer" in
+            [yY][eE][sS]|[yY])
+                exit 0
+                ;;
+            *)
+                echo "Aborting commit due to TODO strings."
+                exit 1
+                ;;
+        esac
+    else
+        echo "Aborting commit due to TODO strings (non-interactive shell)."
+        exit 1
+    fi
+fi
