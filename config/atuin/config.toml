@@ -108,6 +108,7 @@ history_filter = [
   #   "^innocuous-cmd .*--secret=.+",
   "^podman *stash",
   "^gocryptfs",
+  "^export *.*([Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Pp][Aa][Ss][Ss]|[Tt][Oo][Kk][Ee][Nn]).*=",
 ]
 
 ## prevent commands run with cwd matching any of these regexes from being written
