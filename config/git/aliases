@@ -3,6 +3,7 @@
 [alias]
   amend = commit --amend
   discard = checkout --
+  diffside = -c delta.side-by-side=true diff
   graph = log --graph -10 --branches --remotes --tags  --format=format:'%Cgreen%h %Creset• %<(75,trunc)%s (%cN, %cr) %Cred%d' --date-order
   # main - to fetch, checkout main/master, and pull latest from remote
   main = ! MAIN=$(git branch -l master main | sed -r 's/^[* ] //' | head -n 1) && git fetch && git checkout $MAIN && git pull origin $MAIN
