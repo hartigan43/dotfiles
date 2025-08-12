@@ -22,6 +22,10 @@ install_completions() {
         echo "Installing ${tool} completions..."
         "${tool}" completion "${shell}" > "${completion_dir}/_${tool}"
       fi
+      if "${tool}" gen-completion &> /dev/null; then
+        echo "Installing ${tool} completions..."
+        "${tool}" gen-completion --shell "${shell}" > "${completion_dir}/_${tool}"
+      fi
     fi
   done
 
