@@ -53,23 +53,26 @@ white        = "eeeeee"
 "misc/udev-rules" = { target = "/etc/udev/rules.d/", type = "symbolic", owner = "root" }
 
 [shell.files]
-"config/atuin"   = { target = "~/.config/atuin", type = "symbolic", if = '(is_executable "atuin")' }
-"config/gitui"   = { target = "~/.config/gitui", type = "symbolic", if = '(is_executable "gitui")' }
-"config/mise"    = "~/.config/mise"
-"config/ripgrep" = { target = "~/.config/ripgrep", type = "symbolic", if = '(is_executable "rg")' }
-"config/taplo"   = { target = "~/.config/taplo", type = "symbolic", if = '(is_executable "taplo")' }
-"config/twm"     = { target = "~/.config/twm", type = "symbolic", if = '(is_executable "twm")' }
-git              = "~/.config/git"                                                                   #TODO template for ~/.config/git/config so it can be portable between machines
-"misc/common.sh" = "~/.config/common.sh"
+"config/atuin"          = { target = "~/.config/atuin", type = "symbolic", if = '(is_executable "atuin")' }
+"config/git/config.tpl" = { target = "~/.config/git/config", type = "template" }
+"config/git/hooks"      = { target = "~/.config/git/hooks", type = "symbolic" }
+"config/gitui"          = { target = "~/.config/gitui", type = "symbolic", if = '(is_executable "gitui")' }
+"config/mise"           = "~/.config/mise"
+"config/ripgrep"        = { target = "~/.config/ripgrep", type = "symbolic", if = '(is_executable "rg")' }
+"config/taplo"          = { target = "~/.config/taplo", type = "symbolic", if = '(is_executable "taplo")' }
+"config/twm"            = { target = "~/.config/twm", type = "symbolic", if = '(is_executable "twm")' }
+"config/yamllint"       = { target = "~/.config/yamllint", type = "symbolic", if = '(is_executable "yamllint")' }
+"misc/common.sh"        = "~/.config/common.sh"
 # "misc/common.sh.tpl" = { target = "~/.config/common.sh", type = "template" } # TODO finish modularizing template and migrate
-"misc/editorconfig"  = "~/.editorconfig"
-"misc/gitconfig.tpl" = { target = "~/.config/git/config", type = "template" }
-tmux                 = "~/.config/tmux"
+"misc/editorconfig" = "~/.editorconfig"
+tmux                = "~/.config/tmux"
+
+# [shell.files.git]
 
 [shell.variables]
-editor    = "nvim"
-hooksPath = "~/.config/git/hooks"
-pager     = "delta"
+editor         = "nvim"
+git_hooks_path = "~/.config/git/hooks"
+pager          = "delta"
 
 [vim.files]
 # TODO migrate to nvim proper and send the whole dir?
