@@ -5,7 +5,6 @@
 "cargo:twm"             = "latest"
 "cargo:tlrc"            = "latest"
 duf                     = "latest"
-gitui                   = "latest"
 stern                   = "latest"
 usage                   = "latest"
 "ubi:bootandy/dust"     = "latest"

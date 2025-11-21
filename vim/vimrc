@@ -650,16 +650,14 @@ if is_neovim
 
 lua << LSP_EOF
 -- Setup language servers.
-local lspconfig = require('lspconfig')
+-- TODO remove cruft from old lspconfig setup now removed
+-- local lspconfig = require('lspconfig')
 local capabilities = require("ddc_source_lsp").make_client_capabilities()
 
-lspconfig.bashls.setup {}
-lspconfig.denols.setup { capabilities = capabilities, }
-lspconfig.pyright.setup {}
-lspconfig.rust_analyzer.setup {}
-lspconfig.terraformls.setup {}
-lspconfig.ts_ls.setup {}
-lspconfig.yamlls.setup {
+vim.lsp.config('denols', {
+  capabilities = capabilities,
+  })
+vim.lsp.config('yamlls', {
   settings = {
     yaml = {
       customTags = {
@@ -679,7 +677,23 @@ lspconfig.yamlls.setup {
       },
     },
   }
-}
+  })
+--lspconfig.bashls.setup {}
+--lspconfig.denols.setup { capabilities = capabilities, }
+--lspconfig.pyright.setup {}
+--lspconfig.rust_analyzer.setup {}
+--lspconfig.terraformls.setup {}
+--lspconfig.ts_ls.setup {}
+vim.lsp.enable('bashls')
+vim.lsp.enable('denols')
+vim.lsp.enable('pyright')
+vim.lsp.enable('rust_analyzer')
+vim.lsp.enable('terraformls')
+vim.lsp.enable('ts_ls')
+vim.lsp.enable('yamlls')
+--lspconfig.yamlls.setup {
+-- pasted into lsp.config('yamlls above
+-- }
 
 -- set to debug if needed
 vim.lsp.set_log_level('off')
