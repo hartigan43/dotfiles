@@ -257,6 +257,7 @@ elif command_exists pygmentize ; then
 fi
 
 # fzf
+# TODO - fzf has grown and should be configured and managed within its own file
 if command_exists fzf ; then
   alias fvim='vim $(fzf --height 40%)'
 
@@ -300,6 +301,37 @@ if command_exists fzf ; then
       then
           echo "${pid}" | xargs kill -"${1:-9}"
       fi
+  }
+
+  _fzf_complete_git() {
+    ARGS="$@"
+    local branches
+    branches=$(git branch -vv --all)
+    if [[ $ARGS == 'git co'* ]] || [[ $ARGS == 'git checkout'* ]]; then
+        _fzf_complete --reverse --multi -- "$@" < <(
+            echo "${branches}"
+        )
+    else
+        eval "zle ${fzf_default_completion:-expand-or-complete}"
+    fi
+  }
+
+  _fzf_complete_git_post() {
+    awk '{print $1}'
+  }
+
+  # https://medium.com/@dvieitest/enhance-your-terminal-workflow-with-fzf-custom-completions-cc0e462cc483
+  _fzf_complete_podman() {
+      ARGS="$@"
+      if [[ "$ARGS" == "podman exec"* ]]; then
+        _fzf_complete --preview 'podman container logs {1} | tail' -- "$@" < <(
+          podman container ls --format "table {{ .ID }}\t{{ .Image }}\t{{ .Names }}" | awk 'NR>1 {print $0}'
+        )
+      fi
+  }
+
+  _fzf_complete_podman_post() {
+    awk '{print $1}'
   }
 fi
 

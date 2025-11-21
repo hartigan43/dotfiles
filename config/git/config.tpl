@@ -21,6 +21,7 @@
 	defaultBranch = main
 [alias]
   amend = commit --amend
+  co = checkout
   discard = checkout --
   diffside = -c delta.side-by-side=true diff
   graph = log --graph -10 --branches --remotes --tags  --format=format:'%Cgreen%h %Creset• %<(75,trunc)%s (%cN, %cr) %Cred%d' --date-order
