@@ -10,6 +10,7 @@ fi
 
 # check for bash
 # TODO tempalte file with dotter and split bash / zsh completely
+# also replace this with SHELL=$(sed 's/\/bin\///g' <<< $(echo $SHELL))
 if [ -n "${BASH}" ] ; then
   IS_BASH=true
 fi
@@ -372,6 +373,24 @@ if command_exists atuin ; then
 
   fi
 fi
+
+# fnox
+if command_exists fnox ; then
+  # source default fnox age key
+  # TODO specify key file via FNOX_AGE_KEY_FILE
+  # export FNOX_AGE_KEY_FILE=~/.config/fnox/age.txt
+  export FNOX_AGE_KEY=$(cat ~/.config/fnox/age.txt | grep "AGE-SECRET-KEY")
+
+  # enable auto load of secrets ; TODO - fix loading of .local file and env vars
+  # if [ "${FNOX_SHELL_AUTOLOAD}" = "true" ] ; then
+  if [ "$IS_BASH" = "true" ] ; then
+    eval "$(fnox activate bash)"
+  else
+    eval "$(fnox activate zsh)"
+  fi
+  # fi
+fi
+
 
 # rust - rustup / cargo
 # TODO add installer in helpers?
