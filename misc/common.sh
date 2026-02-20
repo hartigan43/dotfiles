@@ -27,6 +27,7 @@ export STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 nvim="$(command -v nvim)"
 vim="$(command -v vim)"
 zed="$(command -v zeditor)"
+export ATAC_KEY_BINDINGS="${HOME}/.config/atac/vim_key_bindings.toml"
 export EDITOR="${nvim:-$vim}"
 export VISUAL="${zed}" # TODO, some kind of sane check for installed editor
 export DIFFPROG="${delta:-${EDITOR} -d}" # vim and nvim use -d for diffmode
@@ -471,6 +472,10 @@ fi
 # have some fun
 if command_exists cmatrix; then
   alias clear='[ $[$RANDOM % 10] = 0 ] && timeout 3 cmatrix; clear || clear'
+fi
+
+if command_exists btop; then
+  alias top='btop'
 fi
 
 ### end aliases

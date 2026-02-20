@@ -53,6 +53,7 @@ white        = "eeeeee"
 "misc/udev-rules" = { target = "/etc/udev/rules.d/", type = "symbolic", owner = "root" }
 
 [shell.files]
+"config/atac"           = { target = "~/.config/atac", type = "symbolic", if = '(is_executable "atac")' }
 "config/atuin"          = { target = "~/.config/atuin", type = "symbolic", if = '(is_executable "atuin")' }
 "config/git/config.tpl" = { target = "~/.config/git/config", type = "template" }
 "config/git/hooks"      = { target = "~/.config/git/hooks", type = "symbolic" }
@@ -62,7 +63,7 @@ white        = "eeeeee"
 "config/taplo"          = { target = "~/.config/taplo", type = "symbolic", if = '(is_executable "taplo")' }
 "config/twm"            = { target = "~/.config/twm", type = "symbolic", if = '(is_executable "twm")' }
 "config/yamllint"       = { target = "~/.config/yamllint", type = "symbolic", if = '(is_executable "yamllint")' }
-"misc/common.sh"        = "~/.config/common.sh"
+"misc/common.sh"        = { target = "~/.config/common.sh", type = "symbolic" }                                   # explictly state this is a symbolic link and not a template due to use of {{  }} in some functions
 # "misc/common.sh.tpl" = { target = "~/.config/common.sh", type = "template" } # TODO finish modularizing template and migrate
 "misc/editorconfig" = "~/.editorconfig"
 tmux                = "~/.config/tmux"
@@ -79,7 +80,7 @@ pager          = "delta"
 # TODO VIMDOTDIR AND VIMINIT
 # TODO nvim colors?
 # nvim = "~/.config/nvim"
-# "vim/vimrc"  = { target = "~/.vimrc", type = "symbolic" } # requires a manual link as dual entries are not supported
+# "vim/vimrc"  = { target = "~/.vimrc", type = "symbolic" } # requires a manual link as dual entries are not supported because this isnt valid TOML
 "vim/vimrc"        = { target = "~/.config/nvim/init.vim", type = "symbolic", if = '(is_executable "nvim")' }
 "vim/colors"       = "~/.vim/colors"
 "vim/custom-snips" = { target = "~/.vim/custom-snips", type = "symbolic" }

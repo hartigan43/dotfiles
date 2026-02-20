@@ -108,6 +108,7 @@ history_filter = [
   #   "^innocuous-cmd .*--secret=.+",
   "^export *.*([Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]|[Pp][Aa][Ss][Ss]|[Tt][Oo][Kk][Ee][Nn]).*=",
   "^gocryptfs",
+  "^fusermount -U",
   "^podman *tashap",
   "^yt-dlp *.",
 ]

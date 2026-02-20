@@ -41,7 +41,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rails',                 { 'for': 'rb' }
 Plug 'tpope/vim-surround'
 
-" all the JS things
+" JavaScript/Typescript
 Plug 'yuezk/vim-js' | Plug 'HerringtonDarkholme/yats.vim' | Plug 'posva/vim-vue' | Plug 'maxmellon/vim-jsx-pretty'
 
 " nvim specific
