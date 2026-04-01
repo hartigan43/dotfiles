@@ -63,10 +63,10 @@ white        = "eeeeee"
 "config/taplo"          = { target = "~/.config/taplo", type = "symbolic", if = '(is_executable "taplo")' }
 "config/twm"            = { target = "~/.config/twm", type = "symbolic", if = '(is_executable "twm")' }
 "config/yamllint"       = { target = "~/.config/yamllint", type = "symbolic", if = '(is_executable "yamllint")' }
-"misc/common.sh"        = { target = "~/.config/common.sh", type = "symbolic" }                                   # explictly state this is a symbolic link and not a template due to use of {{  }} in some functions
-# "misc/common.sh.tpl" = { target = "~/.config/common.sh", type = "template" } # TODO finish modularizing template and migrate
-"misc/editorconfig" = "~/.editorconfig"
-tmux                = "~/.config/tmux"
+# "misc/common.sh"        = { target = "~/.config/common.sh", type = "symbolic" } # explictly state this is a symbolic link and not a template due to use of {{  }} in some functions TODO remove and use rendered template
+"misc/common.sh.tpl" = { target = "~/.config/common.sh", type = "template" }
+"misc/editorconfig"  = "~/.editorconfig"
+tmux                 = "~/.config/tmux"
 
 # [shell.files.git]
 

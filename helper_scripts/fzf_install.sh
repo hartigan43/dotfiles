@@ -1,4 +1,5 @@
 # this script shell-agnostic and intended to be sourced, not executed directly
+# DEPRECATED: using mise to install fzf
 
 # set XDG_DATA_HOME if it isn't set already
 : "${XDG_DATA_HOME:=$HOME/.local/share}"
