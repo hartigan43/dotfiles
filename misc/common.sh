@@ -166,13 +166,56 @@ prepend_to_path () {
 }
 
 # jam out
+# TODO refactor into one function
+# TODO backup mpv scripts
+# NOTE: $(()) is bash arithmetic expansion
+
+# coffeetivity
+# https://audios.coffitivity.com/morning-murmur.mp3
+# university-undertones.mp3
+
 rainymood () {
   if command_exists mpv ; then
-    FILE="$((RANDOM%4))"
+    FILE="$((RANDOM % 4))"
     URL="https://rainymood.com/audio1110/${FILE}.ogg"
     mpv "${URL}" && rainymood
   else
-    echo "Please install mpv to use rainymood function"
+    echo "Please install mpv to use rainymood function."
+  fi
+}
+
+rainwave () {
+  if command_exists mpv ; then
+    # Station 1 - game, 2 - ocremix, 3 - covers, 4 - chiptune, 5 - all, 6 - chill
+    STATION="${1:-$(((RANDOM % 6) + 1))}"
+    FORMAT="${2:-ogg}"
+    URL="https://rainwave.cc/tune_in/${FILE}.${FORMAT}.m3u"
+    mpv "${URL}"
+  else
+    echo "Please install mpv to use rainwave function."
+  fi
+}
+
+soma () {
+  if command_exists mpv ; then
+    STATIONS=(
+      "deepspaceone"
+      "defcon"
+      "fluid"
+      "groovesalad"
+      "indiepop"
+      "lush"
+      "secretagent"
+      "specials"
+      "sonicuniverse"
+      "vaporwaves"
+    )
+    STATION="${1:-${STATIONS[ RANDOM % ${#STATIONS[@]}]}}"
+    FORMAT="${2:-130}" # aac 128k
+    URL="https://somafm.com/${STATION}${FORMAT}.pls"
+    mpv "${URL}"
+  else
+    echo "Please install mpv to use rainwave function."
   fi
 }
 
