@@ -193,6 +193,8 @@ endif
 " Folding ------------------------------------------------------------------ {{{
 
 if is_neovim
+  " TODO see for future nvim/vim breakout
+  " https://github.com/nvim-treesitter/nvim-treesitter/tree/main?tab=readme-ov-file#setup
   set foldmethod=expr
   set foldexpr=nvim_treesitter#foldexpr()
   set nofoldenable
@@ -652,11 +654,18 @@ lua << LSP_EOF
 -- Setup language servers.
 -- TODO remove cruft from old lspconfig setup now removed
 -- local lspconfig = require('lspconfig')
-local capabilities = require("ddc_source_lsp").make_client_capabilities()
+local deno_capabilities = require("ddc_source_lsp").make_client_capabilities()
+local html_capabilities = vim.lsp.protocol.make_client_capabilities()
+html_capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 vim.lsp.config('denols', {
-  capabilities = capabilities,
+  capabilities = deno_capabilities,
   })
+--Enable (broadcasting) snippet capability for completion
+
+vim.lsp.config('html', {
+  capabilities = html_capabilities,
+})
 vim.lsp.config('yamlls', {
   settings = {
     yaml = {
@@ -678,22 +687,16 @@ vim.lsp.config('yamlls', {
     },
   }
   })
---lspconfig.bashls.setup {}
---lspconfig.denols.setup { capabilities = capabilities, }
---lspconfig.pyright.setup {}
---lspconfig.rust_analyzer.setup {}
---lspconfig.terraformls.setup {}
---lspconfig.ts_ls.setup {}
 vim.lsp.enable('bashls')
 vim.lsp.enable('denols')
-vim.lsp.enable('pyright')
+vim.lsp.enable('docker_language_server')
+vim.lsp.enable('gopls')
+vim.lsp.enable('html')
 vim.lsp.enable('rust_analyzer')
-vim.lsp.enable('terraformls')
+vim.lsp.enable('terraformls') -- consider tofu_ls ion the future https://github.com/opentofu/tofu-ls
 vim.lsp.enable('ts_ls')
+vim.lsp.enable('ty') -- astral-sh/ty for python
 vim.lsp.enable('yamlls')
---lspconfig.yamlls.setup {
--- pasted into lsp.config('yamlls above
--- }
 
 -- set to debug if needed
 vim.lsp.set_log_level('off')
@@ -744,61 +747,65 @@ endif
 if is_neovim
 
 lua << TREE_EOF
-require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all"
-  ensure_installed = {'bash', 'cpp', 'go', 'javascript', 'json', 'lua', 'python', 'query', 'regex', 'rust', 'ssh_config', 'terraform', 'vim', 'vimdoc', 'yaml'},
+-- TODO nvim-treesitter rewrite, re-evaluate config
+-- TODO setup call not needed unless you want to change install dir
+require('nvim-treesitter').install {'bash', 'comment', 'cpp', 'css', 'desktop', 'dockerfile', 'editorconfig', 'git_config', 'git_rebase', 'go', 'html', 'javascript', 'json', 'kitty', 'lua', 'markdown', 'python', 'query', 'regex', 'rust', 'ssh_config', 'terraform', 'toml', 'tsx', 'udev', 'vim', 'vimdoc', 'yaml', 'zsh'}
 
-  -- Install parsers synchronously (only applied to `ensure_installed`)
-  sync_install = true,
-
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = false,
-
-  -- List of parsers to ignore installing (or "all")
-  -- ignore_install = { "javascript" },
-
-  ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-  -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
-
-  highlight = {
-    enable = true,
-
-    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-    -- the name of the parser)
-    -- list of language that will be disabled
-    -- disable = { "c", "rust" },
-    -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
-    disable = function(lang, buf)
-        local max_filesize = 100 * 1024 -- 100 KB
-        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if ok and stats and stats.size > max_filesize then
-            return true
-        end
-    end,
-
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
-
-  query_linter = {
-      enable = true,
-      use_virtual_text = true,
-      lint_events = {"BufWrite", "CursorHold"},
-      custom_captures = {
-        -- Highlight TODO in red
-        -- TODO ironically, needs fixing/tweaking
-        ["todo"] = "TODO"
-      },
-      severity = {
-        todo = "error",
-      },
-    },
-}
+-- require('nvim-treesitter').setup {
+--   -- A list of parser names, or "all"
+--   ensure_installed = {'bash', 'comment', 'cpp', 'css', 'desktop', 'dockerfile', 'editorconfig', 'git_config', 'git_rebase', 'go', 'html', 'javascript', 'json', 'kitty', 'lua', 'markdown', 'python', 'query', 'regex', 'rust', 'ssh_config', 'terraform', 'toml', 'tsx', 'udev', 'vim', 'vimdoc', 'yaml', 'zsh'},
+--
+--   -- Install parsers synchronously (only applied to `ensure_installed`)
+--   sync_install = true,
+--
+--   -- Automatically install missing parsers when entering buffer
+--   -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+--   auto_install = false,
+--
+--   -- List of parsers to ignore installing (or "all")
+--   -- ignore_install = { "javascript" },
+--
+--   ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
+--   -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+--
+--   highlight = {
+--     enable = true,
+--
+--     -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
+--     -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
+--     -- the name of the parser)
+--     -- list of language that will be disabled
+--     -- disable = { "c", "rust" },
+--     -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
+--     disable = function(lang, buf)
+--         local max_filesize = 100 * 1024 -- 100 KB
+--         local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+--         if ok and stats and stats.size > max_filesize then
+--             return true
+--         end
+--     end,
+--
+--     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+--     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+--     -- Using this option may slow down your editor, and you may see some duplicate highlights.
+--     -- Instead of true it can also be a list of languages
+--     additional_vim_regex_highlighting = false,
+--   },
+--
+--   query_linter = {
+--       enable = true,
+--       use_virtual_text = true,
+--       lint_events = {"BufWrite", "CursorHold"},
+--       custom_captures = {
+--         -- Highlight TODO in red
+--         -- TODO ironically, needs fixing/tweaking
+--         ["todo"] = "TODO"
+--       },
+--       severity = {
+--         todo = "error",
+--       },
+--     },
+-- }
 TREE_EOF
 
 endif
