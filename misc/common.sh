@@ -31,6 +31,7 @@ export ATAC_KEY_BINDINGS="${HOME}/.config/atac/vim_key_bindings.toml"
 export EDITOR="${nvim:-$vim}"
 export VISUAL="${zed}" # TODO, some kind of sane check for installed editor
 export DIFFPROG="${delta:-${EDITOR} -d}" # vim and nvim use -d for diffmode
+export LESS="Ms" # s - squash duplicate blank lines; M Long-prompt: show line number and percentage
 export LESSHISTFILE="${STATE_HOME}"/less/history
 export TAPLO_CONFIG="${XDG_CONFIG_HOME:=$HOME/.config}"/taplo/taplo.toml # TODO template if taplo installed
 export WORKSPACE="${HOME}"/Workspace
