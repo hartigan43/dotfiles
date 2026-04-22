@@ -1,7 +1,6 @@
 # Helpers are user-defined functions that can be executed inside templates.
 # This section is optional.
 [helpers]
-string_in_file = "./helpers/string_in_file.rhai"
 
 [alacritty]
 depends = ["shell"]
