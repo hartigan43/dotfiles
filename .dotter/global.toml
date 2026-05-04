@@ -10,6 +10,7 @@ depends = ["shell"]
 "alacritty/themes"         = "~/.config/alacritty/themes/themes"
 "alacritty/local.toml.tpl" = { target = "~/.config/alacritty/local.toml", type = "template" }
 
+
 [bash]
 depends = ["shell"]
 
@@ -54,6 +55,7 @@ white        = "eeeeee"
 [shell.files]
 "config/atac"           = { target = "~/.config/atac", type = "symbolic", if = '(is_executable "atac")' }
 "config/atuin"          = { target = "~/.config/atuin", type = "symbolic", if = '(is_executable "atuin")' }
+"config/fzf"            = { target = "~/.config/fzf", type = "symbolic", if = '(is_executable "fzf")' }
 "config/git/config.tpl" = { target = "~/.config/git/config", type = "template" }
 "config/git/hooks"      = { target = "~/.config/git/hooks", type = "symbolic" }
 "config/gitui"          = { target = "~/.config/gitui", type = "symbolic", if = '(is_executable "gitui")' }

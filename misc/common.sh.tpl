@@ -28,6 +28,7 @@ export ATAC_KEY_BINDINGS="${HOME}/.config/atac/vim_key_bindings.toml"
 export EDITOR="${nvim:-$vim}"
 export DIFFPROG="${delta:-${EDITOR} -d}" #vim and nvim use -d for diffmode
 {{#if (is_executable "less")}}
+export LESS="Ms" # s - squash duplicate blank lines; M Long-prompt: show line number and percentage
 export LESSHISTFILE="$STATE_HOME"/less/history
 {{/if}}
 {{#if (is_executable "taplo")}}
