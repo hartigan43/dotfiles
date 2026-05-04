@@ -501,7 +501,7 @@ alias weather='curl wttr.in'
   {{#if (is_executable "mullvad-exclude")}}
 # alias yay='PATH=$(getconf PATH) mullvad-exclude yay' # have yay build aur apps with system libraries
 yay() {
-  PATH=$(getconf PATH) mullvad-exclude yay "$@"' # have yay build aur apps with system libraries
+  PATH=$(getconf PATH) mullvad-exclude yay "$@" # have yay build aur apps with system libraries
 }
   {{else}}
 # alias yay='PATH=$(getconf PATH) yay'
