@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-set -ex
-# TODO figure out what the hell happened with sudo and "${PACKAGER}" expansion
+set -euo pipefail
 
 # do not allow run as root - thanks @freekingdean
 if [ "${EUID}" -eq 0 ]; then
@@ -8,119 +7,300 @@ if [ "${EUID}" -eq 0 ]; then
   exit 1
 fi
 
-HELPER_DIR="${HOME}/.dotfiles/helper_scripts"
+# configuration variables
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+HELPER_DIR="${DOTFILES_DIR}/helper_scripts"
+
+# Log functions
+log() {
+  printf '\n==> %s\n' "$*"
+}
+
+warn() {
+  printf 'WARN: %s\n' "$*" >&2
+}
+
+die() {
+  printf 'ERROR: %s\n' "$*" >&2
+  exit 1
+}
+
+# Install specific helper functions
+require_file() {
+  local path="$1"
+  [[ -f "$path" ]] || die "Required file not found: $path"
+}
+
+require_dir() {
+  local path="$1"
+  [[ -d "$path" ]] || die "Required directory not found: $path"
+}
+
+require_function() {
+  local fn="$1"
+  declare -F "$fn" >/dev/null || die "Required function not loaded: $fn"
+}
+run_required() {
+  log "$*"
+  "$@"
+}
+
+run_optional() {
+  log "$*"
+  if ! "$@"; then
+    warn "Optional step failed: $*"
+    return 0
+  fi
+}
+
+backup_path() {
+  local path="$1"
+  local stamp backup n=1
+
+  if [[ ! -e "$path" && ! -L "$path" ]]; then
+    printf 'Skipping %s (does not exist)\n' "$path"
+    return 0
+  fi
+
+  stamp="$(date +%Y%m%d)"
+  backup="${path}.bak.${stamp}"
+
+  while [[ -e "$backup" || -L "$backup" ]]; do
+    backup="${path}.bak.${stamp}.${n}"
+    n=$((n + 1))
+  done
+
+  printf 'Backing up %s -> %s\n' "$path" "$backup"
+  mv "$path" "$backup"
+}
+
+# renames files in the supplied path to their original name appended with ".bak" and timestamp
+ensure_backup() {
+  local path
+  for path in "$@"; do
+    backup_path "$path"
+  done
+}
+
+# TODO improve with realpath detection?
+# command -v realpath >/dev/null 2>&1 || die "realpath is required"
+ensure_symlink() {
+  local src="$1"
+  local dest="$2"
+
+  [[ -e "$src" || -L "$src" ]] || die "Symlink source does not exist: $src"
+
+  if [[ -L "$dest" && -e "$dest" ]]; then
+    if [[ "$(realpath "$dest")" == "$(realpath "$src")" ]]; then
+      printf 'Skipping %s (already correct symlink)\n' "$dest"
+      return 0
+    fi
+  fi
+
+  if [[ -e "$dest" || -L "$dest" ]]; then
+    backup_path "$dest"
+  fi
+
+  printf 'Linking %s -> %s\n' "$dest" "$src"
+  ln -s "$src" "$dest"
+}
+
+# Set real username
+set_real_name() {
+  local real_name
+  printf 'Please enter your real name, for your user account. ex: John Doe:\n'
+  read -r real_name
+  sudo usermod -c "$real_name" "$(whoami)"
+}
+
+require_dir "$DOTFILES_DIR"
+require_dir "$HELPER_DIR"
+
+require_file "${HELPER_DIR}/alacritty_themes.sh"
+require_file "${HELPER_DIR}/confirm.sh"
+require_file "${HELPER_DIR}/mise_install.sh"
+require_file "${HELPER_DIR}/nerdfonts_install.sh"
+require_file "${HELPER_DIR}/rust_install.sh"
+require_file "${HELPER_DIR}/zcomet_install.sh"
 
 # make workspace and misc
 mkdir -p "${HOME}/Workspace/misc"
 
 #### PLATFORM AND PACKAGES ####
-
 PLATFORM="$(uname)"
-if [ "${PLATFORM}" = "linux" ] || [ "${PLATFORM}" = "Linux" ]; then
-  PLATFORM="$(cat /etc/*-release | grep ^ID= | sed 's/^ID=\(.*\)$/\1/')"
-  if [ "${PLATFORM}" = "" ]; then
-    if [ -x "$(command -v pacman)" ]; then
-      PLATFORM="arch"
-    fi
+if [[ "$PLATFORM" == "Linux" ]]; then
+  if [[ -f /etc/os-release ]]; then
+    . /etc/os-release
+    PLATFORM="$ID"
   fi
 fi
 
-PACKAGES="zsh ruby git curl wget neovim tmux openssh go podman tree"
-EDITOR="${EDITOR:-$(command -v vim)}"
+# EDITOR="${EDITOR:-$(command -v vim)}"
 
-echo "$PLATFORM detected.  Proceeding in 5, hit CTRC-C to cancel"
-sleep 5
+# load confirm function for optional prompting
+. "${HELPER_DIR}/confirm.sh"
+require_function confirm
 
-if [ "${PLATFORM}" = "centos" ]; then
-  PACKAGER="yum -y"
-  PACKAGER_INSTALL="install"
-  PACKAGER_UPDATE="update"
-  PACKAGER_UPGRADE="upgrade"
-  PACKAGES="${PACKAGES} python3 python3-pip openssl-devel readline-devel zlib-devel"
-elif [ "${PLATFORM}" = "debian" ]; then
-  PACKAGER="apt-get -y"
-  PACKAGER_INSTALL="install"
-  PACKAGER_UPDATE="update"
-  PACKAGER_UPGRADE="upgrade"
-  PACKAGES="${PACKAGES} python3 python3-pip libssl-dev libreadline-dev zlib1g-dev"
-  sudo cp /usr/bin/pip3 /usr/bin/pip
-elif [ "${PLATFORM}" = "fedora" ]; then
-  PACKAGER="dnf -y"
-  PACKAGER_INSTALL="install"
-  PACKAGER_UPDATE="update"
-  PACKAGER_UPGRADE="upgrade"
-  PACKAGES="${PACKAGES} python3 python3-pip openssl-devel readline-devel zlib-devel"
-elif [[ "${PLATFORM}" = "arch" || "${PLATFORM}" = "archarm" ]]; then
-  PACKAGER="pacman --noconfirm"
-  PACKAGER_INSTALL="-S"
-  PACKAGER_UPDATE="-Syu"
-  PACKAGER_UPGRADE="-Syu"
-  PACKAGES="${PACKAGES} base-devel bat fd python python-pip cmake vim neovim python-pynvim"
-elif [ "${PLATFORM}" = "Darwin" ]; then
-  # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  PACKAGER="brew"
-  PACKAGER_INSTALL="install"
-  PACKAGER_UPDATE="update"
-  PACKAGER_UPGRADE="upgrade"
-  PACKAGES="${PACKAGES} python telnet watch htop glances kubectx infracost pygments ccat"
-else
-  echo "platform '${PLATFORM}' is not supported"
+if ! confirm "proceed with bootstrap on $PLATFORM"; then
   exit 1
 fi
 
-# Set real username
-set_real_name () {
-  echo -e "Please enter you real name, for your user account. ex: John Doe:\n"; read real_name
-  sudo usermod -c "'${real_name}' $(whoami)"
-}
+# Defaults for installation
+NEEDS_SUDO=true
+PACKAGER_BIN=""
+PACKAGER_FLAGS=()
+PACKAGER_UPDATE=()
+PACKAGER_UPGRADE=()
+PACKAGER_INSTALL=()
+PACKAGES=(
+  curl git go neovim openssh podman ruby tmux tree vim wget zsh
+)
 
-install_basics () {
-  mkdir -p "${HOME}/.local/bin"
+case "$PLATFORM" in
+  centos)
+    PACKAGER_BIN="yum"
+    PACKAGER_FLAGS=(-y)
+    PACKAGER_UPDATE=(update)
+    PACKAGER_UPGRADE=(upgrade)
+    PACKAGER_INSTALL=(install)
+    PACKAGES+=(python3 python3-pip openssl-devel readline-devel zlib-devel)
+    ;;
 
-  # first update and install of packages
-  echo "Running ${PACKAGER} ${PACKAGER_UPDATE}..."
-  sudo ${PACKAGER} ${PACKAGER_UPDATE}
-  echo "Running ${PACKAGER} ${PACKAGER_UPGRADE}..."
-  sudo ${PACKAGER} ${PACKAGER_UPGRADE}
-  echo "Running ${PACKAGER} ${PACKAGER_INSTALL} ${PACKAGES}..."
-  sudo ${PACKAGER} ${PACKAGER_INSTALL} ${PACKAGES}
+  debian|ubuntu)
+    PACKAGER_BIN="apt-get"
+    PACKAGER_FLAGS=(-y)
+    PACKAGER_UPDATE=(update)
+    PACKAGER_UPGRADE=(upgrade)
+    PACKAGER_INSTALL=(install)
+    PACKAGES+=(python3 python3-pip libssl-dev libreadline-dev zlib1g-dev)
+    ;;
 
-  source "${HELPER_DIR}/zcomet_install.sh" && zcomet_install
-  source "${HELPER_DIR}/mise_install.sh" && mise_install
+  fedora)
+    PACKAGER_BIN="dnf"
+    PACKAGER_FLAGS=(-y)
+    PACKAGER_UPDATE=(update)
+    PACKAGER_UPGRADE=(upgrade)
+    PACKAGER_INSTALL=(install)
+    PACKAGES+=(openssl-devel python3 python3-pip readline-devel zlib-devel)
+    ;;
 
-  # Symlink vimrc, zshrc and aliases/functions
-  echo -e "Backing up existing config files...\n"
-  #backup any original config files
-  mv "${HOME}/.zshrc" "${HOME}/.zshrc.bak"
-  mv "${HOME}/.bashrc" "${HOME}/.bashrc.bak"
-  mv "${HOME}/.bash_profile" "${HOME}/.bash_profile.bak"
+  arch|archarm)
+    PACKAGER_BIN="pacman"
+    PACKAGER_FLAGS=(--noconfirm)
+    PACKAGER_UPDATE=(-Sy)
+    PACKAGER_UPGRADE=(-Syu)
+    PACKAGER_INSTALL=(-S)
+    PACKAGES+=(base-devel bat cmake fd python python-pip python-pynvim)
+    ;;
 
-  # vim/nvim, config directories
-  mkdir -p "${HOME}/.config/vim"
-  mkdir -p "${HOME}/.vim/colors"
-  mkdir -p "${HOME}/.config/alacritty/themes"
-  mkdir -p "${HOME}/.config/mise"
-  mkdir -p "${HOME}/.config/nvim/colors"
+  Darwin)
+    PACKAGER_BIN="brew"
+    PACKAGER_FLAGS=()
+    PACKAGER_UPDATE=(update)
+    PACKAGER_UPGRADE=(upgrade)
+    PACKAGER_INSTALL=(install)
+    NEEDS_SUDO=false
+    PACKAGES+=(ccat glances gnupg htop infracost pygments telnet watch wget)
+    if ! command -v brew >/dev/null 2>&1; then
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+    ;;
 
-  source "${HELPER_DIR}/alacritty_themes_install.sh" && alacritty_themes_install
+  *)
+    echo "platform '$PLATFORM' is not supported"
+    exit 1
+    ;;
+esac
 
-  # we need to link mise manually so we can then install tools and dependencies in mise and use dotter after.
-  ln -s "${HOME}/.dotfiles/config/mise/config.toml" "${HOME}/.config/mise/config.toml"
-}
-
-#### Run it ####
-install_basics
-if confirm "install rust via rustup"; then
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path
+SUDO=()
+if [[ "$NEEDS_SUDO" == true ]] && command -v sudo >/dev/null 2>&1; then
+  SUDO=(sudo)
 fi
+
+run_packager() {
+  "${SUDO[@]}" "$PACKAGER_BIN" "${PACKAGER_FLAGS[@]}" "$@"
+}
+
+# Update and install provided packages
+echo "Running package list update..."
+run_required run_packager "${PACKAGER_UPDATE[@]}"
+
+echo "Running upgrade..."
+run_required run_packager "${PACKAGER_UPGRADE[@]}"
+
+echo "Installing packages..."
+run_required run_packager "${PACKAGER_INSTALL[@]}" "${PACKAGES[@]}"
+
+# Get mise and zcomet installed
+echo "Creating a local binary directory within homedir..."
+mkdir -p "${HOME}/.local/bin"
+
+. "${HELPER_DIR}/zcomet_install.sh"
+require_function zcomet_install
+run_required zcomet_install
+
+. "${HELPER_DIR}/mise_install.sh"
+require_function mise_install
+run_required mise_install
+
+# Symlink vimrc, zshrc and aliases/functions
+echo "Backing up existing config files...\n"
+#backup any original config files
+ensure_backup \
+  "${HOME}/.bashrc" \
+  "${HOME}/.bash_profile" \
+  "${HOME}/.zshrc" \
+  "${HOME}/.zprofile"
+
+# vim/nvim, config directories
+mkdir -p "${HOME}/.config/vim" \
+  "${HOME}/.vim/colors" \
+  "${HOME}/.config/alacritty/themes" \
+  "${HOME}/.config/mise" \
+  "${HOME}/.config/nvim/colors"
+
+# we need to link mise manually so we can then install tools and dependencies in mise and use dotter after.
+# ln -s "${HOME}/.dotfiles/config/mise/config.toml" "${HOME}/.config/mise/config.toml"
+run_required ensure_symlink "${HOME}/.dotfiles/config/mise/config.toml" "${HOME}/.config/mise/config.toml"
+
+# TODO make configurable path and as a helper script function?  These paths map to configured path in common.sh/zshrc
+# TODO these vars are necessary outside the rust install as we pass the path to the mise install command
+. "${HELPER_DIR}/rust_install.sh"
+require_function rust_install
+run_required rust_install
+
+#export RUSTUP_HOME="${HOME}/.local/share/rust/rustup"
+#export CARGO_HOME="${HOME}/.local/share/rust/cargo"
+#
+#mkdir -p "$RUSTUP_HOME" "$CARGO_HOME"
+#curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path
+
 if [[ "${PLATFORM}" != "Darwin" ]] ; then
   if confirm "set current user's real name"; then
-    set_real_name
+    run_optional set_real_name
   fi
 fi
+
 if confirm "install NERDFonts"; then
-  source "${HELPER_DIR}/nerdfonts_install.sh" && nerd_fonts_install
+  # shellcheck source=/dev/null
+  . "${HELPER_DIR}/nerdfonts_install.sh"
+  require_function nerd_fonts_install
+  run_optional nerd_fonts_install
 fi
 
-echo -e "Wrapping up.  Starting a new shell and running mise i && cd ~/.dotfiles && dotter"
-exec $SHELL -c "mise i && cd ~/.dotfiles && dotter"
+if confirm "install alacritty themes"; then
+  # shellcheck source=/dev/null
+  . "${HELPER_DIR}/alacritty_themes.sh"
+  require_function alacritty_themes_install
+  run_optional alacritty_themes_install
+fi
+
+echo -e "Wrapping up... Running mise install and then dotter"
+# TODO needs to copy or generate a base .dotter/local.toml, as well as eval the use of mise to call dotter here
+# TODO or convert local.toml to mac.toml and linux.toml
+
+# : -- do nothing no op that succeeds allowing us to run parameter expansion and set CARGO_HOME
+# in the event rust install was skipped.  It should be exported before exiting the helper but this covers all cases
+: "${CARGO_HOME:=${HOME}/.local/share/rust/cargo}"
+PATH="$HOME/.local/bin:$CARGO_HOME/bin:$PATH" mise i && cd ~/.dotfiles && mise x github:SuperCuber/dotter -- dotter
