@@ -1,5 +1,6 @@
 [tools]
 "aqua:atuinsh/atuin"       = "latest"
+"cargo:du-dust"            = "latest"
 "aqua:getsops/sops"        = "latest"
 "cargo:atac"               = "latest"
 "cargo:jsongrep"           = "latest"
@@ -7,7 +8,6 @@
 "cargo:tlrc"               = "latest"
 duf                        = "latest"
 fzf                        = "latest"
-"github:bootandy/dust"     = "latest"
 "github:dandavison/delta"  = "latest"
 "github:SuperCuber/dotter" = "latest"
 "github:tamasfe/taplo"     = "latest"
