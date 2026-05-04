@@ -7,14 +7,13 @@ source "${HOME}/.dotfiles/helper_scripts/command_exists.sh"
 # use builtin dotter.VAR https://github.com/SuperCuber/dotter/wiki/5.-Built%E2%80%90ins,-Helpers,-and-Settings#variables
 # use include_template https://github.com/SuperCuber/dotter/wiki/5.-Built%E2%80%90ins,-Helpers,-and-Settings
 # better define os check
-# OLD test SHELL=$(sed 's/\/bin\///g' <<< $(echo $SHELL))
 
 # check and set unamestr if it was somehow unset in bashrc/zshrc
 unamestr="${unamestr:-$(uname)}"
 # TODO replace after nvim/vim split
 # check for nvim and default to vim
-nvim=$(command -v nvim)
-vim=$(command -v vim)
+nvim="$(command -v nvim)"
+vim="$(command -v vim)"
 zed="$(command -v zeditor)"
 
 # use XDG_DATA_HOME or equivalent path for macOS compatibility
@@ -301,6 +300,7 @@ undozip (){
 # fzf
 alias fvim='vim $(fzf --height 40%)'
 
+{{{{raw}}}}
 export FZF_CTRL_R_OPTS="
   --preview 'echo {}' --preview-window up:3:hidden:wrap
   --bind 'ctrl-/:toggle-preview'
@@ -308,18 +308,23 @@ export FZF_CTRL_R_OPTS="
   --color header:italic
   --header 'Press CTRL-Y to copy command into clipboard'
 "
+{{{{/raw}}}}
 
 {{#if (is_executable "bat")}}
+{{{{raw}}}}
 export FZF_CTRL_T_OPTS="
   --preview 'bat -n --color=always {}'
   --bind 'ctrl-/:change-preview-window(down|hidden|)'
 "
+{{{{/raw}}}}
 {{/if}}
 
 {{#if (is_executable "tree")}}
+{{{{raw}}}}
 if command_exists tree ; then
   export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 fi
+{{{{/raw}}}}
 {{/if}}
 
 
@@ -402,7 +407,7 @@ else
   eval "$(~/.local/bin/mise activate bash)"
   eval "$(mise hook-env -s bash)"
   {{/if}}
-  # mise shims, can also use `mise activate --shims` to enable on demand
+  # mise shims, can also use 'mise activate --shims' to enable on demand
   # prepend_to_path "$HOME/.local/share/mise/shims:$PATH"
 fi
 
@@ -494,9 +499,16 @@ alias tmux='tmux -2' # assume 256 color
 alias weather='curl wttr.in'
 {{#if (is_executable "yay")}}
   {{#if (is_executable "mullvad-exclude")}}
-alias yay='PATH=$(getconf PATH) mullvad-exclude yay' # have yay build aur apps with system libraries
+# alias yay='PATH=$(getconf PATH) mullvad-exclude yay' # have yay build aur apps with system libraries
+yay() {
+  PATH=$(getconf PATH) mullvad-exclude yay "$@"' # have yay build aur apps with system libraries
+}
   {{else}}
-alias yay='PATH=$(getconf PATH) yay' # have yay build aur apps with system libraries
+# alias yay='PATH=$(getconf PATH) yay'
+yay() {
+    PATH=$(getconf PATH) command yay "$@" # have yay build aur apps with system libraries
+}
+
   {{/if}}
 {{/if}}
 alias v='vim'
