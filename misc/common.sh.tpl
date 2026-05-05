@@ -21,23 +21,33 @@ export CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+# Exports for sane configuration locations, install directories, etc
 {{#if (is_executable "atac")}}
 export ATAC_KEY_BINDINGS="${HOME}/.config/atac/vim_key_bindings.toml"
 {{/if}}
-export EDITOR="${nvim:-$vim}"
+export CARGO_HOME="$DATA_HOME/rust/cargo"
 export DIFFPROG="${delta:-${EDITOR} -d}" #vim and nvim use -d for diffmode
+export EDITOR="${nvim:-$vim}"
+export GOPATH="$DATA_HOME/go"
 {{#if (is_executable "less")}}
 export LESS="Ms" # s - squash duplicate blank lines; M Long-prompt: show line number and percentage
-export LESSHISTFILE="$STATE_HOME"/less/history
+export LESSHISTFILE="${STATE_HOME}/less/history"
 {{/if}}
+export PNPM_HOME="${DATA_HOME}/pnpm"
+{{#if (is_executable "rg")}}
+export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/ripgreprc
+{{/if}}
+export RUSTUP_HOME="$DATA_HOME/rust/rustup"
 {{#if (is_executable "taplo")}}
 export TAPLO_CONFIG="${XDG_CONFIG_HOME:=$HOME/.config}/taplo/taplo.toml" # TODO template if taplo installed
 {{/if}}
 export VISUAL=zeditor #TODO
 {{#if (is_executable "wine")}}
-export WINEPREFIX="{$DATA_HOME}"/wine
+export WINEPREFIX="${DATA_HOME}/wine"
 {{/if}}
 export WORKSPACE="$HOME/Workspace"
+export YARN_CACHE_FOLDER="${CACHE_HOME}/yarn"
+export YARN_GLOBAL_FOLDER="${DATA_HOME}/yarn"
 
 # create Workspace dir and export
 if [ ! -d "$WORKSPACE" ]; then
@@ -266,14 +276,6 @@ tup () {
   vim +PlugUpdate +qall +PlugUpgrade -c "call denops#cache#update(#{reload: v:true})" +qall
   # && \ deno cache --reload "/home/hartigan/.vim/plugged/ddc-around/denops/@ddc-sources/around.ts"
   zcomet update && zcomet self-update
-  # TODO see about passing flag to asdf-fzf for mise to support install --xdg
-  # TODO evaluate the use of fzf@latest with mise
-  # cd "${DATA_HOME}/fzf" && git pull &&
-  # {
-  #   echo y # enable completion
-  #   echo y # enable keybindings
-  #   echo n #update config files
-  # } | ./install --xdg
   cd "$CURRDIR" || return
   echo "Refreshing the shell with exec $SHELL"
   exec "$SHELL"
@@ -282,21 +284,20 @@ tup () {
 undozip (){
   unzip -l "$1" |  awk 'BEGIN { OFS="" ; ORS="" } ; { for ( i=4; i<NF; i++ ) print $i " "; print $NF "\n" }' | xargs -I{} rm -r {}
 }
-
 ### end functions
 
 ### path updates and tooling
 {{#if (is_executable "bat")}}
 # use bat, or pygmentize for easier cat viewing
-  alias cat='bat'
-  export BAT_THEME=ansi
+alias cat='bat'
+export BAT_THEME=ansi
 {{else}}
   {{#if (is_executable "pygmentize")}}
-    alias cat='pygmentize -g'
+alias cat='pygmentize -g'
   {{/if}}
 {{/if}}
-
 {{#if (is_executable "fzf")}}
+
 # fzf
 alias fvim='vim $(fzf --height 40%)'
 
@@ -318,17 +319,16 @@ export FZF_CTRL_T_OPTS="
 "
 {{{{/raw}}}}
 {{/if}}
-
 {{#if (is_executable "tree")}}
+
 {{{{raw}}}}
 if command_exists tree ; then
   export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 fi
 {{{{/raw}}}}
 {{/if}}
-
-
 {{#if (is_executable "fd")}}
+
 # TODO SET AND SOURCE FROM FILE - FZF_DEFAULT_OPTS_FILE
 # https://github.com/junegunn/fzf?tab=readme-ov-file#environment-variables for more info
   export FZF_DEFAULT_COMMAND="fd --type f"
@@ -383,19 +383,29 @@ _fzf_complete_podman() {
 _fzf_complete_podman_post() {
   awk '{print $1}'
 }
+# end fzf
 {{/if}}
-
 {{#if (is_executable "go")}}
+
 # go
-export GOPATH="$DATA_HOME/go"
 add_to_path "$GOPATH/bin"
 {{/if}}
-prepend_to_path "$HOME/.local/bin"
-{{#if (is_executable "yarn")}}
-prepend_to_path "$HOME/.yarn/bin"
-{{/if}}
 
-# mise - configured before other tooling as the hook-env is needed for other tools to function properly
+if [ -f "${CARGO_HOME}"/env ]; then
+  source "${CARGO_HOME}"/env
+else
+  prepend_to_path "${CARGO_HOME}"/bin
+fi
+{{#if (is_executable "pnpm")}}
+prepend_to_path "${PNPM_HOME}"
+{{/if}}
+{{#if (is_executable "yarn")}}
+prepend_to_path "${YARN_GLOBAL_FOLDER}/bin"
+{{/if}}
+prepend_to_path "$HOME/.local/bin"
+
+# mise - loaded after other path modifications but before other
+# tooling as the hook-env is needed for other tools to function properly
 if [ ! -f "$HOME/.local/bin/mise" ] ; then
   source "$HOME/.dotfiles/helper_scripts/mise_install.sh" && mise_install
 else
@@ -413,35 +423,15 @@ fi
 
 # atuin
 {{#if (is_executable "atuin")}}
-{{#if (eq login_shell "zsh") }}
-  # https://github.com/atuinsh/atuin/issues/68#issuecomment-1585444955
-  eval "$(atuin init zsh --disable-ctrl-r)" # disable ctrl-r to use fzf for now, up still shows atuin
-{{/if}}
-{{#if (eq login_shell "bash") }}
-  true # no-op for shellcheck
-  # TODO install ble.sh for atuin bash -- https://github.com/akinomyoga/ble.sh
-  # eval "$(atuin init bash)"
-{{/if}}
-{{/if}}
-
-# rust - rustup / cargo
-# TODO add installer in helper?
-export RUSTUP_HOME="$DATA_HOME/rust/rustup"
-export CARGO_HOME="$DATA_HOME/rust/cargo"
-
-if [ -f "$CARGO_HOME/env" ]; then
-  source "$CARGO_HOME/env"
-else
-  prepend_to_path "$CARGO_HOME/bin"
-fi
-
-{{#if (is_executable "nvim")}}
-alias vim='nvim'
-{{/if}}
-
-# ripgrep
-{{#if (is_executable "rg")}}
-export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/ripgreprc
+  {{#if (eq login_shell "zsh") }}
+# https://github.com/atuinsh/atuin/issues/68#issuecomment-1585444955
+eval "$(atuin init zsh --disable-ctrl-r)" # disable ctrl-r to use fzf for now, up still shows atuin
+  {{/if}}
+  {{#if (eq login_shell "bash") }}
+true # no-op for shellcheck
+# TODO install ble.sh for atuin bash -- https://github.com/akinomyoga/ble.sh
+# eval "$(atuin init bash)"
+  {{/if}}
 {{/if}}
 
 # zoxide
@@ -496,6 +486,10 @@ alias tfplan='$tf_cmd plan -lock=false'
 alias tfclean='rm -rf .terraform && $tf_cmd init'
 alias tf-update-lockfile='$tf_cmd providers lock -platform=darwin_amd64 -platform=linux_amd64 -platform=darwin_arm64'
 alias tmux='tmux -2' # assume 256 color
+alias v='vim'
+{{#if (is_executable "nvim")}}
+alias vim='nvim'
+{{/if}}
 alias weather='curl wttr.in'
 {{#if (is_executable "yay")}}
   {{#if (is_executable "mullvad-exclude")}}
@@ -508,10 +502,8 @@ yay() {
 yay() {
     PATH=$(getconf PATH) command yay "$@" # have yay build aur apps with system libraries
 }
-
   {{/if}}
 {{/if}}
-alias v='vim'
 
 ### end aliases
 

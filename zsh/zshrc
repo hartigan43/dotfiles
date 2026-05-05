@@ -159,11 +159,3 @@ zcomet compinit
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C $(which "$tf_cmd") terraform
 complete -C $(which aws_completer) aws
-
-# pnpm
-export PNPM_HOME="/Users/jake.hartigan/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end

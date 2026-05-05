@@ -28,14 +28,21 @@ nvim="$(command -v nvim)"
 vim="$(command -v vim)"
 zed="$(command -v zeditor)"
 export ATAC_KEY_BINDINGS="${HOME}/.config/atac/vim_key_bindings.toml"
-export EDITOR="${nvim:-$vim}"
-export VISUAL="${zed}" # TODO, some kind of sane check for installed editor
+export CARGO_HOME="${DATA_HOME}"/rust/cargo
 export DIFFPROG="${delta:-${EDITOR} -d}" # vim and nvim use -d for diffmode
+export EDITOR="${nvim:-$vim}"
+export GOPATH="${DATA_HOME}/go"
 export LESS="Ms" # s - squash duplicate blank lines; M Long-prompt: show line number and percentage
-export LESSHISTFILE="${STATE_HOME}"/less/history
-export TAPLO_CONFIG="${XDG_CONFIG_HOME:=$HOME/.config}"/taplo/taplo.toml # TODO template if taplo installed
-export WORKSPACE="${HOME}"/Workspace
-export WINEPREFIX="{$DATA_HOME}"/wine
+export LESSHISTFILE="${STATE_HOME}/less/history"
+export PNPM_HOME="${DATA_HOME}/pnpm"
+export RUSTUP_HOME="${DATA_HOME}"/rust/rustup
+export TAPLO_CONFIG="${XDG_CONFIG_HOME:=$HOME/.config}/taplo/taplo.toml" # TODO template if taplo installed
+export VISUAL="${zed}" # TODO, some kind of sane check for installed editor
+export WINEPREFIX="${DATA_HOME}/wine"
+export WORKSPACE="${HOME}/Workspace"
+export YARN_CACHE_FOLDER="${CACHE_HOME}/yarn"
+export YARN_GLOBAL_FOLDER="${DATA_HOME}/yarn"
+
 
 ### functions
 # add to path
@@ -383,12 +390,26 @@ fi
 
 # go
 if command_exists go ; then
-  export GOPATH="${DATA_HOME}/go"
   add_to_path "${GOPATH}/bin"
 fi
 
-prepend_to_path "${HOME}"/.yarn/bin
-prepend_to_path "${HOME}"/.local/bin
+# pnpm
+if command_exists pnpm ; then
+  prepend_to_path "${PNPM_HOME}"
+fi
+
+# rust - rustup / cargo
+if [ -f "${CARGO_HOME}"/env ]; then
+  source "${CARGO_HOME}"/env
+else
+  prepend_to_path "${CARGO_HOME}"/bin
+fi
+
+if command_exists yarn ; then
+  prepend_to_path "${YARN_GLOBAL_FOLDER}/bin"
+fi
+
+prepend_to_path "${HOME}/.local/bin"
 
 # mise - configured before other tooling as the hook-env is needed for other tools to function properly
 if [ ! -f "${HOME}"/.local/bin/mise ] ; then
@@ -434,18 +455,6 @@ if command_exists fnox ; then
     eval "$(fnox activate zsh)"
   fi
   # fi
-fi
-
-
-# rust - rustup / cargo
-# TODO add installer in helpers?
-export RUSTUP_HOME="${DATA_HOME}"/rust/rustup
-export CARGO_HOME="${DATA_HOME}"/rust/cargo
-
-if [ -f "${CARGO_HOME}"/env ]; then
-  source "${CARGO_HOME}"/env
-else
-  prepend_to_path "${CARGO_HOME}"/bin
 fi
 
 if command_exists nvim ; then
