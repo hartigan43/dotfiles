@@ -16,42 +16,48 @@ nvim="$(command -v nvim)"
 vim="$(command -v vim)"
 zed="$(command -v zeditor)"
 
-# use XDG_DATA_HOME or equivalent path for macOS compatibility
+# use XDG_DATA_HOME or equivalent path on macOS for compatibility
 export CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 # Exports for sane configuration locations, install directories, etc
 {{#if (is_executable "atac")}}
-export ATAC_KEY_BINDINGS="${HOME}/.config/atac/vim_key_bindings.toml"
+export ATAC_KEY_BINDINGS="${CONFIG_HOME}/atac/vim_key_bindings.toml"
 {{/if}}
-export CARGO_HOME="$DATA_HOME/rust/cargo"
+export CARGO_HOME="${DATA_HOME}/rust/cargo"
 export DIFFPROG="${delta:-${EDITOR} -d}" #vim and nvim use -d for diffmode
 export EDITOR="${nvim:-$vim}"
-export GOPATH="$DATA_HOME/go"
+export GOPATH="${DATA_HOME}/go"
+export GTK2_RC_FILES="${CONFIG_HOME}/gtk-2.0/gtkrc" # TODO collect this and other _very_ linux settings in conditional? perhpaps in templated local file
 {{#if (is_executable "less")}}
 export LESS="Ms" # s - squash duplicate blank lines; M Long-prompt: show line number and percentage
 export LESSHISTFILE="${STATE_HOME}/less/history"
 {{/if}}
+{{#if (is_executable "mplayer")}}
+export MPLAYER_HOME="${CONFIG_HOME}/mplayer"
+{{/if}}
+export PARALLEL_HOME="${CONFIG_HOME}/parallel" # GNU Parallell
 export PNPM_HOME="${DATA_HOME}/pnpm"
 {{#if (is_executable "rg")}}
-export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/ripgreprc
+export RIPGREP_CONFIG_PATH="${CONFIG_HOME}/ripgrep/ripgreprc"
 {{/if}}
-export RUSTUP_HOME="$DATA_HOME/rust/rustup"
+export RUSTUP_HOME="${DATA_HOME}/rust/rustup"
 {{#if (is_executable "taplo")}}
-export TAPLO_CONFIG="${XDG_CONFIG_HOME:=$HOME/.config}/taplo/taplo.toml" # TODO template if taplo installed
+export TAPLO_CONFIG="${CONFIG_HOME}/taplo/taplo.toml"
 {{/if}}
 export VISUAL=zeditor #TODO
 {{#if (is_executable "wine")}}
 export WINEPREFIX="${DATA_HOME}/wine"
 {{/if}}
-export WORKSPACE="$HOME/Workspace"
+export WORKSPACE="${HOME}/Workspace"
+export XCURSOR_PATH="/usr/share/icons:${DATA_HOME}/icons" # TODO - drop with wayland?
 export YARN_CACHE_FOLDER="${CACHE_HOME}/yarn"
 export YARN_GLOBAL_FOLDER="${DATA_HOME}/yarn"
 
 # create Workspace dir and export
-if [ ! -d "$WORKSPACE" ]; then
-  mkdir "$WORKSPACE"
+if [ ! -d "${WORKSPACE}" ]; then
+  mkdir "${WORKSPACE}"
 fi
 
 ### functions
@@ -479,6 +485,7 @@ alias me='mullvad-exclude'
 {{/if}}
 alias mxlookup='nslookup -q=mx'
 alias p='podman'
+alias svn="svn --config-dir ${CONFIG_HOME}/subversion" # make svn play nice with XDG spec
 alias sudo='nocorrect sudo ' # A trailing space in VALUE causes the next word to be checked for alias substitution when the alias is expanded.
 alias sdiff='sudo vimdiff'
 alias tf='$tf_cmd'
@@ -491,6 +498,9 @@ alias v='vim'
 alias vim='nvim'
 {{/if}}
 alias weather='curl wttr.in'
+{{#if (is_executable "wget")}}
+alias wget=wget --hsts-file="${DATA_HOME}/wget-hsts" # make wget play nice with XDG spec
+{{/if}}
 {{#if (is_executable "yay")}}
   {{#if (is_executable "mullvad-exclude")}}
 # alias yay='PATH=$(getconf PATH) mullvad-exclude yay' # have yay build aur apps with system libraries
