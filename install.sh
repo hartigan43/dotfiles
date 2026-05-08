@@ -313,8 +313,27 @@ if confirm "install alacritty themes"; then
 fi
 
 printf '\nWrapping up... Running mise install and then dotter deploy\n'
-# TODO needs to copy or generate a base .dotter/local.toml, as well as eval the use of mise to call dotter here
-# TODO or convert local.toml to mac.toml and linux.toml
+
+if [[ ! -f .dotter/local.toml ]]; then
+  if [[ "$PLATFORM" == "Linux" ]]; then
+    cp misc/dotter_linux.toml .dotter/local.toml
+  else
+    cp misc/dotter_mac.toml .dotter/local.toml
+  fi
+
+  printf 'Enter your email for git/dotter config (leave blank to skip): '
+  read -r dotter_email
+  if [[ -n "$dotter_email" ]]; then
+    if [[ "$PLATFORM" == "Linux" ]]; then
+      # we still need two sed commands because BSD sed requires a separate argument to -i
+      sed -i "s/email[[:space:]]*=[[:space:]]*\"\"/email = \"${dotter_email}\"/" .dotter/local.toml
+    else
+      sed -i '' "s/email[[:space:]]*=[[:space:]]*\"\"/email = \"${dotter_email}\"/" .dotter/local.toml
+    fi
+  fi
+else
+  printf '.dotter/local.toml already exists, skipping copy\n'
+fi
 
 # : -- do nothing no op that succeeds allowing us to run parameter expansion and set CARGO_HOME
 # in the event rust install was skipped.  It should be exported before exiting the helper but this covers all cases
