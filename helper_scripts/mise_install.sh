@@ -1,6 +1,11 @@
 # this script shell-agnostic and intended to be sourced, not executed directly
 
 mise_install() {
+  if command -v mise >/dev/null 2>&1; then
+    printf 'Skipping mise install (already installed at %s)\n' "$(command -v mise)"
+    return 0
+  fi
+
   echo "mise binary not found, installing mise..."
   tmp_install_dir=$(mktemp -d) && cd "$tmp_install_dir" || exit
 

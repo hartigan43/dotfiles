@@ -1,0 +1,27 @@
+local wezterm = require 'wezterm'
+local M = {}
+
+local status = require 'status' -- upper right status bar configured in status.lua
+local symbols = require 'symbols'
+
+function M.apply_to_config(config)
+  -- tab settings
+  -- config.show_close_tab_button_in_tabs = false -- nightly only
+  config.show_new_tab_button_in_tab_bar = false
+  -- window settings
+  config.window_background_opacity = 1.0
+  config.window_decorations = 'INTEGRATED_BUTTONS|RESIZE' -- consider only RESIZE outside macOS?
+  -- Sets the font for the window frame (tab bar)
+  config.window_frame = {
+      font = wezterm.font({ family = 'Iosevka Nerd Font', weight = 'Bold' }),
+      font_size = 12,
+  }
+  config.window_padding = {
+    left = '0.25cell',  -- 1
+    right = '0.25cell', -- 1
+    top = '0.1cell',    -- 0.5
+    bottom = '0.1cell', -- 0.5
+  }
+end
+
+return M

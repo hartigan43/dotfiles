@@ -3,10 +3,17 @@
 # confirmation prompt wrapper for read use in zsh and bash
 # usage example:
 #   confirm "install THINGS"
+# Set NON_INTERACTIVE=true as an env var to auto-confirm all prompts, e.g:
+#   NON_INTERACTIVE=true ./install.sh
 confirm() {
-  echo "Do you want to $1? [y/N] "
-  read response
-  response="$(echo "$response"  | tr '[:upper:]' '[:lower:]')"
+  if [[ "${NON_INTERACTIVE:-false}" == "true" ]]; then
+    printf 'Auto-confirming: %s\n' "$1"
+    return 0
+  fi
+
+  printf 'Do you want to %s? [y/N] ' "$1"
+  read -r response
+  response="$(printf '%s' "$response" | tr '[:upper:]' '[:lower:]')"
 
   if [[ "$response" =~ ^(yes|y)$ ]]; then
     return 0

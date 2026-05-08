@@ -1,0 +1,17 @@
+local wezterm = require 'wezterm'
+local M = {}
+
+-- Returns a bool based on whether the host operating system's appearance is
+-- light or dark. https://alexplescan.com/posts/2024/08/10/wezterm/
+function M.is_dark()
+  -- wezterm.gui is not always available, depending on what environment
+  -- wezterm is operating in. Just return true if it's not defined.
+  if wezterm.gui then
+    -- Some systems report appearance like "Dark High Contrast" so just look
+    -- for the string "Dark" and if we find it, assume appearance is dark.
+    return wezterm.gui.get_appearance():find("Dark") ~= nil
+  end
+  return true
+end
+
+return M

@@ -9,7 +9,7 @@ fi
 
 # configuration variables
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-DOTFILES_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+DOTFILES_DIR="${SCRIPT_DIR}"
 HELPER_DIR="${DOTFILES_DIR}/helper_scripts"
 
 # Log functions
@@ -60,6 +60,12 @@ backup_path() {
 
   if [[ ! -e "$path" && ! -L "$path" ]]; then
     printf 'Skipping %s (does not exist)\n' "$path"
+    return 0
+  fi
+
+  # Skip symlinks already managed by this dotfiles repo to avoid clobbering dotter-managed files
+  if [[ -L "$path" && "$(realpath "$path")" == "${DOTFILES_DIR}/"* ]]; then
+    printf 'Skipping %s (already a managed dotfiles symlink)\n' "$path"
     return 0
   fi
 
@@ -214,8 +220,12 @@ case "$PLATFORM" in
 esac
 
 SUDO=()
-if [[ "$NEEDS_SUDO" == true ]] && command -v sudo >/dev/null 2>&1; then
-  SUDO=(sudo)
+if [[ "$NEEDS_SUDO" == true ]]; then
+  if command -v sudo >/dev/null 2>&1; then
+    SUDO=(sudo)
+  else
+    warn "sudo not found; package manager will run as the current user and may fail"
+  fi
 fi
 
 run_packager() {
@@ -226,8 +236,10 @@ run_packager() {
 echo "Running package list update..."
 run_required run_packager "${PACKAGER_UPDATE[@]}"
 
-echo "Running upgrade..."
-run_required run_packager "${PACKAGER_UPGRADE[@]}"
+if confirm "run a full system upgrade (may be slow on re-runs)"; then
+  echo "Running upgrade..."
+  run_required run_packager "${PACKAGER_UPGRADE[@]}"
+fi
 
 echo "Installing packages..."
 run_required run_packager "${PACKAGER_INSTALL[@]}" "${PACKAGES[@]}"
@@ -245,7 +257,7 @@ require_function mise_install
 run_required mise_install
 
 # Symlink vimrc, zshrc and aliases/functions
-echo "Backing up existing config files...\n"
+printf 'Backing up existing config files...\n'
 #backup any original config files
 ensure_backup \
   "${HOME}/.bashrc" \
@@ -260,9 +272,13 @@ mkdir -p "${HOME}/.config/vim" \
   "${HOME}/.config/mise" \
   "${HOME}/.config/nvim/colors"
 
-# we need to link mise manually so we can then install tools and dependencies in mise and use dotter after.
-# ln -s "${HOME}/.dotfiles/config/mise/config.toml" "${HOME}/.config/mise/config.toml"
-run_required ensure_symlink "${HOME}/.dotfiles/config/mise/config.toml" "${HOME}/.config/mise/config.toml"
+# Manually link mise config so mise can install tools (including dotter) before dotter itself runs.
+# Once dotter has run, it manages ~/.config/mise as a directory symlink; skip to avoid conflicts.
+if [[ -L "${HOME}/.config/mise" ]]; then
+  printf 'Skipping mise config symlink (already managed by dotter)\n'
+else
+  run_required ensure_symlink "${DOTFILES_DIR}/config/mise/config.toml" "${HOME}/.config/mise/config.toml"
+fi
 
 # TODO make configurable path and as a helper script function?  These paths map to configured path in common.sh/zshrc
 # TODO these vars are necessary outside the rust install as we pass the path to the mise install command
@@ -296,11 +312,11 @@ if confirm "install alacritty themes"; then
   run_optional alacritty_themes_install
 fi
 
-echo -e "Wrapping up... Running mise install and then dotter"
+printf '\nWrapping up... Running mise install and then dotter deploy\n'
 # TODO needs to copy or generate a base .dotter/local.toml, as well as eval the use of mise to call dotter here
 # TODO or convert local.toml to mac.toml and linux.toml
 
 # : -- do nothing no op that succeeds allowing us to run parameter expansion and set CARGO_HOME
 # in the event rust install was skipped.  It should be exported before exiting the helper but this covers all cases
 : "${CARGO_HOME:=${HOME}/.local/share/rust/cargo}"
-PATH="$HOME/.local/bin:$CARGO_HOME/bin:$PATH" mise i && cd ~/.dotfiles && mise x github:SuperCuber/dotter -- dotter
+PATH="$HOME/.local/bin:$CARGO_HOME/bin:$PATH" mise i && cd "${DOTFILES_DIR}" && mise x github:SuperCuber/dotter -- dotter deploy
