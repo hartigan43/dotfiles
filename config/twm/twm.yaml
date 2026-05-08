@@ -54,7 +54,6 @@ workspace_definitions:             # our list of workspaces, each with different
 
 layouts:                           # our list of layouts just have names and a list of commands. the command get sent directly with tmux send-keys
     - name: python-dev             # i chose not to use any custom configuration becuase that would be a lot of work to basically maintain a subset of possible functionality
-      # TODO FIX FOR ME
       commands:
         - tmux split-window -v
         - tmux resize-pane -D 20

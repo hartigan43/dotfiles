@@ -92,16 +92,15 @@ function getNvim() {
 }
 
 # ssh-agent
-# TODO figure out why its borked
-[ -f ~/.ssh-agent.sh ] && source ~/.ssh-agent.sh
+[ -f ~/.ssh-agent.sh ] && . ~/.ssh-agent.sh
 
 # load fzf if it exists
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f ~/.fzf.bash ] && . ~/.fzf.bash
 
-# source common
-[ -f "$HOME/.config/common.sh" ] && source "$HOME/.config/common.sh"
+# . common
+[ -f "$HOME/.config/common.sh" ] && . "$HOME/.config/common.sh"
 
 # allow local machine overrides
-[ -f "$HOME/.bashrc.local" ] && source "$HOME/.bashrc.local"
+[ -f "$HOME/.bashrc.local" ] && . "$HOME/.bashrc.local"
 
 complete -C "$(which "$tf_cmd")" terraform
