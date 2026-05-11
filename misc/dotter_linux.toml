@@ -1,0 +1,16 @@
+includes = []
+packages = ["graphics", "linux", "shell", "vim", "wezterm", "zsh"]
+
+[files]
+
+[variables]
+email         = ""
+hints_command = "xdg-open"
+platform      = "Linux"
+regular       = "Noto Sans"
+monospace     = "Iosevka Term"
+t_cols        = 317
+t_lines       = 62
+
+name    = "Jake"
+surname = "Hartigan"

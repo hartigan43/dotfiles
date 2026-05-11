@@ -1,0 +1,12 @@
+includes = []
+packages = ["graphics", "linux", "shell", "vim", "wezterm", "zsh"]
+
+[files]
+
+[variables]
+email         = ""
+hints_command = "open"
+platform      = "Darwin"
+
+name    = "Jake"
+surname = "Hartigan"

@@ -6,9 +6,9 @@
 depends = ["shell"]
 
 [alacritty.files]
-"alacritty/alacritty.toml" = "~/.config/alacritty/alacritty.toml"
-"alacritty/themes"         = "~/.config/alacritty/themes/themes"
-"alacritty/local.toml.tpl" = { target = "~/.config/alacritty/local.toml", type = "template" }
+"config/alacritty/alacritty.toml" = "~/.config/alacritty/alacritty.toml"
+"config/alacritty/themes"         = "~/.config/alacritty/themes/themes"
+"config/alacritty/local.toml.tpl" = { target = "~/.config/alacritty/local.toml", type = "template" }
 
 
 [bash]
@@ -85,6 +85,12 @@ pager          = "delta"
 "vim/vimrc"        = { target = "~/.config/nvim/init.vim", type = "symbolic", if = '(is_executable "nvim")' }
 "vim/colors"       = "~/.vim/colors"
 "vim/custom-snips" = { target = "~/.vim/custom-snips", type = "symbolic" }
+
+[wezterm]
+depends = ["shell"]
+
+[wezterm.files]
+"config/wezterm" = { target = "~/.config/wezterm", type = "symbolic" }
 
 [zsh]
 depends = ["shell"]
