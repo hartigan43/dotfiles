@@ -25,6 +25,15 @@ local function move_pane(keys, direction, mods)
   return bindings
 end
 
+local function resize_pane(key, direction)
+  -- TODO consider old tmux binding that also allowed arrow key resize
+  -- TODO use a local bindings and use the add_keys helper?
+  return {
+    key = key,
+    action = wezterm.action.AdjustPaneSize { direction, 3 }
+  }
+end
+
 local function select_tabs()
   local bindings = {} -- store the bindings for return to config.keys later
 
@@ -63,9 +72,16 @@ keys_config.keys = {
   },
   -- panes
   {
-    key = 'c',
+    key = 'r',
     mods = 'LEADER',
-    action = act.SpawnTab 'CurrentPaneDomain',
+    -- Activate the `resize_panes` keytable
+    action = wezterm.action.ActivateKeyTable {
+      name = 'resize_panes',
+      -- Ensures the keytable stays active after it handles its first keypress.
+      one_shot = false,
+      -- Deactivate the keytable after a timeout.
+      timeout_milliseconds = 1000,
+    }
   },
   {
     key = 'z',
@@ -85,9 +101,23 @@ keys_config.keys = {
   },
   -- tabs
   {
+    key = 'c',
+    mods = 'LEADER',
+    action = act.SpawnTab 'CurrentPaneDomain',
+  },
+  {
     key = 'o', -- using 2xCTRL+F currently with tmux
     mods = 'LEADER',
     action = wezterm.action.ActivateLastTab,
+  },
+}
+
+keys_config.key_tables = {
+    resize_panes = {
+    resize_pane('j', 'Down'),
+    resize_pane('k', 'Up'),
+    resize_pane('h', 'Left'),
+    resize_pane('l', 'Right'),
   },
 }
 
@@ -102,6 +132,7 @@ add_keys(select_tabs())
 function M.apply_to_config(config)
   config.leader = keys_config.leader
   config.keys = keys_config.keys
+  config.key_tables = keys_config.key_tables
 end
 
 return M
