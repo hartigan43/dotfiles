@@ -6,8 +6,8 @@
 # itf-incosolata-go-nerd
 # ttf-inconsolata-nerd
 # otf-droid-nerd
-
 # TODO same for brew + macos: brew install font-hack-nerd-font
+# TODO use clone as last resort method?
 
 # clone and install patched nerdfonts to work with airline and powerline symbols
 nerd_fonts_install() {

@@ -8,7 +8,6 @@ check_remote_session () {
     REMOTE_SESSION=true
   else
     # Checking the parent process to detect remote sessions via other tools
-    # TODO: Investigate why */sshd might be relevant for inclusion
     case $(ps -o comm= -p "${PPID}") in
       sshd|mosh-server|mosh)
         REMOTE_SESSION=true

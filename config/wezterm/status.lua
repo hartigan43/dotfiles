@@ -3,19 +3,20 @@ local M = {}
 
 local symbols = require 'symbols'
 
+local is_mac <const> = wezterm.target_triple:find("darwin") ~= nil
+
 wezterm.on('update-status', function(window)
   -- Grab the current window's configuration, and from it the
   -- palette (this is the combination of your chosen colour scheme
   -- including any overrides).
   local color_scheme = window:effective_config().resolved_palette
-  -- TODO locals for to color_scheme.ansi[0/1..7/8] and color_scheme.brights?
-  -- or reverse it and remove bg and fg?
   local bg = color_scheme.background
   local fg = color_scheme.foreground
+  local none = is_mac and 'none' or '#333333' --temporary until we use calculation for status bar
 
   window:set_right_status(wezterm.format({
     -- start of bar
-    { Background = { Color = 'none' } },
+    { Background = { Color = none } },
     { Foreground = { Color = color_scheme.ansi[7] } },
     { Text = symbols.PLE_LOWER_RIGHT_TRIANGLE },
     -- time date section
