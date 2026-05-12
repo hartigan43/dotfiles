@@ -14,10 +14,10 @@ local function tab_title(tab_info)
   local title = tab_info.tab_title
   -- if the tab title is explicitly set, use it
   if title and #title > 0 then
-    return ' ' .. tab_info.tab_id+1 .. ' | ' .. title .. ' '
+    return ' ' .. tab_info.tab_index+1 .. ' | ' .. title .. ' '
   end
   -- Otherwise, use the title from the active pane in that tab
-  return ' ' .. tab_info.tab_id+1 .. ' | ' .. tab_info.active_pane.title .. ' '
+  return ' ' .. tab_info.tab_index+1 .. ' | ' .. tab_info.active_pane.title .. ' '
 end
 
 wezterm.on(
