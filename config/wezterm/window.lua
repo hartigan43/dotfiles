@@ -4,13 +4,16 @@ local M = {}
 local status = require 'status' -- upper right status bar configured in status.lua
 local symbols = require 'symbols'
 
+local is_mac <const> = wezterm.target_triple:find("darwin") ~= nil
+
 function M.apply_to_config(config)
   -- tab settings
   -- config.show_close_tab_button_in_tabs = false -- nightly only
-  config.show_new_tab_button_in_tab_bar = false
+  if is_mac then
+    config.window_decorations = 'INTEGRATED_BUTTONS|RESIZE'
+  end
   -- window settings
   config.window_background_opacity = 1.0
-  config.window_decorations = 'INTEGRATED_BUTTONS|RESIZE' -- consider only RESIZE outside macOS?
   -- Sets the font for the window frame (tab bar)
   config.window_frame = {
       font = wezterm.font({ family = 'Iosevka Nerd Font', weight = 'Bold' }),

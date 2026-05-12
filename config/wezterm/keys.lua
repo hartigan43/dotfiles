@@ -10,7 +10,7 @@ local function add_keys(bindings)
 end
 
 local function move_pane(keys, direction, mods)
-  mods = mods or 'LEADER' -- default to LEADER key unless otherwise specified
+  local mods = mods or 'LEADER' -- default to LEADER key unless otherwise specified
 
   local bindings = {} -- store the bindings for return to config.keys later
 
