@@ -4,6 +4,8 @@ local wezterm = require 'wezterm'
 -- Creates a config object which we will be adding our config to
 local config = wezterm.config_builder()
 
+local is_mac <const> = wezterm.target_triple:find("darwin") ~= nil
+
 -- additional config from local files to include
 local appearance = require 'appearance'
 local keys = require 'keys'
@@ -25,9 +27,11 @@ config.font = wezterm.font {
     weight = 'Regular',
     harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0', 'zero' },
 }
-config.font_size = 13
 
-
+config.font_size = 12
+if is_mac then
+  config.font_size = 13
+end
 
 -- Returns our config to be evaluated. We must always do this at the bottom of this file
 return config
