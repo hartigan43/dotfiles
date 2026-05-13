@@ -48,6 +48,7 @@ Plug 'yuezk/vim-js' | Plug 'HerringtonDarkholme/yats.vim' | Plug 'posva/vim-vue'
 if is_neovim
   Plug 'neovim/nvim-lspconfig'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  let g:loaded_perl_provider = 0 " move to appropriate location after breaking nvim out to proper space
 else
   Plug 'prabirshrestha/vim-lsp'
   Plug 'mattn/vim-lsp-settings', {'do': ':LspInstallServer'}
@@ -699,7 +700,7 @@ vim.lsp.enable('ty') -- astral-sh/ty for python
 vim.lsp.enable('yamlls')
 
 -- set to debug if needed
-vim.lsp.set_log_level('off')
+vim.lsp.log.set_level('off')
 
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
