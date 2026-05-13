@@ -229,7 +229,9 @@ if [[ "$NEEDS_SUDO" == true ]]; then
 fi
 
 run_packager() {
-  "${SUDO[@]}" "$PACKAGER_BIN" "${PACKAGER_FLAGS[@]}" "$@"
+  # ${array[@]+"${array[@]}"}` -- this only expands the array if it has elements, and produces nothing otherwise.
+  # bash < 4.4 is default on macOS requires this, should work in posix sh and zsh without issues.
+  ${SUDO[@]+"${SUDO[@]}"} "$PACKAGER_BIN" ${PACKAGER_FLAGS[@]+"${PACKAGER_FLAGS[@]}"} "$@"
 }
 
 # Update and install provided packages
@@ -314,11 +316,11 @@ fi
 
 printf '\nWrapping up... Running mise install and then dotter deploy\n'
 
-if [[ ! -f .dotter/local.toml ]]; then
+if [[ ! -f "${DOTFILES_DIR}/.dotter/local.toml" ]]; then
   if [[ "$PLATFORM" == "Linux" ]]; then
-    cp misc/dotter_linux.toml .dotter/local.toml
+    cp "${DOTFILES_DIR}/misc/dotter_linux.toml" "${DOTFILES_DIR}/.dotter/local.toml"
   else
-    cp misc/dotter_mac.toml .dotter/local.toml
+    cp "${DOTFILES_DIR}/misc/dotter_mac.toml" "${DOTFILES_DIR}/.dotter/local.toml"
   fi
 
   printf 'Enter your email for git/dotter config (leave blank to skip): '
@@ -326,16 +328,17 @@ if [[ ! -f .dotter/local.toml ]]; then
   if [[ -n "$dotter_email" ]]; then
     if [[ "$PLATFORM" == "Linux" ]]; then
       # we still need two sed commands because BSD sed requires a separate argument to -i
-      sed -i "s/email[[:space:]]*=[[:space:]]*\"\"/email = \"${dotter_email}\"/" .dotter/local.toml
+      sed -i "s/email[[:space:]]*=[[:space:]]*\"\"/email = \"${dotter_email}\"/" "${DOTFILES_DIR}/.dotter/local.toml"
     else
-      sed -i '' "s/email[[:space:]]*=[[:space:]]*\"\"/email = \"${dotter_email}\"/" .dotter/local.toml
+      sed -i '' "s/email[[:space:]]*=[[:space:]]*\"\"/email = \"${dotter_email}\"/" "${DOTFILES_DIR}/.dotter/local.toml"
     fi
   fi
 else
   printf '.dotter/local.toml already exists, skipping copy\n'
 fi
 
-# : -- do nothing no op that succeeds allowing us to run parameter expansion and set CARGO_HOME
+# ":" is a do nothing no op that succeeds allowing us to run parameter expansion and set CARGO_HOME
 # in the event rust install was skipped.  It should be exported before exiting the helper but this covers all cases
 : "${CARGO_HOME:=${HOME}/.local/share/rust/cargo}"
-PATH="$HOME/.local/bin:$CARGO_HOME/bin:$PATH" mise i && cd "${DOTFILES_DIR}" && mise x github:SuperCuber/dotter -- dotter deploy
+export PATH="$HOME/.local/bin:$CARGO_HOME/bin:$PATH"  # export path so all commands following use updated path
+mise i && cd "${DOTFILES_DIR}" && mise x github:SuperCuber/dotter -- dotter deploy
