@@ -17,7 +17,6 @@ endif
 call plug#begin('~/.vim/plugged') "load vim-plug
 
 Plug 'airblade/vim-gitgutter'
-Plug 'christoomey/vim-tmux-navigator'
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'fatih/vim-go',                    { 'do': ':GoInstallBinaries', 'for': 'go' }
@@ -67,7 +66,6 @@ if executable('deno')
 
   " ddc sources
   " source is too old issue fix -https://github.com/statiolake/ddc-ale/pull/9
-  Plug 'delphinus/ddc-tmux'
   Plug 'delphinus/ddc-treesitter'
   Plug 'LumaKernel/ddc-source-file'
   Plug 'matsui54/ddc-buffer'
@@ -300,7 +298,7 @@ endfunction
 " ui must be set -- native: https://github.com/Shougo/ddc-ui-native
  "   \   'matchers': ['matcher_fuzzy', 'matcher_head'],
 call ddc#custom#patch_global('ui', 'native')
-call ddc#custom#patch_global('sources', ['ale','around','buffer','denippet','file','lsp','path','rg','treesitter','tmux'])
+call ddc#custom#patch_global('sources', ['ale','around','buffer','denippet','file','lsp','path','rg','treesitter'])
 call ddc#custom#patch_global('sourceOptions', {
     \ '_': {
     \   'matchers': ['matcher_fuzzy'],
@@ -349,11 +347,6 @@ call ddc#custom#patch_global('sourceOptions', {
     \   'mark': 'RG',
     \   'minAutoCompleteLength': 4,
     \   'maxItems': 4,
-    \ },
-    \ 'tmux': {
-    \   'mark' : 'TMUX',
-    \   'minAutoCompleteLength': 5,
-    \   'maxItems': 2,
     \ },
     \ 'treesitter': {
     \   'mark': 'TREE',
@@ -452,10 +445,6 @@ let g:fern#renderer#default#collapsed_symbol = "├─ "
 let g:fern#renderer#default#expanded_symbol = "├┬ "
 
 function! s:init_fern() abort
-  nmap <buffer><nowait> <C-j> :<C-U>TmuxNavigateDown<cr>
-  nmap <buffer><nowait> <C-k> :<C-U>TmuxNavigateUp<cr>
-  nmap <buffer><nowait> <C-h> :<C-U>TmuxNavigateLeft<cr>
-  nmap <buffer><nowait> <C-l> :<C-U>TmuxNavigateRight<cr>
   nmap <buffer> B <Plug>(fern-action-open:below)
   nmap <buffer> S <Plug>(fern-action-open:split)
 
