@@ -90,7 +90,7 @@ keys_config.keys = {
   },
   -- splits
   {
-    key = '|', -- " is tmux default
+    key = '\\', -- " is tmux default
     mods = 'LEADER',
     action = act.SplitHorizontal { domain = 'CurrentPaneDomain' },
   },
