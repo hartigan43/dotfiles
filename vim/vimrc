@@ -151,7 +151,7 @@ set writebackup                                   "enabling temp backups during 
 
 if !empty($EDITOR_MONOTONE)
   set background=light
-  colorscheme komau-mod
+  colorscheme komau-mod                           "for future nvim split: https://github.com/ntk148v/komau.vim#neovim-lua
   highlight Comment cterm=italic gui=italic
 else
   colorscheme dim
