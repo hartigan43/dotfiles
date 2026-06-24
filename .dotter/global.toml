@@ -51,6 +51,7 @@ white        = "eeeeee"
 
 [linux.files]
 "misc/udev-rules" = { target = "/etc/udev/rules.d/", type = "symbolic", owner = "root" }
+"config/yay"      = { target = "~/.config/yay/", type = "symbolic", if = '(is_executable "yay")' }
 
 [shell.files]
 "config/atac"           = { target = "~/.config/atac", type = "symbolic", if = '(is_executable "atac")' }

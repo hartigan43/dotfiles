@@ -18,3 +18,7 @@ SUBSYSTEMS=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0b10", MODE="0660
 # ID 3434:d048 Keychron Keychron M5 8K
 SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="d048", MODE="0660", TAG+="uaccess"
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="d048", MODE="0660", TAG+="uaccess"
+
+# ID 3434:d030 Keychron Link Wireless -- currently unused
+#SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="d030", TAG+="uaccess"
+#SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="d030", TAG+="uaccess"

@@ -1,20 +1,23 @@
+[plugins]
+
+[settings]
+minimum_release_age = "5d"
+
 [tools]
 "aqua:atuinsh/atuin"       = "latest"
-"cargo:du-dust"            = "latest"
 "aqua:getsops/sops"        = "latest"
 "cargo:atac"               = "latest"
+"cargo:du-dust"            = "latest"
 "cargo:jsongrep"           = "latest"
-"cargo:twm"                = "latest"
 "cargo:tlrc"               = "latest"
+"github:SuperCuber/dotter" = "latest"
+"github:dandavison/delta"  = "latest"
+"github:tamasfe/taplo"     = "latest"
 duf                        = "latest"
 fzf                        = "latest"
-"github:dandavison/delta"  = "latest"
-"github:SuperCuber/dotter" = "latest"
-"github:tamasfe/taplo"     = "latest"
+helm-ls                    = "latest"
 stern                      = "latest"
 tree-sitter                = "latest"
 ty                         = "latest"
 usage                      = "latest"
 zoxide                     = "latest"
-
-[plugins]
