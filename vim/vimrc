@@ -2,6 +2,7 @@
 " TODO consider mason for language servers/linters/formatters?
 " many things from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 set nocompatible             " be iMproved
+filetype plugin indent on
 
 let is_neovim = has('nvim')
 let plugin_dir = is_neovim ? expand('~/.local/share/nvim/site/autoload/plug.vim') : expand('~/.vim/autoload/plug.vim')
@@ -147,6 +148,13 @@ set undoreload=10000                              "max lines that can change out
 set undodir=~/.vim/tmp/undo//                     "undo dir
 set writebackup                                   "enabling temp backups during save
 
+"if $TERM_PROGRAM ==# "WezTerm"
+"  " TODO eval if fixes artifacts when using the multiplexer
+"  " https://github.com/wezterm/wezterm/issues/4607 - fixed in nightly
+"  " vim.opt.termsync = false " lua version
+"  set notermsync
+"endif
+
 if !empty($EDITOR_MONOTONE)
   set background=light
   colorscheme komau-mod                           "for future nvim split: https://github.com/ntk148v/komau.vim#neovim-lua
@@ -218,12 +226,10 @@ let g:ale_echo_msg_warning_str = 'W'
 let g:ale_lint_delay = 550                                          "delay before ale linting`, def 200
 
 function! FormatToml(buffer) abort
-  return {
-  \  'command': 'taplo format -'
-  \}
+  return {'command': 'taplo format -'}
 endfunction
 
-execute ale#fix#registry#Add('taplo', 'FormatToml', ['toml'], 'taplo fmt for toml')
+call ale#fix#registry#Add('taplo', 'FormatToml', ['toml'], 'taplo fmt for toml')
 
 let g:ale_linters = {
 \ 'cpp': ['clang'],
@@ -272,6 +278,38 @@ let g:ale_yaml_ls_config = {
 let g:ale_fix_on_save = 1
 " valid options are current for the current cursor is on, disabled to disable, or default by removing the setting
 let g:ale_virtualtext_cursor = 'disabled'
+
+"augroup ale_project_fixers
+"  autocmd!
+"  autocmd BufEnter *.toml call s:ConfigureTomlFixers()
+"augroup END
+
+augroup ale_project_fixers
+  autocmd!
+  autocmd BufRead,BufNewFile,BufEnter *.toml call s:ConfigureTomlFixers()
+augroup END
+
+let s:toml_skip_dir = fnamemodify('~/Workspace/', ':p')
+
+function! s:ConfigureTomlFixers() abort
+  if stridx(expand('%:p'), s:toml_skip_dir) == 0
+    " Disable taplo here, keep whitespace cleanup only
+    let b:ale_fixers = ['trim_whitespace']
+  else
+    unlet! b:ale_fixers
+  endif
+endfunction
+
+"function! s:ConfigureTomlFixers() abort
+"  if expand('%:p') =~# '^' . escape(expand('~/Workspace/'), '\')
+"    let b:ale_fixers = {
+"          \ '*': ['trim_whitespace'],
+"          \ 'toml': [],
+"          \}
+"  else
+"    unlet! b:ale_fixers
+"  endif
+"endfunction
 
 " checks for an open preview window - SO14300101
 function! CheckPreviewWindow()
