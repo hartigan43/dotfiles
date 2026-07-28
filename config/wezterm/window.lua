@@ -10,19 +10,27 @@ local is_mac <const> = wezterm.target_triple:find("darwin") ~= nil
 -- was set via `tab:set_title()` or `wezterm cli set-tab-title`, but falls back to the
 -- title of the active pane in that tab.
 -- TODO this file needs some love and maybe  merging with status?
-local function tab_title(tab_info)
+local function tab_title(tab_info, zoomed)
   local title = tab_info.tab_title
+  local zoomed = zoomed
+
   -- if the tab title is explicitly set, use it
   if title and #title > 0 then
-    return ' ' .. tab_info.tab_index+1 .. ' | ' .. title .. ' '
+    return ' ' .. tab_info.tab_index+1 .. ' | ' .. zoomed .. title .. ' '
   end
   -- Otherwise, use the title from the active pane in that tab
-  return ' ' .. tab_info.tab_index+1 .. ' | ' .. tab_info.active_pane.title .. ' '
+  return ' ' .. tab_info.tab_index+1 .. ' | ' .. zoomed .. tab_info.active_pane.title .. ' '
 end
 
 wezterm.on(
   'format-tab-title',
   function(tab, tabs, panes, config, hover, max_width)
+    -- check if currently zoomed
+    local zoomed = ''
+    if tab.active_pane.is_zoomed then zoomed = '[Z] ' end
+
+    local title = tab_title(tab, zoomed)
+
     local edge_background = '#333333'
     local background = '#333333'
     local foreground = '#808080'
@@ -36,8 +44,6 @@ wezterm.on(
     end
 
     local edge_foreground = background
-
-    local title = tab_title(tab)
 
     -- ensure that the titles fit in the available space,
     -- and that we have room for the edges.

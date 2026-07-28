@@ -110,6 +110,16 @@ keys_config.keys = {
     mods = 'LEADER',
     action = wezterm.action.ActivateLastTab,
   },
+  -- generic keys
+  -- TODO breaks in vim?
+  -- {
+  --   key = 'PageUp',  -- default bindings use SHIFT+PAGEUP/DOWN which is cumbersome on some laptops
+  --   action = act.ScrollByPage(-1),
+  -- },
+  -- {
+  --   key = 'PageDown',
+  --   action = act.ScrollByPage(1),
+  -- },
 }
 
 keys_config.key_tables = {
