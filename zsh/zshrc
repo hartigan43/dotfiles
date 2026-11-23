@@ -161,7 +161,7 @@ zle -N bracketed-paste bracketed-paste-magic
 # TODO check on preferred order of fpath additions and modularize completion loading on a local machine basis as this assumes all machines have aws cli/tofui
 [[ -d ~/.config/zsh/completions ]] && fpath=(~/.config/zsh/completions $fpath)
 
-zcomet compinit
+zcomet compinit # zcomet compinit can catch compdef declarations that happen “too early” as opposed to autoload -Uz compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C $(which "$tf_cmd") terraform
 complete -C $(which aws_completer) aws
