@@ -31,15 +31,14 @@ Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'liuchengxu/vista.vim'
 Plug 'maximbaz/lightline-ale'
-Plug 'mg979/vim-visual-multi'
 Plug 'mgee/lightline-bufferline'
 Plug 'puremourning/vimspector'
 "Plug 'ryanoasis/vim-devicons'
-Plug 'simnalamburt/vim-mundo',          { 'on': 'MundoToggle' }
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rails',                 { 'for': 'rb' }
 Plug 'tpope/vim-surround'
+"Plug 'XXiaoA/atone.nvim',               { 'on': ['Atone', 'Atone open', 'Atone toggle'] }
 
 " JavaScript/Typescript
 Plug 'yuezk/vim-js' | Plug 'HerringtonDarkholme/yats.vim' | Plug 'posva/vim-vue' | Plug 'maxmellon/vim-jsx-pretty'
@@ -219,7 +218,7 @@ nnoremap zO zczO
 
 " ALE settings ------------------------------------------------------- {{{
 let g:ale_completion_delay = 250                                    "delay before ale completion, def 100
-let g:ale_disable_lsp = 'auto'                                      "disables ale-lsp features for those loaded by nvim-lspconfig, set to 1 to disable for all
+let g:ale_disable_lsp = is_neovim ? 1 : 'auto'                      "native LSP owns language servers in Neovim; ALE handles CLI linters
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'            "define the format of the messages
 let g:ale_echo_msg_warning_str = 'W'
@@ -233,9 +232,9 @@ call ale#fix#registry#Add('taplo', 'FormatToml', ['toml'], 'taplo fmt for toml')
 
 let g:ale_linters = {
 \ 'cpp': ['clang'],
-\ 'go': ['gofmt', 'golint'],
+\ 'go': ['govet', 'gopls'],
 \ 'javascript': ['eslint'],
-\ 'python': ['ruff', 'black'],
+\ 'python': ['ruff'],
 \ 'rust': ['analyzer'],
 \ 'terraform': ['terraform'],
 \ 'yaml': ['yaml-language-server'],
@@ -243,23 +242,31 @@ let g:ale_linters = {
 
 let g:ale_fixers = {
 \  '*': ['trim_whitespace'],
-\ 'css': ['prettier'],
-\ 'go': ['gofmt'],
+\ 'css': ['prettier', 'trim_whitespace'],
+\ 'go': ['gofmt', 'trim_whitespace'],
 \ 'javascript': ['eslint', 'remove_trailing_lines', 'trim_whitespace'],
 \ 'python': ['black', 'trim_whitespace'],
-\ 'rust': ['rustfmt'],
+\ 'rust': ['rustfmt', 'trim_whitespace'],
 \ 'terraform': ['terraform', 'trim_whitespace'],
 \ 'toml': ['taplo', 'trim_whitespace'],
 \ 'yaml': ['trim_whitespace'],
 \}
 
+" use eslint for jsx, tsx, and TypeScript buffers
+for s:ft in ['javascriptreact', 'typescript', 'typescriptreact']
+  let g:ale_linters[s:ft] = ['eslint']
+  let g:ale_fixers[s:ft] = copy(g:ale_fixers.javascript)
+endfor
+
 let g:ale_c_parse_makefile = 1
 let g:ale_cpp_clang_executable = 'clang++'
 let g:ale_cpp_clang_options = '-stdc=c++14 -Wall `sdl2-config --cflags --libs`'
-let g:ale_javascript_prettier_options = '--single-quote --trailing-comma --no-unused-vars --no-mixed-spaces-and-tabs'
+let g:ale_javascript_prettier_options = '--single-quote --trailing-comma all'
 let g:ale_python_black_options = '--line-length=120'
 let g:ale_python_flake8_options = '--max-line-length=88 --extend-ignore=E203'
-let g:ale_python_ruff_options = 'line-length 120 --ignore E203'
+let g:ale_python_ruff_options = '--line-length 120 --ignore E203'
+let g:ale_terraform_terraform_executable = executable('tofu') ? 'tofu' : 'terraform'
+let g:ale_terraform_fmt_executable = g:ale_terraform_terraform_executable
 let g:ale_yaml_ls_config = {
 \   'yaml': {
 \     'schemaStore': {
@@ -878,7 +885,7 @@ nmap <F5> :call ToggleALEPreview()<CR>
 nnoremap <leader><space> :nohlsearch<CR>
 
 " display vim undo tree
-nnoremap <leader>u :MundoToggle<CR>
+nnoremap <leader>u :Atone toggle<CR>
 
 " split line similar to using J to join a line
 nnoremap S i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w
