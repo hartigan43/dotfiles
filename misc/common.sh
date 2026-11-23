@@ -413,6 +413,7 @@ prepend_to_path "${HOME}/.local/bin"
 
 # mise - configured before other tooling as the hook-env is needed for other tools to function properly
 if [ ! -f "${HOME}"/.local/bin/mise ] ; then
+  # shellcheck source=${HOME}/.doftiles/helper_scripts/mise_install.sh
   source "${HOME}"/.dotfiles/helper_scripts/mise_install.sh && mise_install
 else
   if [ "$IS_BASH" = true ] ; then

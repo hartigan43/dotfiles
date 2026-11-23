@@ -118,6 +118,11 @@ extract () {
      fi
 }
 
+# clone and cd into the directory
+gcd () {
+  git clone "$1" && cd "$(basename "$1" .git)"
+}
+
 # git commit -am "commit message"
 gcam () {
   git commit -am "$1"
@@ -337,8 +342,11 @@ fi
 
 # TODO SET AND SOURCE FROM FILE - FZF_DEFAULT_OPTS_FILE
 # https://github.com/junegunn/fzf?tab=readme-ov-file#environment-variables for more info
-  export FZF_DEFAULT_COMMAND="fd --type f"
+# https://github.com/junegunn/fzf#respecting-gitignore use fd and search gitignore
+  export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
   export FZF_ALT_C_COMMAND="fd --type d --follow"
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
 {{/if}}
 
 # fkill - kill processes - list only the ones you can kill
@@ -413,6 +421,7 @@ prepend_to_path "$HOME/.local/bin"
 # mise - loaded after other path modifications but before other
 # tooling as the hook-env is needed for other tools to function properly
 if [ ! -f "$HOME/.local/bin/mise" ] ; then
+  # shellcheck source=${HOME}/.doftiles/helper_scripts/mise_install.sh
   source "$HOME/.dotfiles/helper_scripts/mise_install.sh" && mise_install
 else
   {{#if (eq login_shell "zsh") }}
