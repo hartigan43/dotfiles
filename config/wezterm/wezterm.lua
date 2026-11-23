@@ -17,8 +17,9 @@ window.apply_to_config(config)
 if appearance.is_dark() then
   config.color_scheme = 'seoulbones_dark'
 else
--- config.color_scheme = 'Seoul256 Light (Gogh)' -- only in nightly
+--  config.color_scheme = 'Seoul256 Light (Gogh)' -- only in nightly
   config.color_scheme = 'seoulbones_light'
+--  config.color_scheme = 'Tokyo Night (Gogh)' -- uncomment for presentations
 end
 
 -- font config

@@ -1,24 +1,3 @@
-[user]
-	name =  {{name}} {{surname}}
-	email = {{email}}
-[core]
-	editor = nvim
-  pager = delta
-  hooksPath = {{git_hooks_path}}
-[delta]
-  navigate = true    # use n and N to move between diff sections
-
-  # delta detects terminal colors automatically; set one of these to disable auto-detection
-  # dark = true
-  light = true
-  # side-by-side = true
-  syntax-theme = gruvbox-light
-[diff]
-  colorMoved = default
-[interactive]
-  diffFilter = delta --color-only
-[init]
-	defaultBranch = main
 [alias]
   amend = commit --amend
   co = checkout
@@ -33,8 +12,34 @@
   root = rev-parse --show-toplevel
   unmerged = diff --name-only --diff-filter=U
   unstage = reset -q HEAD --
+[core]
+	editor = nvim
+  pager = delta
+  hooksPath = {{git_hooks_path}}
+[delta]
+  hyperlinks = true
+  # delta detects terminal colors automatically; set one of these to disable auto-detection
+  # dark = true
+  light = true
+  line-numbers = true
+  navigate = true    # use n and N to move between diff sections
+  # side-by-side = true
+  syntax-theme = gruvbox-light
+[diff]
+  colorMoved = default
 [filter "lfs"]
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
+[init]
+	defaultBranch = main
+[interactive]
+  diffFilter = delta --color-only
+[pager]
+  blame = delta
+[rerere]
+  enabled = true
+[user]
+	name =  {{name}} {{surname}}
+	email = {{email}}
